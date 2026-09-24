@@ -2,7 +2,6 @@
 
 import { type FormEvent, useState } from "react";
 import {
-  BadgeCheck,
   CircleAlert,
   ClipboardCheck,
   ExternalLink,
@@ -73,6 +72,12 @@ function positiveId(value: string) {
   return /^\d+$/.test(value.trim()) && BigInt(value.trim()) > 0n;
 }
 
+const confirmedStamp: Record<ReportMode, string> = {
+  recall: "Recalled",
+  counterfeit: "Reported",
+  validation: "Validated",
+};
+
 function ConfirmedReport({
   mode,
   transactionHash,
@@ -95,18 +100,20 @@ function ConfirmedReport({
         : "The validation transaction succeeded on Monad Mainnet. The selected finding state was submitted on-chain.";
 
   return (
-    <div className="mt-6 rounded-3xl border border-emerald-200 bg-emerald-50 p-5" role="status">
-      <div className="flex gap-3">
-        <BadgeCheck className="mt-0.5 h-6 w-6 shrink-0 text-emerald-700" />
-        <div>
-          <h2 className="font-display text-lg font-extrabold tracking-[-0.03em]">{title}</h2>
-          <p className="mt-1 text-sm leading-6 text-emerald-950/65">{description}</p>
+    <div className="mt-6 rounded-3xl border border-teal/40 bg-teal/5 p-5 shadow-glow-teal" role="status">
+      <div className="flex flex-col gap-4 sm:flex-row">
+        <span className="grid h-20 w-40 shrink-0 place-items-center rounded-2xl border-2 border-teal/60 bg-black/40 font-display text-2xl font-extrabold uppercase text-teal motion-safe:animate-stamp-in">
+          {confirmedStamp[mode]}
+        </span>
+        <div className="min-w-0">
+          <h2 className="font-display text-xl font-bold uppercase leading-tight tracking-[-0.01em] text-frost">{title}</h2>
+          <p className="mt-1.5 text-sm leading-6 text-muted">{description}</p>
           {explorerUrl ? (
             <a
               href={explorerUrl}
               target="_blank"
               rel="noreferrer"
-              className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-emerald-900 hover:text-emerald-700"
+              className="mt-4 inline-flex items-center gap-1.5 font-mono text-xs font-bold uppercase tracking-[0.08em] text-electric underline decoration-electric/40 decoration-1 underline-offset-4 transition-colors hover:text-frost hover:decoration-frost"
             >
               View confirmed transaction
               <ExternalLink className="h-3.5 w-3.5" />
@@ -196,9 +203,9 @@ export function ReportForm() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_20rem] lg:items-start">
-      <div className="rounded-[2rem] border border-ink/8 bg-white p-4 shadow-card sm:p-7">
+      <div className="glass rounded-3xl p-4 sm:p-7">
         <div className="grid gap-2 sm:grid-cols-3" role="tablist" aria-label="Report action">
-          {tabs.map((tab) => {
+          {tabs.map((tab, index) => {
             const Icon = tab.icon;
             const active = mode === tab.id;
             return (
@@ -209,24 +216,26 @@ export function ReportForm() {
                 aria-selected={active}
                 onClick={() => changeMode(tab.id)}
                 className={cn(
-                  "flex min-h-16 items-center gap-3 rounded-2xl border px-4 text-left transition",
+                  "flex min-h-16 items-center gap-3 rounded-2xl border px-4 text-left transition-[border-color,box-shadow,background-color,color]",
                   active
-                    ? "border-ink bg-ink text-white shadow-sm"
-                    : "border-ink/8 bg-paper text-ink hover:border-teal/25 hover:bg-mint/25",
+                    ? "border-electric/50 bg-electric/10 text-frost shadow-glow-cyan"
+                    : "border-white/10 bg-black/30 text-muted hover:border-white/25 hover:text-frost",
                 )}
               >
                 <span
                   className={cn(
-                    "grid h-9 w-9 shrink-0 place-items-center rounded-xl",
-                    active ? "bg-white/10 text-mint" : "bg-white text-teal",
+                    "grid h-9 w-9 shrink-0 place-items-center rounded-lg border",
+                    active ? "border-electric/50 bg-black/40 text-electric" : "border-white/10 text-muted",
                   )}
                 >
                   <Icon className="h-4 w-4" />
                 </span>
                 <span>
-                  <span className="block text-sm font-bold">{tab.label}</span>
-                  <span className={cn("mt-0.5 block text-[11px]", active ? "text-white/50" : "text-ink/40")}>
-                    {tab.description}
+                  <span className="block font-mono text-sm font-bold uppercase tracking-[0.08em]">
+                    {tab.label}
+                  </span>
+                  <span className={cn("mt-0.5 block font-mono text-[10px] uppercase tracking-[0.1em]", active ? "text-electric/80" : "text-muted")}>
+                    {`0${index + 1} · ${tab.description}`}
                   </span>
                 </span>
               </button>
@@ -235,22 +244,22 @@ export function ReportForm() {
         </div>
 
         <form onSubmit={(event) => void submit(event)} className="mt-7" noValidate>
-          <div className="border-b border-ink/5 pb-5">
-            <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-teal">
+          <div className="border-b border-white/10 pb-5">
+            <p className="font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-electric">
               {mode === "recall"
-                ? "Batch safety signal"
+                ? "Signal 01 · Batch safety signal"
                 : mode === "counterfeit"
-                  ? "Product authenticity report"
-                  : "Authorized review action"}
+                  ? "Signal 02 · Product authenticity report"
+                  : "Signal 03 · Authorized review action"}
             </p>
-            <h2 className="mt-2 font-display text-2xl font-black tracking-[-0.04em]">
+            <h2 className="mt-2 font-display text-3xl font-extrabold uppercase leading-none tracking-[-0.02em] text-frost">
               {mode === "recall"
                 ? "Flag a batch for recall"
                 : mode === "counterfeit"
                   ? "Report a suspected counterfeit"
                   : "Validate a counterfeit report"}
             </h2>
-            <p className="mt-2 text-sm leading-6 text-ink/55">
+            <p className="mt-2 text-sm leading-6 text-muted">
               {mode === "recall"
                 ? "Submit the exact batch ID and reason. Only the batch manufacturer or DrugRegistry owner can create the recall."
                 : mode === "counterfeit"
@@ -261,9 +270,9 @@ export function ReportForm() {
 
           <div className="mt-6">
             {mode === "recall" ? (
-              <div className="space-y-5">
+              <div className="space-y-5 border-l border-white/10 pl-4 sm:pl-6">
                 <div>
-                  <FieldLabel htmlFor="recall-batch-id">Batch ID</FieldLabel>
+                  <FieldLabel htmlFor="recall-batch-id">1a · Batch ID</FieldLabel>
                   <Input
                     id="recall-batch-id"
                     inputMode="numeric"
@@ -275,7 +284,7 @@ export function ReportForm() {
                   />
                 </div>
                 <div>
-                  <FieldLabel htmlFor="recall-reason">Recall reason</FieldLabel>
+                  <FieldLabel htmlFor="recall-reason">1b · Recall reason</FieldLabel>
                   <Textarea
                     id="recall-reason"
                     value={draft.reason}
@@ -283,7 +292,7 @@ export function ReportForm() {
                     placeholder="Describe the affected batch and safety reason"
                     maxLength={512}
                   />
-                  <p className="mt-2 text-right text-[11px] text-ink/35">
+                  <p className="mt-2 text-right font-mono text-[11px] text-muted">
                     {draft.reason.length}/512
                   </p>
                 </div>
@@ -291,9 +300,9 @@ export function ReportForm() {
             ) : null}
 
             {mode === "counterfeit" ? (
-              <div className="space-y-5">
+              <div className="space-y-5 border-l border-white/10 pl-4 sm:pl-6">
                 <div>
-                  <FieldLabel htmlFor="counterfeit-nafdac">NAFDAC number</FieldLabel>
+                  <FieldLabel htmlFor="counterfeit-nafdac">2a · NAFDAC number</FieldLabel>
                   <Input
                     id="counterfeit-nafdac"
                     value={draft.nafdacNumber}
@@ -303,7 +312,7 @@ export function ReportForm() {
                   />
                 </div>
                 <div>
-                  <FieldLabel htmlFor="counterfeit-details">Report details</FieldLabel>
+                  <FieldLabel htmlFor="counterfeit-details">2b · Report details</FieldLabel>
                   <Textarea
                     id="counterfeit-details"
                     value={draft.details}
@@ -311,7 +320,7 @@ export function ReportForm() {
                     placeholder="Describe the affected batch, source, and observed issue"
                     maxLength={2_048}
                   />
-                  <p className="mt-2 text-right text-[11px] text-ink/35">
+                  <p className="mt-2 text-right font-mono text-[11px] text-muted">
                     {draft.details.length}/2,048
                   </p>
                 </div>
@@ -319,9 +328,9 @@ export function ReportForm() {
             ) : null}
 
             {mode === "validation" ? (
-              <div className="space-y-5">
+              <div className="space-y-5 border-l border-white/10 pl-4 sm:pl-6">
                 <div>
-                  <FieldLabel htmlFor="report-id">Counterfeit report ID</FieldLabel>
+                  <FieldLabel htmlFor="report-id">3a · Counterfeit report ID</FieldLabel>
                   <Input
                     id="report-id"
                     inputMode="numeric"
@@ -333,7 +342,7 @@ export function ReportForm() {
                   />
                 </div>
                 <div>
-                  <FieldLabel htmlFor="validation-result">Review decision</FieldLabel>
+                  <FieldLabel htmlFor="validation-result">3b · Review decision</FieldLabel>
                   <Select
                     id="validation-result"
                     value={draft.validation}
@@ -343,8 +352,8 @@ export function ReportForm() {
                     <option value="dismiss">Dismiss report — submit false</option>
                   </Select>
                 </div>
-                <div className="flex gap-3 rounded-2xl border border-amber-300/50 bg-amber-50 p-4 text-sm leading-6 text-amber-950/75">
-                  <CircleAlert className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />
+                <div className="flex gap-3 rounded-2xl border border-gold/40 bg-gold/5 p-4 text-sm leading-6 text-muted">
+                  <CircleAlert className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
                   This button submits a final boolean to the contract. It does not infer a
                   finding from local evidence.
                 </div>
@@ -353,12 +362,12 @@ export function ReportForm() {
           </div>
 
           {formError ? (
-            <p className="mt-5 rounded-2xl bg-red-50 p-3 text-sm text-red-800" role="alert">
+            <p className="mt-5 rounded-2xl border border-danger/40 bg-danger/10 p-3 font-mono text-sm text-frost shadow-glow-red" role="alert">
               {formError}
             </p>
           ) : null}
 
-          <div className="mt-6 border-t border-ink/5 pt-6">
+          <div className="mt-6 border-t border-white/10 pt-6">
             <ActionRequirements action={action} />
             <ActionTransactionStatus action={action} />
             {action.isConfirmed ? (
@@ -405,7 +414,7 @@ export function ReportForm() {
               ) : null}
             </div>
             {!canSubmit && !action.isConfirmed ? (
-              <p className="mt-3 text-center text-xs text-ink/45">
+              <p className="mt-3 text-center font-mono text-xs text-muted">
                 {!isRegistryConfigured
                   ? "Configure a valid DrugRegistry address to enable this action."
                   : !action.isConnected
@@ -419,24 +428,27 @@ export function ReportForm() {
         </form>
       </div>
 
-      <aside className="space-y-4 lg:sticky lg:top-24">
-        <div className="rounded-3xl border border-coral/15 bg-[#fff6f2] p-6">
-          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-coral/10 text-coral">
+      <aside className="space-y-5 lg:sticky lg:top-28">
+        <div className="corner-marks corner-marks-danger glass rounded-3xl border-danger/30 bg-danger/5 p-6">
+          <span
+            className="grid h-11 w-11 place-items-center rounded-xl border border-danger/50 bg-black/40 text-danger shadow-glow-red"
+            aria-hidden="true"
+          >
             <ShieldAlert className="h-5 w-5" />
           </span>
-          <h2 className="mt-5 font-display text-lg font-extrabold tracking-[-0.03em]">
+          <h2 className="mt-5 font-display text-xl font-bold uppercase leading-tight tracking-[-0.01em] text-frost">
             Safety before speed
           </h2>
-          <p className="mt-2 text-sm leading-6 text-ink/58">
+          <p className="mt-2 text-sm leading-6 text-muted">
             If a medicine may be unsafe, stop using it and contact a qualified health
             professional or the relevant regulator. An on-chain report is not medical
             advice.
           </p>
         </div>
 
-        <div className="rounded-3xl border border-ink/8 bg-white p-5 shadow-card">
-          <h2 className="text-sm font-extrabold">Registry destination</h2>
-          <p className="mt-2 break-all font-mono text-xs leading-5 text-ink/45">
+        <div className="corner-marks corner-marks-soft glass rounded-3xl p-5">
+          <h2 className="font-mono text-xs font-bold uppercase tracking-[0.14em] text-frost">Registry destination</h2>
+          <p className="mt-2 break-all font-mono text-xs leading-5 text-muted">
             {registryAddress ?? "NEXT_PUBLIC_DRUG_REGISTRY_ADDRESS is not set"}
           </p>
           {registryAddress ? (
@@ -444,7 +456,7 @@ export function ReportForm() {
               href={monadAddressUrl(registryAddress)}
               target="_blank"
               rel="noreferrer"
-              className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-teal hover:text-ink"
+              className="mt-4 inline-flex items-center gap-1.5 font-mono text-xs font-bold uppercase tracking-[0.08em] text-electric underline decoration-electric/40 decoration-1 underline-offset-4 transition-colors hover:text-frost hover:decoration-frost"
             >
               Inspect contract on MonadScan
               <ExternalLink className="h-3.5 w-3.5" />

@@ -72,16 +72,16 @@ function RegistrationSuccess({
 }) {
   const transactionUrl = monadTransactionUrl(transactionHash);
   return (
-    <div className="mt-6 rounded-3xl border border-emerald-200 bg-emerald-50 p-5" role="status">
-      <div className="flex gap-3">
-        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-emerald-100 text-emerald-800">
-          <PackageCheck className="h-5 w-5" />
+    <div className="mt-6 rounded-3xl border border-teal/40 bg-teal/5 p-5 shadow-glow-teal" role="status">
+      <div className="flex flex-col gap-4 sm:flex-row">
+        <span className="grid h-20 w-40 shrink-0 place-items-center rounded-2xl border-2 border-teal/60 bg-black/40 font-display text-2xl font-extrabold uppercase text-teal motion-safe:animate-stamp-in">
+          Attested
         </span>
         <div className="min-w-0 flex-1">
-          <h2 className="font-display text-lg font-extrabold tracking-[-0.03em]">
+          <h2 className="font-display text-xl font-bold uppercase leading-tight tracking-[-0.01em] text-frost">
             Batch attestation confirmed
           </h2>
-          <p className="mt-1 text-sm leading-6 text-emerald-950/65">
+          <p className="mt-1.5 text-sm leading-6 text-muted">
             The DrugRegistry transaction succeeded on Monad Mainnet. Inspect the
             receipt for BatchAttested and open the passport to read the stored batch.
           </p>
@@ -98,12 +98,12 @@ function RegistrationSuccess({
                 href={transactionUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-emerald-300 bg-white px-5 text-sm font-semibold text-emerald-900 transition hover:bg-emerald-100"
+                className={buttonStyles("outline", "md")}
               >
                 View transaction
               </a>
             ) : null}
-            <Button variant="outline" onClick={onReset}>
+            <Button variant="ghost" onClick={onReset}>
               Register another
             </Button>
           </div>
@@ -197,32 +197,35 @@ export function RegisterForm() {
     <div className="grid gap-6 lg:grid-cols-[1fr_20rem] lg:items-start">
       <form
         onSubmit={(event) => void submit(event)}
-        className="rounded-[2rem] border border-ink/8 bg-white p-5 shadow-card sm:p-7"
+        className="glass rounded-3xl p-5 sm:p-7"
         noValidate
       >
-        <div className="flex items-start justify-between gap-4 border-b border-ink/5 pb-6">
+        <div className="flex items-start justify-between gap-4 border-b border-white/10 pb-6">
           <div>
-            <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-teal">
-              Attestation details
+            <p className="font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-electric">
+              Step 01 · Attestation details
             </p>
-            <h2 className="mt-2 font-display text-2xl font-black tracking-[-0.04em]">
+            <h2 className="mt-2 font-display text-3xl font-extrabold uppercase leading-none tracking-[-0.02em] text-frost">
               Attest a medicine batch
             </h2>
-            <p className="mt-2 max-w-xl text-sm leading-6 text-ink/55">
+            <p className="mt-2 max-w-xl text-sm leading-6 text-muted">
               The connected wallet calls the exact
-              <code className="mx-1 rounded-md bg-ink/5 px-1.5 py-0.5 font-mono text-xs">
+              <code className="mx-1 rounded-md border border-white/15 bg-black/40 px-1.5 py-0.5 font-mono text-xs text-electric">
                 attestBatch
               </code>
               function. The registry assigns the batch ID after authorization succeeds.
             </p>
           </div>
-          <span className="hidden h-12 w-12 shrink-0 place-items-center rounded-2xl bg-mint text-ink sm:grid">
+          <span
+            className="hidden h-12 w-12 shrink-0 place-items-center rounded-xl border border-electric/40 bg-electric/10 text-electric shadow-glow-cyan sm:grid"
+            aria-hidden="true"
+          >
             <BadgePlus className="h-5 w-5" />
           </span>
         </div>
 
-        <div className="mt-5 flex gap-3 rounded-2xl border border-amber-300/50 bg-amber-50 p-4 text-sm leading-6 text-amber-950/75">
-          <LockKeyhole className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />
+        <div className="mt-5 flex gap-3 rounded-2xl border border-gold/40 bg-gold/5 p-4 text-sm leading-6 text-muted">
+          <LockKeyhole className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
           <p>
             Manufacturer credentials are soulbound ERC-721 tokens. Credential minting is
             owner-only and available in the separate owner flow above; otherwise request
@@ -230,11 +233,11 @@ export function RegisterForm() {
           </p>
         </div>
 
-        <div className="mt-6 grid gap-5 sm:grid-cols-2">
+        <div className="mt-6 grid gap-x-6 gap-y-6 border-l border-white/10 pl-4 sm:pl-6 lg:grid-cols-2">
           <div>
-            <FieldLabel htmlFor="manufacturer-id">Credential token ID</FieldLabel>
+            <FieldLabel htmlFor="manufacturer-id">1a · Credential token ID</FieldLabel>
             <div className="relative">
-              <IdCard className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/30" />
+              <IdCard className="pointer-events-none absolute left-4 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-muted" />
               <Input
                 id="manufacturer-id"
                 inputMode="numeric"
@@ -247,9 +250,9 @@ export function RegisterForm() {
             </div>
           </div>
           <div>
-            <FieldLabel htmlFor="nafdac-number">NAFDAC number</FieldLabel>
+            <FieldLabel htmlFor="nafdac-number">1b · NAFDAC number</FieldLabel>
             <div className="relative">
-              <ShieldCheck className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/30" />
+              <ShieldCheck className="pointer-events-none absolute left-4 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-muted" />
               <Input
                 id="nafdac-number"
                 value={draft.nafdacNumber}
@@ -261,9 +264,9 @@ export function RegisterForm() {
             </div>
           </div>
           <div>
-            <FieldLabel htmlFor="batch-number">Batch number</FieldLabel>
+            <FieldLabel htmlFor="batch-number">1c · Batch number</FieldLabel>
             <div className="relative">
-              <PackageCheck className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/30" />
+              <PackageCheck className="pointer-events-none absolute left-4 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-muted" />
               <Input
                 id="batch-number"
                 value={draft.batchNumber}
@@ -275,9 +278,9 @@ export function RegisterForm() {
             </div>
           </div>
           <div>
-            <FieldLabel htmlFor="drug-name">Medicine name</FieldLabel>
+            <FieldLabel htmlFor="drug-name">1d · Medicine name</FieldLabel>
             <div className="relative">
-              <PackageCheck className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/30" />
+              <PackageCheck className="pointer-events-none absolute left-4 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-muted" />
               <Input
                 id="drug-name"
                 value={draft.drugName}
@@ -289,22 +292,22 @@ export function RegisterForm() {
             </div>
           </div>
           <div>
-            <FieldLabel htmlFor="expiry-date">Expiry date</FieldLabel>
+            <FieldLabel htmlFor="expiry-date">1e · Expiry date</FieldLabel>
             <div className="relative">
-              <CalendarDays className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/30" />
+              <CalendarDays className="pointer-events-none absolute left-4 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-muted" />
               <Input
                 id="expiry-date"
                 type="date"
                 value={draft.expiryDate}
                 onChange={(event) => update("expiryDate", event.target.value)}
-                className="pl-11"
+                className="pl-11 [color-scheme:dark]"
               />
             </div>
           </div>
           <div>
-            <FieldLabel htmlFor="evidence-hash">Evidence hash</FieldLabel>
+            <FieldLabel htmlFor="evidence-hash">1f · Evidence hash</FieldLabel>
             <div className="relative">
-              <Fingerprint className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/30" />
+              <Fingerprint className="pointer-events-none absolute left-4 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-muted" />
               <Input
                 id="evidence-hash"
                 value={draft.evidenceHash}
@@ -318,7 +321,7 @@ export function RegisterForm() {
           </div>
         </div>
 
-        <div className="mt-5 flex gap-3 rounded-2xl border border-teal/10 bg-teal/5 p-4 text-sm leading-6 text-ink/60">
+        <div className="mt-5 flex gap-3 rounded-2xl border-l-2 border-l-teal/60 bg-teal/5 p-4 text-sm leading-6 text-muted">
           <Info className="mt-0.5 h-4 w-4 shrink-0 text-teal" />
           <p>
             The evidence hash commits to records outside this transaction. PharmChain
@@ -327,12 +330,12 @@ export function RegisterForm() {
         </div>
 
         {formError ? (
-          <p className="mt-5 rounded-2xl bg-red-50 p-3 text-sm text-red-800" role="alert">
+          <p className="mt-5 rounded-2xl border border-danger/40 bg-danger/10 p-3 font-mono text-sm text-frost shadow-glow-red" role="alert">
             {formError}
           </p>
         ) : null}
 
-        <div className="mt-6 border-t border-ink/5 pt-6">
+        <div className="mt-6 border-t border-white/10 pt-6">
           <ActionRequirements action={action} />
           <ActionTransactionStatus action={action} />
 
@@ -367,39 +370,42 @@ export function RegisterForm() {
                 : "Attest batch on Monad"}
           </Button>
           {!isRegistryConfigured ? (
-            <p className="mt-2 text-center text-xs text-ink/45">
+            <p className="mt-2 text-center font-mono text-xs text-muted">
               A valid registry address is required before this action can be sent.
             </p>
           ) : !action.isConnected ? (
-            <p className="mt-2 text-center text-xs text-ink/45">
+            <p className="mt-2 text-center font-mono text-xs text-muted">
               Connect the injected wallet shown above to continue.
             </p>
           ) : action.needsMonad ? (
-            <p className="mt-2 text-center text-xs text-ink/45">
+            <p className="mt-2 text-center font-mono text-xs text-muted">
               Switch to Monad Mainnet to continue.
             </p>
           ) : null}
         </div>
       </form>
 
-      <aside className="space-y-4 lg:sticky lg:top-24">
-        <div className="rounded-3xl bg-ink p-6 text-white shadow-card">
-          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 text-mint">
+      <aside className="space-y-5 lg:sticky lg:top-28">
+        <div className="glass rounded-3xl p-6">
+          <span
+            className="grid h-11 w-11 place-items-center rounded-xl border border-electric/40 bg-electric/10 text-electric shadow-glow-cyan"
+            aria-hidden="true"
+          >
             <IdCard className="h-5 w-5" />
           </span>
-          <h2 className="mt-5 font-display text-lg font-extrabold tracking-[-0.03em]">
+          <h2 className="mt-5 font-display text-xl font-bold uppercase leading-tight tracking-[-0.01em] text-frost">
             Existing credential required
           </h2>
-          <p className="mt-2 text-sm leading-6 text-white/58">
+          <p className="mt-2 text-sm leading-6 text-muted">
             DrugRegistry checks that the credential is active and that its manufacturer
             wallet equals the transaction sender. Use the owner flow above to issue a new
             credential or enter an existing token ID.
           </p>
           <div className="mt-4 border-t border-white/10 pt-4">
-            <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-mint/70">
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-electric/80">
               Public credential context
             </p>
-            <p className="mt-2 break-all font-mono text-xs leading-5 text-white/55">
+            <p className="mt-2 break-all font-mono text-xs leading-5 text-muted">
               {manufacturerCredentialAddress ??
                 "NEXT_PUBLIC_MANUFACTURER_CREDENTIAL_ADDRESS is not set"}
             </p>
@@ -408,7 +414,7 @@ export function RegisterForm() {
                 href={monadAddressUrl(manufacturerCredentialAddress)}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-mint hover:text-white"
+                className="mt-3 inline-flex items-center gap-1.5 font-mono text-xs font-bold uppercase tracking-[0.08em] text-electric underline decoration-electric/40 decoration-1 underline-offset-4 transition-colors hover:text-frost hover:decoration-frost"
               >
                 Inspect credential contract
               </a>
@@ -416,9 +422,9 @@ export function RegisterForm() {
           </div>
         </div>
 
-        <div className="rounded-3xl border border-ink/8 bg-white p-5 shadow-card">
-          <h2 className="text-sm font-extrabold">Registry destination</h2>
-          <p className="mt-2 break-all font-mono text-xs leading-5 text-ink/45">
+        <div className="corner-marks corner-marks-soft glass rounded-3xl p-5">
+          <h2 className="font-mono text-xs font-bold uppercase tracking-[0.14em] text-frost">Registry destination</h2>
+          <p className="mt-2 break-all font-mono text-xs leading-5 text-muted">
             {registryAddress ?? "NEXT_PUBLIC_DRUG_REGISTRY_ADDRESS is not set"}
           </p>
           {registryAddress ? (
@@ -426,13 +432,13 @@ export function RegisterForm() {
               href={monadAddressUrl(registryAddress)}
               target="_blank"
               rel="noreferrer"
-              className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-teal hover:text-ink"
+              className="mt-4 inline-flex items-center gap-1.5 font-mono text-xs font-bold uppercase tracking-[0.08em] text-electric underline decoration-electric/40 decoration-1 underline-offset-4 transition-colors hover:text-frost hover:decoration-frost"
             >
               Inspect on MonadScan
             </a>
           ) : null}
-          <div className="mt-4 border-t border-ink/5 pt-4 text-xs leading-5 text-ink/45">
-            <LockKeyhole className="mr-1.5 inline h-3.5 w-3.5 text-teal" />
+          <div className="mt-4 border-t border-white/10 pt-4 font-mono text-xs leading-5 text-muted">
+            <LockKeyhole className="mr-1.5 inline h-3.5 w-3.5 text-electric" />
             The credential address is the public write target for the owner mint flow.
             The registry&apos;s immutable credential contract controls batch authorization.
           </div>

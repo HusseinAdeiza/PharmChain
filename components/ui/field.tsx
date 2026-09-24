@@ -5,6 +5,9 @@ import type {
 } from "react";
 import { cn } from "@/components/ui/button";
 
+const fieldBase =
+  "w-full rounded-xl border border-white/10 bg-black/40 text-base text-frost placeholder:text-muted/60 transition-[border-color,box-shadow] hover:border-white/25 focus:border-electric/70 focus:outline-none focus:ring-1 focus:ring-electric/60 focus:shadow-glow-cyan";
+
 export function FieldLabel({
   children,
   htmlFor,
@@ -17,11 +20,11 @@ export function FieldLabel({
   return (
     <label
       htmlFor={htmlFor}
-      className="mb-2 flex items-center justify-between gap-3 text-sm font-semibold text-ink"
+      className="mb-2 flex items-baseline justify-between gap-3 font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-muted"
     >
       <span>{children}</span>
       {optional ? (
-        <span className="text-xs font-medium text-ink/45">Optional</span>
+        <span className="font-medium normal-case tracking-normal text-muted/70">Optional</span>
       ) : null}
     </label>
   );
@@ -30,10 +33,7 @@ export function FieldLabel({
 export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
-      className={cn(
-        "min-h-12 w-full rounded-2xl border border-ink/10 bg-white px-4 text-base text-ink shadow-sm transition placeholder:text-ink/30 hover:border-ink/20 focus:border-teal focus:outline-none focus:ring-4 focus:ring-teal/10",
-        className,
-      )}
+      className={cn(fieldBase, "min-h-12 px-4", className)}
       {...props}
     />
   );
@@ -45,10 +45,7 @@ export function Textarea({
 }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return (
     <textarea
-      className={cn(
-        "min-h-32 w-full resize-y rounded-2xl border border-ink/10 bg-white px-4 py-3 text-base text-ink shadow-sm transition placeholder:text-ink/30 hover:border-ink/20 focus:border-teal focus:outline-none focus:ring-4 focus:ring-teal/10",
-        className,
-      )}
+      className={cn(fieldBase, "min-h-32 resize-y px-4 py-3", className)}
       {...props}
     />
   );
@@ -60,10 +57,7 @@ export function Select({
 }: SelectHTMLAttributes<HTMLSelectElement>) {
   return (
     <select
-      className={cn(
-        "min-h-12 w-full appearance-none rounded-2xl border border-ink/10 bg-white px-4 text-base text-ink shadow-sm transition hover:border-ink/20 focus:border-teal focus:outline-none focus:ring-4 focus:ring-teal/10",
-        className,
-      )}
+      className={cn(fieldBase, "min-h-12 appearance-none bg-black/40 px-4 [&>option]:bg-panel [&>option]:text-frost", className)}
       {...props}
     />
   );

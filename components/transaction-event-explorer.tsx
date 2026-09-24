@@ -91,6 +91,20 @@ function eventScanRange(latestBlock: bigint): EventScanRange {
   };
 }
 
+const eventLabelClass: Record<ExplorerEventName, string> = {
+  BatchAttested: "border-electric/50 bg-electric/10 text-electric",
+  BatchRecalled: "border-danger/60 bg-danger/15 text-danger",
+  CounterfeitFlagged: "border-danger/60 bg-danger/15 text-danger",
+  CounterfeitValidated: "border-gold/60 bg-gold/15 text-gold",
+};
+
+const eventNodeClass: Record<ExplorerEventName, string> = {
+  BatchAttested: "border-electric/60 bg-electric/15 text-electric shadow-glow-cyan",
+  BatchRecalled: "border-danger/60 bg-danger/15 text-danger shadow-glow-red",
+  CounterfeitFlagged: "border-danger/60 bg-danger/15 text-danger shadow-glow-red",
+  CounterfeitValidated: "border-gold/60 bg-gold/15 text-gold shadow-glow-gold",
+};
+
 function ExplorerEventIcon({ name }: { name: ExplorerEventName }) {
   if (name === "BatchAttested") {
     return <FileCheck2 className="h-4 w-4" />;
@@ -129,38 +143,42 @@ function ExplorerEventCard({ event }: { event: ExplorerEvent }) {
   const transactionUrl = monadTransactionUrl(event.transactionHash);
 
   return (
-    <article className="rounded-2xl border border-ink/8 bg-white p-4 shadow-sm sm:p-5">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div className="flex min-w-0 gap-3">
-          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-mint text-ink">
-            <ExplorerEventIcon name={event.name} />
-          </span>
-          <div className="min-w-0">
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-teal">
-              {eventLabel}
-            </p>
-            <h4 className="mt-1 font-display text-base font-extrabold tracking-[-0.02em]">
-              {id}
-            </h4>
-          </div>
-        </div>
-        <div className="shrink-0 text-left text-xs text-ink/45 sm:text-right">
-          <p>Block {event.blockNumber.toString()}</p>
-          {event.actor ? <p className="mt-1">By {shortAddress(event.actor)}</p> : null}
-        </div>
-      </div>
-      <p className="mt-4 break-words text-sm leading-6 text-ink/60">{detail}</p>
-      {transactionUrl ? (
-        <a
-          href={transactionUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-4 flex items-start gap-2 rounded-xl bg-ink/[0.035] p-3 text-xs text-teal transition hover:bg-teal/5"
+    <article className="glass grid grid-cols-[auto_1fr] gap-4 rounded-3xl p-4 sm:grid-cols-[auto_1fr_auto] sm:gap-5 sm:p-5">
+      <div className="flex flex-col items-center gap-2">
+        <span
+          className={cn(
+            "grid h-10 w-10 place-items-center rounded-xl border",
+            eventNodeClass[event.name],
+          )}
         >
-          <span className="min-w-0 break-all font-mono leading-5">{event.transactionHash}</span>
-          <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-        </a>
-      ) : null}
+          <ExplorerEventIcon name={event.name} />
+        </span>
+        <span className="font-mono text-[10px] font-bold text-muted">#{event.logIndex}</span>
+      </div>
+      <div className="min-w-0">
+        <p className={cn("w-fit rounded-md border px-2 py-0.5 font-mono text-[11px] font-bold uppercase tracking-[0.1em]", eventLabelClass[event.name])}>
+          {eventLabel}
+        </p>
+        <h4 className="mt-2.5 font-display text-lg font-bold uppercase leading-tight tracking-[-0.01em] text-frost">
+          {id}
+        </h4>
+        <p className="mt-1.5 break-words text-sm leading-6 text-muted">{detail}</p>
+        {transactionUrl ? (
+          <a
+            href={transactionUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-3 flex items-start gap-2 rounded-xl border border-white/10 bg-black/40 p-3 font-mono text-xs text-electric transition-[border-color,box-shadow] hover:border-electric/50 hover:shadow-glow-cyan"
+          >
+            <span className="min-w-0 break-all leading-5">{event.transactionHash}</span>
+            <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+          </a>
+        ) : null}
+      </div>
+      <div className="col-span-2 flex flex-wrap gap-x-5 gap-y-1 border-t border-white/10 pt-3 font-mono text-[11px] text-muted sm:col-span-1 sm:border-t-0 sm:pt-0 sm:text-right">
+        <p>Block {event.blockNumber.toString()}</p>
+        {event.actor ? <p>By {shortAddress(event.actor)}</p> : null}
+      </div>
     </article>
   );
 }
@@ -292,17 +310,17 @@ export function TransactionEventExplorer({
   });
 
   return (
-    <section className="rounded-3xl border border-ink/8 bg-white p-5 shadow-card sm:p-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <section className="glass rounded-3xl p-5 sm:p-7">
+      <div className="flex flex-col gap-4 border-b border-white/10 pb-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.16em] text-teal">
+          <p className="flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-electric">
             <History className="h-4 w-4" />
-            Transaction event explorer
+            Section 04 · Transaction event explorer
           </p>
-          <h2 className="mt-2 font-display text-2xl font-black tracking-[-0.04em]">
+          <h2 className="mt-1.5 font-display text-3xl font-extrabold uppercase leading-none tracking-[-0.02em] text-frost">
             Matching registry events
           </h2>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-ink/55">
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
             Event logs are independent public-RPC index data. A failure here does not
             invalidate the passport records already returned by the contract.
           </p>
@@ -319,30 +337,32 @@ export function TransactionEventExplorer({
       </div>
 
       {eventQuery.isPending ? (
-        <div className="mt-5 flex items-center gap-3 rounded-2xl border border-ink/8 bg-paper p-4 text-sm text-ink/55">
-          <LoaderCircle className="h-4 w-4 animate-spin text-teal" />
+        <div className="mt-5 flex items-center gap-3 rounded-2xl border border-white/10 bg-black/40 p-4 font-mono text-xs text-muted">
+          <LoaderCircle className="h-4 w-4 animate-spin text-electric" />
           Querying the bounded Monad event window…
         </div>
       ) : null}
 
       {eventQuery.isError ? (
-        <div className="mt-5 rounded-2xl border border-amber-300/60 bg-amber-50 p-4 text-amber-950" role="status">
+        <div className="mt-5 rounded-2xl border border-gold/40 bg-gold/5 p-4 text-frost" role="status">
           <div className="flex gap-3">
-            <CircleAlert className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" />
+            <CircleAlert className="mt-0.5 h-5 w-5 shrink-0 text-gold" />
             <div>
-              <p className="text-sm font-bold">Explorer index data is unavailable</p>
-              <p className="mt-1 text-sm leading-6 text-amber-900/70">
+              <p className="font-mono text-sm font-bold uppercase tracking-[0.12em] text-gold">
+                Explorer index data is unavailable
+              </p>
+              <p className="mt-1 text-sm leading-6 text-muted">
                 The public RPC could not return the bounded event logs. The passport,
                 batch, and report records remain available; no transaction hash is shown
                 unless it was returned by Monad.
               </p>
-              <p className="mt-2 break-words text-xs text-amber-900/55">
+              <p className="mt-2 break-words font-mono text-xs text-muted">
                 {errorMessage(eventQuery.error)}
               </p>
               <Button
                 size="sm"
                 variant="outline"
-                className="mt-3 border-amber-300 bg-white"
+                className="mt-3"
                 onClick={() => void eventQuery.refetch()}
               >
                 <RefreshCw className="h-4 w-4" />
@@ -355,7 +375,7 @@ export function TransactionEventExplorer({
 
       {eventQuery.isSuccess ? (
         <>
-          <div className="mt-5 rounded-2xl bg-ink/[0.035] px-4 py-3 text-xs leading-5 text-ink/50">
+          <div className="mt-5 rounded-2xl border-l-2 border-l-electric/60 bg-black/40 px-4 py-3 font-mono text-xs leading-5 text-muted">
             Queried blocks {eventQuery.data.range.fromBlock.toString()} through{" "}
             {eventQuery.data.range.toBlock.toString()} on Monad Mainnet.{" "}
             {eventQuery.data.range.source === "deployment"
@@ -363,19 +383,24 @@ export function TransactionEventExplorer({
               : "The lower bound uses the latest 50,000-block lookback; older events are outside this query."}
           </div>
           {eventQuery.data.events.length ? (
-            <div className="mt-4 space-y-3">
+            <ol className="mt-5 space-y-4 border-l border-white/10 pl-5">
               {eventQuery.data.events.map((event) => (
-                <ExplorerEventCard
-                  key={`${event.transactionHash}-${event.logIndex}`}
-                  event={event}
-                />
+                <li key={`${event.transactionHash}-${event.logIndex}`} className="relative">
+                  <span
+                    className="absolute -left-[26px] top-6 h-3 w-3 rounded-full border border-electric/60 bg-electric/20 shadow-glow-cyan"
+                    aria-hidden="true"
+                  />
+                  <ExplorerEventCard event={event} />
+                </li>
               ))}
-            </div>
+            </ol>
           ) : (
-            <div className="mt-4 rounded-2xl border border-dashed border-ink/15 bg-paper/60 p-6 text-center">
-              <SearchX className="mx-auto h-6 w-6 text-ink/30" />
-              <p className="mt-3 text-sm font-bold text-ink">No matching events in this window</p>
-              <p className="mx-auto mt-1 max-w-xl text-xs leading-5 text-ink/45">
+            <div className="mt-4 rounded-2xl border border-dashed border-white/15 bg-black/30 p-6 text-center">
+              <SearchX className="mx-auto h-6 w-6 text-muted" />
+              <p className="mt-3 font-mono text-sm font-bold uppercase tracking-[0.1em] text-frost">
+                No matching events in this window
+              </p>
+              <p className="mx-auto mt-1 max-w-xl font-mono text-xs leading-5 text-muted">
                 This does not prove that no older event exists. A verified deployment block
                 can be supplied to extend the bounded query.
               </p>

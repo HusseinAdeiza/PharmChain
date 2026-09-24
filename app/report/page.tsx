@@ -10,26 +10,24 @@ export const metadata: Metadata = {
 
 export default function ReportPage() {
   return (
-    <section className="relative overflow-hidden py-10 sm:py-14 lg:py-16">
-      <div className="grid-fade pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px]" />
-      <div className="pointer-events-none absolute -right-24 top-20 -z-10 h-72 w-72 rounded-full bg-coral/10 blur-3xl" />
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-coral/20 bg-white px-3 py-2 text-xs font-bold text-coral shadow-sm">
+    <section className="relative">
+      <div className="mx-auto max-w-7xl px-4 pb-16 pt-12 sm:px-6 sm:pt-16 lg:px-8 lg:pb-20">
+        <div className="border-l border-danger/60 pl-5 sm:pl-6">
+          <p className="flex w-fit items-center gap-2 rounded-full border border-danger/50 bg-danger/10 px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-danger shadow-glow-red">
             <Siren className="h-4 w-4" />
-            ON-CHAIN SAFETY REPORTING
-          </span>
-          <h1 className="mt-5 text-balance font-display text-4xl font-black tracking-[-0.05em] sm:text-5xl">
+            Form PC-4 · On-chain safety reporting
+          </p>
+          <h1 className="mt-4 font-display text-5xl font-extrabold uppercase leading-[0.92] tracking-[-0.02em] text-frost sm:text-6xl">
             Report what should not be ignored
           </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-ink/55">
+          <p className="mt-4 max-w-2xl text-base leading-7 text-muted">
             Record a batch recall, submit details for a suspected counterfeit, or use an
             authorized validator action. Every write is a real wallet transaction on
             Monad Mainnet.
           </p>
         </div>
 
-        <div className="mt-10">
+        <div className="mt-12">
           <ReportForm />
         </div>
       </div>

@@ -52,14 +52,14 @@ function validateText(label: string, value: string) {
 
 function OwnerAddress({ address }: { address?: `0x${string}` }) {
   if (!address) {
-    return <span className="text-ink/45">Not returned</span>;
+    return <span className="text-muted">Not returned</span>;
   }
   return (
     <a
       href={monadAddressUrl(address)}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex items-center gap-1.5 font-mono text-xs text-teal hover:text-ink"
+      className="inline-flex items-center gap-1.5 font-mono text-xs text-electric underline decoration-electric/40 decoration-1 underline-offset-4 transition-colors hover:text-frost hover:decoration-frost"
     >
       {shortAddress(address)}
       <ExternalLink className="h-3 w-3" />
@@ -120,28 +120,31 @@ export function ManufacturerCredentialForm() {
   const configurationReady = credentialConfiguration === "ready";
 
   return (
-    <div id="mint-credential" className="scroll-mt-28">
-      <div className="overflow-hidden rounded-[2rem] border border-ink/8 bg-white shadow-card">
-        <div className="flex flex-col gap-4 border-b border-ink/5 bg-ink p-6 text-white sm:flex-row sm:items-start sm:justify-between sm:p-7">
+    <div id="mint-credential" className="scroll-mt-32">
+      <div className="glass overflow-hidden rounded-3xl">
+        <div className="flex flex-col gap-4 border-b border-white/10 bg-black/50 p-6 sm:flex-row sm:items-start sm:justify-between sm:p-7">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full bg-white/10 px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-[0.1em] text-mint">
+              <span className="rounded-md border border-electric/50 bg-electric/10 px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-[0.1em] text-electric shadow-glow-cyan">
                 Owner-only flow
               </span>
-              <span className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] font-semibold text-white/55">
+              <span className="rounded-md border border-white/15 bg-white/5 px-2.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-muted">
                 ManufacturerCredential
               </span>
             </div>
-            <h2 className="mt-4 font-display text-2xl font-black tracking-[-0.04em]">
+            <h2 className="mt-4 font-display text-3xl font-extrabold uppercase leading-none tracking-[-0.02em] text-frost">
               Mint a manufacturer credential
             </h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-white/58">
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
               The configured contract&apos;s owner can issue one active, soulbound ERC-721
               credential to a manufacturer wallet. The UI verifies ownership on-chain
               before enabling minting.
             </p>
           </div>
-          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white/10 text-mint">
+          <span
+            className="grid h-12 w-12 shrink-0 place-items-center rounded-xl border border-electric/40 bg-electric/10 text-electric shadow-glow-cyan"
+            aria-hidden="true"
+          >
             <IdCard className="h-6 w-6" />
           </span>
         </div>
@@ -149,18 +152,18 @@ export function ManufacturerCredentialForm() {
         <div className="grid gap-6 p-5 sm:p-7 lg:grid-cols-[1fr_19rem] lg:items-start">
           <form onSubmit={(event) => void submit(event)} noValidate>
             {!configurationReady ? (
-              <div className="mb-5 rounded-2xl border border-amber-300/60 bg-amber-50 p-4 text-amber-950" role="status">
+              <div className="mb-5 rounded-2xl border border-gold/40 bg-gold/5 p-4" role="status">
                 <div className="flex gap-3">
-                  <CircleAlert className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />
+                  <CircleAlert className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
                   <div>
-                    <p className="text-sm font-bold">
+                    <p className="font-mono text-sm font-bold uppercase tracking-[0.12em] text-gold">
                       {credentialConfiguration === "invalid"
                         ? "Credential address is invalid"
                         : "Credential deployment not configured"}
                     </p>
-                    <p className="mt-1 text-sm leading-5 text-amber-900/70">
+                    <p className="mt-1 text-sm leading-5 text-muted">
                       Set a verified Monad Mainnet address in{" "}
-                      <code className="rounded-md bg-amber-100 px-1.5 py-0.5 font-mono text-xs">
+                      <code className="rounded-md border border-white/15 bg-black/40 px-1.5 py-0.5 font-mono text-xs text-electric">
                         NEXT_PUBLIC_MANUFACTURER_CREDENTIAL_ADDRESS
                       </code>
                       , then restart the app. No address or mint will be simulated.
@@ -170,11 +173,11 @@ export function ManufacturerCredentialForm() {
               </div>
             ) : null}
 
-            <div className="grid gap-5 sm:grid-cols-2">
+            <div className="grid gap-x-6 gap-y-6 border-l border-white/10 pl-4 sm:pl-6 lg:grid-cols-2">
               <div className="sm:col-span-2">
-                <FieldLabel htmlFor="credential-manufacturer">Manufacturer wallet</FieldLabel>
+                <FieldLabel htmlFor="credential-manufacturer">1a · Manufacturer wallet</FieldLabel>
                 <div className="relative">
-                  <Wallet className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/30" />
+                  <Wallet className="pointer-events-none absolute left-4 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-muted" />
                   <Input
                     id="credential-manufacturer"
                     value={draft.manufacturer}
@@ -187,9 +190,9 @@ export function ManufacturerCredentialForm() {
                 </div>
               </div>
               <div>
-                <FieldLabel htmlFor="credential-manufacturer-name">Manufacturer name</FieldLabel>
+                <FieldLabel htmlFor="credential-manufacturer-name">1b · Manufacturer name</FieldLabel>
                 <div className="relative">
-                  <Building2 className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/30" />
+                  <Building2 className="pointer-events-none absolute left-4 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-muted" />
                   <Input
                     id="credential-manufacturer-name"
                     value={draft.manufacturerName}
@@ -201,9 +204,9 @@ export function ManufacturerCredentialForm() {
                 </div>
               </div>
               <div>
-                <FieldLabel htmlFor="credential-nafdac">NAFDAC registration number</FieldLabel>
+                <FieldLabel htmlFor="credential-nafdac">1c · NAFDAC registration number</FieldLabel>
                 <div className="relative">
-                  <ShieldCheck className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/30" />
+                  <ShieldCheck className="pointer-events-none absolute left-4 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-muted" />
                   <Input
                     id="credential-nafdac"
                     value={draft.nafdacRegistrationNumber}
@@ -215,9 +218,9 @@ export function ManufacturerCredentialForm() {
                 </div>
               </div>
               <div className="sm:col-span-2">
-                <FieldLabel htmlFor="credential-address">Manufacturing address</FieldLabel>
+                <FieldLabel htmlFor="credential-address">1d · Manufacturing address</FieldLabel>
                 <div className="relative">
-                  <MapPin className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/30" />
+                  <MapPin className="pointer-events-none absolute left-4 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-muted" />
                   <Input
                     id="credential-address"
                     value={draft.manufacturingAddress}
@@ -230,7 +233,7 @@ export function ManufacturerCredentialForm() {
               </div>
             </div>
 
-            <div className="mt-5 flex gap-3 rounded-2xl border border-teal/10 bg-teal/5 p-4 text-sm leading-6 text-ink/60">
+            <div className="mt-5 flex gap-3 rounded-2xl border-l-2 border-l-teal/60 bg-teal/5 p-4 text-sm leading-6 text-muted">
               <LockKeyhole className="mt-0.5 h-4 w-4 shrink-0 text-teal" />
               <p>
                 The credential is soulbound. Transfers and approvals revert, and revoking
@@ -239,17 +242,17 @@ export function ManufacturerCredentialForm() {
             </div>
 
             {formError ? (
-              <p className="mt-5 rounded-2xl bg-red-50 p-3 text-sm text-red-800" role="alert">
+              <p className="mt-5 rounded-2xl border border-danger/40 bg-danger/10 p-3 font-mono text-sm text-frost shadow-glow-red" role="alert">
                 {formError}
               </p>
             ) : null}
 
             <div className="mt-6 space-y-3">
               {configurationReady && !action.isConnected ? (
-                <div className="flex flex-col gap-3 rounded-2xl border border-ink/10 bg-ink/[0.035] p-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/30 p-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <p className="text-sm font-bold">Connect the owner wallet</p>
-                    <p className="mt-1 text-xs leading-5 text-ink/55">
+                    <p className="font-mono text-xs font-bold uppercase tracking-[0.12em] text-frost">Connect the owner wallet</p>
+                    <p className="mt-1 text-xs leading-5 text-muted">
                       The app compares the connected account with the contract&apos;s owner().
                     </p>
                   </div>
@@ -264,10 +267,10 @@ export function ManufacturerCredentialForm() {
               ) : null}
 
               {configurationReady && action.needsMonad ? (
-                <div className="flex flex-col gap-3 rounded-2xl border border-coral/20 bg-coral/5 p-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-col gap-3 rounded-2xl border border-danger/40 bg-danger/5 p-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <p className="text-sm font-bold">Monad Mainnet required</p>
-                    <p className="mt-1 text-xs leading-5 text-ink/55">
+                    <p className="font-mono text-xs font-bold uppercase tracking-[0.12em] text-danger">Monad Mainnet required</p>
+                    <p className="mt-1 text-xs leading-5 text-muted">
                       Credential minting never switches to a test network.
                     </p>
                   </div>
@@ -284,20 +287,20 @@ export function ManufacturerCredentialForm() {
 
               {configurationReady &&
               (action.ownerReadLoading || action.pausedReadLoading) ? (
-                <div className="flex items-center gap-3 rounded-2xl border border-ink/10 bg-white p-4 text-sm text-ink/55">
-                  <LoaderCircle className="h-4 w-4 animate-spin text-teal" />
+                <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/30 p-4 font-mono text-xs text-muted">
+                  <LoaderCircle className="h-4 w-4 animate-spin text-electric" />
                   Reading credential owner and pause state…
                 </div>
               ) : null}
 
               {configurationReady &&
               (action.ownerReadFailed || action.pausedReadFailed) ? (
-                <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-900" role="alert">
-                  <p className="font-bold">Credential contract state could not be read</p>
+                <div className="rounded-2xl border border-danger/40 bg-danger/10 p-4 font-mono text-sm text-frost shadow-glow-red" role="alert">
+                  <p className="font-bold uppercase tracking-[0.12em] text-danger">Credential contract state could not be read</p>
                   <Button
                     size="sm"
                     variant="outline"
-                    className="mt-3 border-red-200 bg-white"
+                    className="mt-3"
                     onClick={action.refetchContractState}
                   >
                     <RefreshCw className="h-4 w-4" />
@@ -307,23 +310,23 @@ export function ManufacturerCredentialForm() {
               ) : null}
 
               {configurationReady && action.isConnected && !action.isOwner && !action.ownerReadLoading ? (
-                <div className="rounded-2xl border border-amber-300/60 bg-amber-50 p-4 text-amber-950">
-                  <p className="text-sm font-bold">Connected wallet is not the owner</p>
-                  <p className="mt-1 text-xs leading-5 text-amber-900/70">
+                <div className="rounded-2xl border border-gold/40 bg-gold/5 p-4">
+                  <p className="font-mono text-sm font-bold uppercase tracking-[0.12em] text-gold">Connected wallet is not the owner</p>
+                  <p className="mt-1 text-xs leading-5 text-muted">
                     mint is onlyOwner. Contract owner: <OwnerAddress address={action.ownerAddress} />
                   </p>
                 </div>
               ) : null}
 
               {configurationReady && action.isOwner ? (
-                <div className="flex items-center gap-2 text-xs font-semibold text-emerald-800">
+                <div className="flex items-center gap-2 rounded-2xl border-l-2 border-l-teal/70 bg-teal/5 px-3 py-2 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-teal">
                   <BadgeCheck className="h-4 w-4" />
                   Connected wallet matches the on-chain contract owner
                 </div>
               ) : null}
 
               {action.isPaused ? (
-                <div className="rounded-2xl border border-amber-300/60 bg-amber-50 p-4 text-sm text-amber-950">
+                <div className="rounded-2xl border border-gold/40 bg-gold/5 p-4 font-mono text-sm text-muted">
                   Credential minting is paused by the contract. An owner must unpause it
                   before another mint can succeed.
                 </div>
@@ -334,15 +337,15 @@ export function ManufacturerCredentialForm() {
               <div
                 className={`mt-5 rounded-2xl border p-4 ${
                   action.error
-                    ? "border-red-200 bg-red-50 text-red-900"
+                    ? "border-danger/40 bg-danger/10 text-frost shadow-glow-red"
                     : action.mintedTokenId
-                      ? "border-emerald-200 bg-emerald-50 text-emerald-950"
-                      : "border-teal/15 bg-teal/5 text-ink"
+                      ? "border-teal/40 bg-teal/5 text-frost shadow-glow-teal"
+                      : "border-white/10 bg-black/30 text-frost"
                 }`}
                 role="status"
                 aria-live="polite"
               >
-                <p className="text-sm font-bold">
+                <p className="font-mono text-xs font-bold uppercase tracking-[0.12em]">
                   {action.error
                     ? "Credential mint was not completed"
                     : action.isWriting
@@ -356,12 +359,12 @@ export function ManufacturerCredentialForm() {
                             : "Mint transaction submitted"}
                 </p>
                 {action.error ? (
-                  <p className="mt-1 break-words text-xs leading-5 text-red-900/70">
+                  <p className="mt-1 break-words font-mono text-xs leading-5 text-frost/80">
                     {action.error}
                   </p>
                 ) : null}
                 {action.mintedTokenId ? (
-                  <p className="mt-2 font-mono text-sm font-bold">
+                  <p className="mt-2 font-mono text-sm font-bold text-teal">
                     Token ID {action.mintedTokenId.toString()}
                   </p>
                 ) : null}
@@ -370,7 +373,7 @@ export function ManufacturerCredentialForm() {
                     href={transactionUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-teal hover:text-ink"
+                    className="mt-3 inline-flex items-center gap-1.5 font-mono text-xs font-bold uppercase tracking-[0.08em] text-electric underline decoration-electric/40 decoration-1 underline-offset-4 transition-colors hover:text-frost hover:decoration-frost"
                   >
                     View actual transaction on MonadScan
                     <ExternalLink className="h-3.5 w-3.5" />
@@ -380,7 +383,7 @@ export function ManufacturerCredentialForm() {
                   <button
                     type="button"
                     onClick={action.clear}
-                    className="mt-3 text-xs font-bold text-ink underline decoration-ink/25 underline-offset-4"
+                    className="mt-3 font-mono text-xs font-bold uppercase tracking-[0.1em] text-frost underline decoration-white/30 decoration-1 underline-offset-4"
                   >
                     Clear error and try again
                   </button>
@@ -419,7 +422,7 @@ export function ManufacturerCredentialForm() {
                   ? "Confirming on Monad"
                   : "Mint credential on Monad"}
             </Button>
-            <p className="mt-2 text-center text-xs leading-5 text-ink/45">
+            <p className="mt-2 text-center font-mono text-xs leading-5 text-muted">
               {!configurationReady
                 ? "Configure a verified credential contract to enable minting."
                 : !action.isConnected
@@ -436,25 +439,25 @@ export function ManufacturerCredentialForm() {
             </p>
           </form>
 
-          <aside className="space-y-4">
-            <div className="rounded-3xl border border-ink/8 bg-paper p-5">
-              <p className="text-[11px] font-extrabold uppercase tracking-[0.12em] text-ink/40">
+          <aside className="space-y-5">
+            <div className="corner-marks corner-marks-soft glass rounded-3xl p-5">
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-muted">
                 Contract owner
               </p>
               <div className="mt-2">
                 <OwnerAddress address={action.ownerAddress} />
               </div>
-              <p className="mt-3 text-xs leading-5 text-ink/50">
+              <p className="mt-3 text-xs leading-5 text-muted">
                 Read directly from owner() on the configured contract. A connected wallet
                 alone is not treated as owner.
               </p>
             </div>
 
-            <div className="rounded-3xl border border-ink/8 bg-paper p-5">
-              <p className="text-[11px] font-extrabold uppercase tracking-[0.12em] text-ink/40">
+            <div className="corner-marks corner-marks-soft glass rounded-3xl p-5">
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-muted">
                 Credential contract
               </p>
-              <p className="mt-2 break-all font-mono text-xs leading-5 text-ink/50">
+              <p className="mt-2 break-all font-mono text-xs leading-5 text-muted">
                 {manufacturerCredentialAddress ??
                   "NEXT_PUBLIC_MANUFACTURER_CREDENTIAL_ADDRESS is not set"}
               </p>
@@ -463,7 +466,7 @@ export function ManufacturerCredentialForm() {
                   href={monadAddressUrl(manufacturerCredentialAddress)}
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-teal hover:text-ink"
+                  className="mt-3 inline-flex items-center gap-1.5 font-mono text-xs font-bold uppercase tracking-[0.08em] text-electric underline decoration-electric/40 decoration-1 underline-offset-4 transition-colors hover:text-frost hover:decoration-frost"
                 >
                   Inspect on MonadScan
                   <ExternalLink className="h-3.5 w-3.5" />

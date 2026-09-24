@@ -3,9 +3,16 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light;
-  --background: 247 250 247;
-  --foreground: 16 44 42;
+  color-scheme: dark;
+  --void: #04060a;
+  --panel: #0a0e14;
+  --hairline: rgba(255, 255, 255, 0.08);
+  --electric: #1fb6ff;
+  --teal: #12d6c0;
+  --gold: #f5a623;
+  --frost: #f6f8fb;
+  --muted: #8a97a6;
+  --danger: #ff4d4d;
 }
 
 * {
@@ -19,18 +26,14 @@ html {
 body {
   min-height: 100vh;
   margin: 0;
-  background:
-    radial-gradient(circle at 8% 2%, rgba(185, 239, 220, 0.45), transparent 28rem),
-    radial-gradient(circle at 96% 14%, rgba(245, 185, 66, 0.14), transparent 24rem),
-    #f7faf7;
-  color: #102c2a;
-  font-feature-settings: "ss01" on, "cv02" on, "cv03" on;
+  background-color: var(--void);
+  color: var(--frost);
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: #b9efdc;
-  color: #102c2a;
+  background: rgba(31, 182, 255, 0.35);
+  color: #ffffff;
 }
 
 button,
@@ -41,13 +44,70 @@ select {
   -webkit-tap-highlight-color: transparent;
 }
 
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: 3px solid rgba(15, 118, 110, 0.3);
+:focus-visible {
+  outline: 2px solid var(--electric);
   outline-offset: 2px;
+}
+
+@layer components {
+  .glass {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--hairline);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.05),
+      0 30px 80px -20px rgba(31, 182, 255, 0.25);
+  }
+
+  .app-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background:
+      radial-gradient(120% 80% at 50% -10%, rgba(31, 182, 255, 0.08), transparent 60%),
+      radial-gradient(90% 60% at 85% 110%, rgba(245, 166, 35, 0.06), transparent 60%);
+  }
+
+  .app-backdrop__art {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .app-backdrop__mark {
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    width: min(74vmin, 780px);
+    height: min(74vmin, 780px);
+    transform: translate(-50%, -50%);
+    color: var(--electric);
+    opacity: 0.05;
+  }
+}
+
+@keyframes trailDrift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -18px, 0);
+  }
+}
+
+.trail-drift {
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .trail-drift {
+    animation: trailDrift 30s ease-in-out infinite;
+  }
 }
 
 @layer utilities {
@@ -55,22 +115,122 @@ select:focus-visible {
     text-wrap: balance;
   }
 
-  .grid-fade {
-    background-image:
-      linear-gradient(rgba(16, 44, 42, 0.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(16, 44, 42, 0.045) 1px, transparent 1px);
-    background-size: 34px 34px;
-    mask-image: linear-gradient(to bottom, black, transparent 92%);
+  .head-glow {
+    text-shadow: 0 0 26px rgba(31, 182, 255, 0.22);
   }
 
-  .glass {
-    background: rgba(255, 255, 255, 0.76);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+  .text-electric-gradient {
+    background: linear-gradient(180deg, #6fc8ff 0%, #1fb6ff 55%, #12d6c0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--hairline);
+  }
+
+  .reflection-glow {
+    height: 9rem;
+    margin-top: -3rem;
+    background: radial-gradient(
+      52% 100% at 50% 0%,
+      rgba(31, 182, 255, 0.26),
+      rgba(245, 166, 35, 0.07) 48%,
+      transparent 78%
+    );
+    filter: blur(20px);
+    transform: scaleY(-1);
+  }
+
+  .btn-sheen {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-sheen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 35%,
+      rgba(255, 255, 255, 0.4) 50%,
+      transparent 65%
+    );
+    transform: translateX(-140%);
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .btn-sheen:hover::after {
+      transform: translateX(140%);
+      transition: transform 0.8s cubic-bezier(0.2, 0.6, 0.2, 1);
+    }
+  }
+
+  .corner-marks {
+    --corner-length: 18px;
+    --corner-weight: 2px;
+    --corner-color: rgba(31, 182, 255, 0.9);
+    background-image:
+      linear-gradient(var(--corner-color), var(--corner-color)),
+      linear-gradient(var(--corner-color), var(--corner-color)),
+      linear-gradient(var(--corner-color), var(--corner-color)),
+      linear-gradient(var(--corner-color), var(--corner-color)),
+      linear-gradient(var(--corner-color), var(--corner-color)),
+      linear-gradient(var(--corner-color), var(--corner-color)),
+      linear-gradient(var(--corner-color), var(--corner-color)),
+      linear-gradient(var(--corner-color), var(--corner-color));
+    background-repeat: no-repeat;
+    background-size:
+      var(--corner-length) var(--corner-weight),
+      var(--corner-weight) var(--corner-length),
+      var(--corner-length) var(--corner-weight),
+      var(--corner-weight) var(--corner-length),
+      var(--corner-length) var(--corner-weight),
+      var(--corner-weight) var(--corner-length),
+      var(--corner-length) var(--corner-weight),
+      var(--corner-weight) var(--corner-length);
+    background-position:
+      top left,
+      top left,
+      top right,
+      top right,
+      bottom left,
+      bottom left,
+      bottom right,
+      bottom right;
+  }
+
+  .corner-marks-danger {
+    --corner-color: rgba(255, 77, 77, 0.75);
+  }
+
+  .corner-marks-soft {
+    --corner-color: rgba(31, 182, 255, 0.4);
   }
 
   .safe-bottom {
     padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+
+  .scanline-beam {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    height: 3px;
+    background: var(--electric);
+    box-shadow:
+      0 0 18px 3px rgba(31, 182, 255, 0.65),
+      0 0 60px 10px rgba(31, 182, 255, 0.25);
+  }
+
+  .nav-underline-active {
+    box-shadow:
+      inset 0 -3px 0 0 var(--electric),
+      0 10px 22px -12px rgba(31, 182, 255, 0.8);
   }
 }
 
@@ -81,5 +241,10 @@ select:focus-visible {
     scroll-behavior: auto !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .trail-drift {
+    animation: none !important;
   }
 }

@@ -19,6 +19,7 @@ export function WalletButton({ compact = false }: { compact?: boolean }) {
     return (
       <Button
         size={compact ? "sm" : "md"}
+        variant="danger"
         onClick={() => switchChain({ chainId: MONAD_MAINNET_ID })}
         disabled={isSwitching}
         className={cn(compact && "px-3")}
@@ -41,13 +42,13 @@ export function WalletButton({ compact = false }: { compact?: boolean }) {
           variant="outline"
           onClick={() => disconnect()}
           aria-label={`Disconnect ${address}`}
-          className={cn(compact && "px-3 font-mono")}
+          className={cn(compact && "px-3")}
         >
           <span
-            className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_0_4px_rgba(16,185,129,0.12)]"
+            className="h-2 w-2 rounded-full bg-teal shadow-[0_0_10px_rgba(18,214,192,0.8)]"
             aria-hidden="true"
           />
-          <span className={cn(!compact && "hidden sm:inline")}>{shortAddress(address)}</span>
+          <span className={cn("font-mono", !compact && "hidden sm:inline")}>{shortAddress(address)}</span>
           <LogOut className="h-3.5 w-3.5 opacity-55" />
         </Button>
       </div>
@@ -76,7 +77,7 @@ export function WalletButton({ compact = false }: { compact?: boolean }) {
       </Button>
       {connectError ? (
         <div
-          className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-72 rounded-2xl border border-coral/20 bg-white p-3 text-left text-xs leading-5 text-ink shadow-lift"
+          className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-72 rounded-2xl border border-danger/50 bg-panel p-3 text-left font-mono text-xs leading-5 text-frost shadow-glow-red"
           role="alert"
         >
           {errorMessage(connectError)}
