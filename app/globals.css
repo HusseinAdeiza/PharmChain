@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --background: 247 250 247;
+  --foreground: 16 44 42;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(circle at 8% 2%, rgba(185, 239, 220, 0.45), transparent 28rem),
+    radial-gradient(circle at 96% 14%, rgba(245, 185, 66, 0.14), transparent 24rem),
+    #f7faf7;
+  color: #102c2a;
+  font-feature-settings: "ss01" on, "cv02" on, "cv03" on;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #b9efdc;
+  color: #102c2a;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(15, 118, 110, 0.3);
+  outline-offset: 2px;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .grid-fade {
+    background-image:
+      linear-gradient(rgba(16, 44, 42, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(16, 44, 42, 0.045) 1px, transparent 1px);
+    background-size: 34px 34px;
+    mask-image: linear-gradient(to bottom, black, transparent 92%);
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.76);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+
+  .safe-bottom {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

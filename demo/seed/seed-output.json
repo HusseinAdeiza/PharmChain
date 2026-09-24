@@ -1,0 +1,519 @@
+{
+  "chainId": 143,
+  "network": "Monad Mainnet",
+  "contractAddresses": {
+    "manufacturerCredential": "0xb1B2b43dBb26C12b25e3eBd85418830413c55B0A",
+    "drugRegistry": "0x0f784017793776A8D6537F827421696077aDb396"
+  },
+  "deployer": "0xf8bbf36018301cdff0B88A0f390350519c887bC9",
+  "manufacturers": [
+    {
+      "name": "A.C. Drugs Ltd",
+      "address": "0x188ba3572102FA8ce6d77860Ba6129f4577Ba8AD",
+      "tokenId": "1"
+    },
+    {
+      "name": "Michelle Laboratories Limited",
+      "address": "0x19e653CAD48077b0749Af87b7fCBddBD4525fc83",
+      "tokenId": "2"
+    },
+    {
+      "name": "Me Cure Industries Limited",
+      "address": "0x77560499e8452B08f59F7Df36e12e24BEE132CBc",
+      "tokenId": "3"
+    },
+    {
+      "name": "Afrab-Chem Limited",
+      "address": "0x802B8977636AB97Bc65c9afc645d10B50d3706E3",
+      "tokenId": "4"
+    },
+    {
+      "name": "Fidson Healthcare PLC",
+      "address": "0xf86fa1c21Cc1D3CE90D43bbcFD48D7A3f34e542A",
+      "tokenId": "5"
+    }
+  ],
+  "metrics": {
+    "manufacturerCredentials": 5,
+    "batches": 16,
+    "activeRecalls": 1,
+    "validatedCounterfeitFlags": 1,
+    "evidencePdfs": 4
+  },
+  "evidence": [
+    {
+      "key": "registration-guideline",
+      "filename": "nafdac-registration-guideline.pdf",
+      "sourceUrl": "https://nafdac.gov.ng/wp-content/uploads/Files/Resources/Guidelines/DR&R_2025/Guidelines-for-Registration-of-Drug-Products-Made-in-Nigeria-Human-and-Veterinary-Drug.pdf",
+      "keccak256": "0x5cb585ee5861dfb7c0720dfd6d1484f5770b9fdd486564816a8a77f8390cfdf4",
+      "cid": "QmcLDTzmLU8rdBkEChr9kt7SCk7fL2G3L82ptLzkptfK1m",
+      "ipfsUrl": "https://ipfs.io/ipfs/QmcLDTzmLU8rdBkEChr9kt7SCk7fL2G3L82ptLzkptfK1m"
+    },
+    {
+      "key": "recall-guideline",
+      "filename": "nafdac-recall-guideline.pdf",
+      "sourceUrl": "https://nafdac.gov.ng/wp-content/uploads/Files/Resources/Guidelines/PMS_Guidelines_2024/NAFDAC-Guidelines-for-the-Recall-of-Defective-Medical-Products.pdf",
+      "keccak256": "0x2700dd358660b776471a95c9d8de6dcb9da3d685ae0d1ef272b4b91deef77992",
+      "cid": "QmTrfPpNnjcx2KGT8kJxRwVm19wRiCCU9eVvQHZvVjxTzC",
+      "ipfsUrl": "https://ipfs.io/ipfs/QmTrfPpNnjcx2KGT8kJxRwVm19wRiCCU9eVvQHZvVjxTzC"
+    },
+    {
+      "key": "gmp-guideline",
+      "filename": "nafdac-gmp-guideline.pdf",
+      "sourceUrl": "https://nafdac.gov.ng/wp-content/uploads/Files/Resources/Guidelines/DRUG_GUIDELINES/NAFDAC-GMP-GUIDELINES.pdf",
+      "keccak256": "0x478798460bbc265092cb1a377f0da26eca92ebed40e06ebb0f4b2d28ed4e885c",
+      "cid": "QmSg5KNxBDzzBNx2jicLXRYzrBadkt9DRRen1wVkwJozPo",
+      "ipfsUrl": "https://ipfs.io/ipfs/QmSg5KNxBDzzBNx2jicLXRYzrBadkt9DRRen1wVkwJozPo"
+    },
+    {
+      "key": "label-guidance",
+      "filename": "nafdac-label-guidance.pdf",
+      "sourceUrl": "https://nafdac.gov.ng/wp-content/uploads/Files/Resources/Guidelines/DR_And_R_Guidelines/Label-Guidance-For-Pharmaceutical-Products.pdf",
+      "keccak256": "0x3403ed83c356c71e677ac59c329e3917e58c0290e208c411240cf7af5d9b6f4f",
+      "cid": "QmQbzc1uaKKxyWy4Webh6PderNuXF6u9m59ehepVnpkJmS",
+      "ipfsUrl": "https://ipfs.io/ipfs/QmQbzc1uaKKxyWy4Webh6PderNuXF6u9m59ehepVnpkJmS"
+    }
+  ],
+  "transactions": [
+    {
+      "action": "mint credential A.C. Drugs Ltd",
+      "hash": "0xd6454139655dd5c085e484a5c10a03368e87e34ea490cd05ec4e65e8dc23ac6a",
+      "explorerUrl": "https://monadscan.com/tx/0xd6454139655dd5c085e484a5c10a03368e87e34ea490cd05ec4e65e8dc23ac6a",
+      "tokenId": "1"
+    },
+    {
+      "action": "attest DEMO-AC-001",
+      "hash": "0xc6b7d106de38ec18eb94132ef3ee819f741dec6413e543c645403d16c2deac0d",
+      "explorerUrl": "https://monadscan.com/tx/0xc6b7d106de38ec18eb94132ef3ee819f741dec6413e543c645403d16c2deac0d",
+      "batchId": "1"
+    },
+    {
+      "action": "attest DEMO-AC-002",
+      "hash": "0x7439baf9b9ac3b79becd3ec1468e97f4e5842a2f14898b3210f6704433d6960d",
+      "explorerUrl": "https://monadscan.com/tx/0x7439baf9b9ac3b79becd3ec1468e97f4e5842a2f14898b3210f6704433d6960d",
+      "batchId": "2"
+    },
+    {
+      "action": "attest DEMO-AC-003",
+      "hash": "0x5dae6d159bfbd6261d82eb4e26263088840f88967cd660fe01cf510bad2fd889",
+      "explorerUrl": "https://monadscan.com/tx/0x5dae6d159bfbd6261d82eb4e26263088840f88967cd660fe01cf510bad2fd889",
+      "batchId": "3"
+    },
+    {
+      "action": "attest DEMO-AC-004",
+      "hash": "0xe5f1edbfc3109da1a7e719c99f2208304f7f84f3c829bcff0e4f570df2a9adbc",
+      "explorerUrl": "https://monadscan.com/tx/0xe5f1edbfc3109da1a7e719c99f2208304f7f84f3c829bcff0e4f570df2a9adbc",
+      "batchId": "4"
+    },
+    {
+      "action": "mint credential Michelle Laboratories Limited",
+      "hash": "0x19b168d1f13f84364732e93cfd59296c31341dfd24d4cdbae16d78425817b7dd",
+      "explorerUrl": "https://monadscan.com/tx/0x19b168d1f13f84364732e93cfd59296c31341dfd24d4cdbae16d78425817b7dd",
+      "tokenId": "2"
+    },
+    {
+      "action": "attest DEMO-ML-001",
+      "hash": "0x54c3d2a6d629d3e8fe67c92543abc5f9f80947279d33a17c86e4c6c911423c6f",
+      "explorerUrl": "https://monadscan.com/tx/0x54c3d2a6d629d3e8fe67c92543abc5f9f80947279d33a17c86e4c6c911423c6f",
+      "batchId": "5"
+    },
+    {
+      "action": "attest DEMO-ML-002",
+      "hash": "0x62b9cd205ecec4d5fc8443064a01d2722443ef9898971ab28a84f1fb82812c74",
+      "explorerUrl": "https://monadscan.com/tx/0x62b9cd205ecec4d5fc8443064a01d2722443ef9898971ab28a84f1fb82812c74",
+      "batchId": "6"
+    },
+    {
+      "action": "attest DEMO-ML-003",
+      "hash": "0xb16851a9063b101c58f189a8df2b4007e29336247d02c5865e2789d965a2fcd3",
+      "explorerUrl": "https://monadscan.com/tx/0xb16851a9063b101c58f189a8df2b4007e29336247d02c5865e2789d965a2fcd3",
+      "batchId": "7"
+    },
+    {
+      "action": "mint credential Me Cure Industries Limited",
+      "hash": "0xdc743bc52d3397037d5c0d5200260e98925fa2370c70b1cba5202dc6adb89acd",
+      "explorerUrl": "https://monadscan.com/tx/0xdc743bc52d3397037d5c0d5200260e98925fa2370c70b1cba5202dc6adb89acd",
+      "tokenId": "3"
+    },
+    {
+      "action": "attest DEMO-MC-001",
+      "hash": "0xe4fb3c8958172475c411d5cc68022ee9be758c0a46a3fc53cf5ed0afe4813071",
+      "explorerUrl": "https://monadscan.com/tx/0xe4fb3c8958172475c411d5cc68022ee9be758c0a46a3fc53cf5ed0afe4813071",
+      "batchId": "8"
+    },
+    {
+      "action": "attest DC.319",
+      "hash": "0x3f29d1c32414c7d36c7ec34d06a4eb6e4ea4c6a9a3247d3dfa88800a490cff6b",
+      "explorerUrl": "https://monadscan.com/tx/0x3f29d1c32414c7d36c7ec34d06a4eb6e4ea4c6a9a3247d3dfa88800a490cff6b",
+      "batchId": "9"
+    },
+    {
+      "action": "attest DEMO-MC-003",
+      "hash": "0x882ad8703468a132560a2ecd024182b012524e7a80472f51bb427c2a220d52ba",
+      "explorerUrl": "https://monadscan.com/tx/0x882ad8703468a132560a2ecd024182b012524e7a80472f51bb427c2a220d52ba",
+      "batchId": "10"
+    },
+    {
+      "action": "mint credential Afrab-Chem Limited",
+      "hash": "0xc065d194a82aef2408e87382a33a2c0ae9b460dc836bb260ea597f321afd0d3b",
+      "explorerUrl": "https://monadscan.com/tx/0xc065d194a82aef2408e87382a33a2c0ae9b460dc836bb260ea597f321afd0d3b",
+      "tokenId": "4"
+    },
+    {
+      "action": "attest DEMO-AR-001",
+      "hash": "0xd2a180621cb7d3eaf051454735ad09477664e09d7a68cca84687ee9c0458bb07",
+      "explorerUrl": "https://monadscan.com/tx/0xd2a180621cb7d3eaf051454735ad09477664e09d7a68cca84687ee9c0458bb07",
+      "batchId": "11"
+    },
+    {
+      "action": "attest DEMO-AR-002",
+      "hash": "0x09adfe1e54cdeb4011b9239f9ea4eee671c43af671ac7387ea199583a33ac0aa",
+      "explorerUrl": "https://monadscan.com/tx/0x09adfe1e54cdeb4011b9239f9ea4eee671c43af671ac7387ea199583a33ac0aa",
+      "batchId": "12"
+    },
+    {
+      "action": "attest DEMO-AR-003",
+      "hash": "0x6baa3140e15aba3932dd5b46e56432798e30ee0f6aa7a31d14f5b3006f70fc7d",
+      "explorerUrl": "https://monadscan.com/tx/0x6baa3140e15aba3932dd5b46e56432798e30ee0f6aa7a31d14f5b3006f70fc7d",
+      "batchId": "13"
+    },
+    {
+      "action": "mint credential Fidson Healthcare PLC",
+      "hash": "0x41c2d065504a01ba9dc7844f8aeddc2225d436f17a60094489fa73b5fe658805",
+      "explorerUrl": "https://monadscan.com/tx/0x41c2d065504a01ba9dc7844f8aeddc2225d436f17a60094489fa73b5fe658805",
+      "tokenId": "5"
+    },
+    {
+      "action": "attest DEMO-FH-001",
+      "hash": "0xc1717965a411f16d82f3cac7e009f3ba01c2a1dc26cc3a9fb40a4b3756e2941c",
+      "explorerUrl": "https://monadscan.com/tx/0xc1717965a411f16d82f3cac7e009f3ba01c2a1dc26cc3a9fb40a4b3756e2941c",
+      "batchId": "14"
+    },
+    {
+      "action": "attest DEMO-FH-002",
+      "hash": "0xbdfaeabf71415078f194102ed9d8bd83d2dd3235ae662afeac181ffd1169da2f",
+      "explorerUrl": "https://monadscan.com/tx/0xbdfaeabf71415078f194102ed9d8bd83d2dd3235ae662afeac181ffd1169da2f",
+      "batchId": "15"
+    },
+    {
+      "action": "attest DEMO-FH-003",
+      "hash": "0x9faed060a23425dd6ee09432c9018cac297a954fde96ce1bf33ff148b34a0303",
+      "explorerUrl": "https://monadscan.com/tx/0x9faed060a23425dd6ee09432c9018cac297a954fde96ce1bf33ff148b34a0303",
+      "batchId": "16"
+    },
+    {
+      "action": "flag recalled dexamethasone batch",
+      "hash": "0x4e70b71e6f03de7c3dd1080b1de95bbab9aab22744b0fe1531b250269adb253e",
+      "explorerUrl": "https://monadscan.com/tx/0x4e70b71e6f03de7c3dd1080b1de95bbab9aab22744b0fe1531b250269adb253e",
+      "batchId": "9"
+    },
+    {
+      "action": "flag counterfeit Cikatem report",
+      "hash": "0xfa88d6e86676bde6f13a7fca6b173691f5c4b5cbfc852d9056248e810a8a0797",
+      "explorerUrl": "https://monadscan.com/tx/0xfa88d6e86676bde6f13a7fca6b173691f5c4b5cbfc852d9056248e810a8a0797",
+      "reportId": "1"
+    },
+    {
+      "action": "validate counterfeit report",
+      "hash": "0x3f54e6cf91bfa74197a60e09d59150e874fd99f1d663d830a35ed5a9c0a73af0",
+      "explorerUrl": "https://monadscan.com/tx/0x3f54e6cf91bfa74197a60e09d59150e874fd99f1d663d830a35ed5a9c0a73af0",
+      "reportId": "1"
+    }
+  ],
+  "batchRecords": [
+    {
+      "nrn": "A11-0550",
+      "batchNumber": "DEMO-AC-001",
+      "drugName": "ACD 500 Tablet — Paracetamol 500 mg",
+      "expiryDate": "2027-12-31",
+      "evidenceKey": "registration-guideline",
+      "tokenId": "1",
+      "manufacturer": "A.C. Drugs Ltd",
+      "manufacturerAddress": "0x188ba3572102FA8ce6d77860Ba6129f4577Ba8AD",
+      "batchId": "1",
+      "transactionHash": "0xc6b7d106de38ec18eb94132ef3ee819f741dec6413e543c645403d16c2deac0d",
+      "explorerUrl": "https://monadscan.com/tx/0xc6b7d106de38ec18eb94132ef3ee819f741dec6413e543c645403d16c2deac0d",
+      "evidenceCid": "QmcLDTzmLU8rdBkEChr9kt7SCk7fL2G3L82ptLzkptfK1m"
+    },
+    {
+      "nrn": "A4-8982",
+      "batchNumber": "DEMO-AC-002",
+      "drugName": "Acimox Capsule — Amoxicillin 500 mg",
+      "expiryDate": "2027-11-30",
+      "evidenceKey": "registration-guideline",
+      "tokenId": "1",
+      "manufacturer": "A.C. Drugs Ltd",
+      "manufacturerAddress": "0x188ba3572102FA8ce6d77860Ba6129f4577Ba8AD",
+      "batchId": "2",
+      "transactionHash": "0x7439baf9b9ac3b79becd3ec1468e97f4e5842a2f14898b3210f6704433d6960d",
+      "explorerUrl": "https://monadscan.com/tx/0x7439baf9b9ac3b79becd3ec1468e97f4e5842a2f14898b3210f6704433d6960d",
+      "evidenceCid": "QmcLDTzmLU8rdBkEChr9kt7SCk7fL2G3L82ptLzkptfK1m"
+    },
+    {
+      "nrn": "A4-3164",
+      "batchNumber": "DEMO-AC-003",
+      "drugName": "Artemetrin DS Tablet — Artemether/Lumefantrine 80/480 mg",
+      "expiryDate": "2028-01-31",
+      "evidenceKey": "registration-guideline",
+      "tokenId": "1",
+      "manufacturer": "A.C. Drugs Ltd",
+      "manufacturerAddress": "0x188ba3572102FA8ce6d77860Ba6129f4577Ba8AD",
+      "batchId": "3",
+      "transactionHash": "0x5dae6d159bfbd6261d82eb4e26263088840f88967cd660fe01cf510bad2fd889",
+      "explorerUrl": "https://monadscan.com/tx/0x5dae6d159bfbd6261d82eb4e26263088840f88967cd660fe01cf510bad2fd889",
+      "evidenceCid": "QmcLDTzmLU8rdBkEChr9kt7SCk7fL2G3L82ptLzkptfK1m"
+    },
+    {
+      "nrn": "A4-4958",
+      "batchNumber": "DEMO-AC-004",
+      "drugName": "AC-Ome 20 Capsule — Omeprazole 20 mg",
+      "expiryDate": "2027-10-31",
+      "evidenceKey": "registration-guideline",
+      "tokenId": "1",
+      "manufacturer": "A.C. Drugs Ltd",
+      "manufacturerAddress": "0x188ba3572102FA8ce6d77860Ba6129f4577Ba8AD",
+      "batchId": "4",
+      "transactionHash": "0xe5f1edbfc3109da1a7e719c99f2208304f7f84f3c829bcff0e4f570df2a9adbc",
+      "explorerUrl": "https://monadscan.com/tx/0xe5f1edbfc3109da1a7e719c99f2208304f7f84f3c829bcff0e4f570df2a9adbc",
+      "evidenceCid": "QmcLDTzmLU8rdBkEChr9kt7SCk7fL2G3L82ptLzkptfK1m"
+    },
+    {
+      "nrn": "A11-100255",
+      "batchNumber": "DEMO-ML-001",
+      "drugName": "Cikagyl 400 Tablet — Metronidazole 400 mg",
+      "expiryDate": "2027-09-30",
+      "evidenceKey": "label-guidance",
+      "tokenId": "2",
+      "manufacturer": "Michelle Laboratories Limited",
+      "manufacturerAddress": "0x19e653CAD48077b0749Af87b7fCBddBD4525fc83",
+      "batchId": "5",
+      "transactionHash": "0x54c3d2a6d629d3e8fe67c92543abc5f9f80947279d33a17c86e4c6c911423c6f",
+      "explorerUrl": "https://monadscan.com/tx/0x54c3d2a6d629d3e8fe67c92543abc5f9f80947279d33a17c86e4c6c911423c6f",
+      "evidenceCid": "QmQbzc1uaKKxyWy4Webh6PderNuXF6u9m59ehepVnpkJmS"
+    },
+    {
+      "nrn": "A11-100025",
+      "batchNumber": "DEMO-ML-002",
+      "drugName": "Cikatem Tablet 20/120 mg",
+      "expiryDate": "2027-09-30",
+      "evidenceKey": "registration-guideline",
+      "tokenId": "2",
+      "manufacturer": "Michelle Laboratories Limited",
+      "manufacturerAddress": "0x19e653CAD48077b0749Af87b7fCBddBD4525fc83",
+      "batchId": "6",
+      "transactionHash": "0x62b9cd205ecec4d5fc8443064a01d2722443ef9898971ab28a84f1fb82812c74",
+      "explorerUrl": "https://monadscan.com/tx/0x62b9cd205ecec4d5fc8443064a01d2722443ef9898971ab28a84f1fb82812c74",
+      "evidenceCid": "QmcLDTzmLU8rdBkEChr9kt7SCk7fL2G3L82ptLzkptfK1m"
+    },
+    {
+      "nrn": "A11-100025",
+      "batchNumber": "DEMO-ML-003",
+      "drugName": "Cikatem Tablet 20/120 mg",
+      "expiryDate": "2027-09-30",
+      "evidenceKey": "registration-guideline",
+      "tokenId": "2",
+      "manufacturer": "Michelle Laboratories Limited",
+      "manufacturerAddress": "0x19e653CAD48077b0749Af87b7fCBddBD4525fc83",
+      "batchId": "7",
+      "transactionHash": "0xb16851a9063b101c58f189a8df2b4007e29336247d02c5865e2789d965a2fcd3",
+      "explorerUrl": "https://monadscan.com/tx/0xb16851a9063b101c58f189a8df2b4007e29336247d02c5865e2789d965a2fcd3",
+      "evidenceCid": "QmcLDTzmLU8rdBkEChr9kt7SCk7fL2G3L82ptLzkptfK1m"
+    },
+    {
+      "nrn": "A11-100744",
+      "batchNumber": "DEMO-MC-001",
+      "drugName": "MeCure's Amlodipine 10 mg Tablet",
+      "expiryDate": "2028-02-28",
+      "evidenceKey": "registration-guideline",
+      "tokenId": "3",
+      "manufacturer": "Me Cure Industries Limited",
+      "manufacturerAddress": "0x77560499e8452B08f59F7Df36e12e24BEE132CBc",
+      "batchId": "8",
+      "transactionHash": "0xe4fb3c8958172475c411d5cc68022ee9be758c0a46a3fc53cf5ed0afe4813071",
+      "explorerUrl": "https://monadscan.com/tx/0xe4fb3c8958172475c411d5cc68022ee9be758c0a46a3fc53cf5ed0afe4813071",
+      "evidenceCid": "QmcLDTzmLU8rdBkEChr9kt7SCk7fL2G3L82ptLzkptfK1m"
+    },
+    {
+      "nrn": "A4-0201",
+      "batchNumber": "DC.319",
+      "drugName": "Me cure Dexamethasone 0.5 mg Tablet",
+      "expiryDate": "2024-05-01",
+      "evidenceKey": "recall-guideline",
+      "tokenId": "3",
+      "manufacturer": "Me Cure Industries Limited",
+      "manufacturerAddress": "0x77560499e8452B08f59F7Df36e12e24BEE132CBc",
+      "batchId": "9",
+      "transactionHash": "0x3f29d1c32414c7d36c7ec34d06a4eb6e4ea4c6a9a3247d3dfa88800a490cff6b",
+      "explorerUrl": "https://monadscan.com/tx/0x3f29d1c32414c7d36c7ec34d06a4eb6e4ea4c6a9a3247d3dfa88800a490cff6b",
+      "evidenceCid": "QmTrfPpNnjcx2KGT8kJxRwVm19wRiCCU9eVvQHZvVjxTzC"
+    },
+    {
+      "nrn": "A11-0262",
+      "batchNumber": "DEMO-MC-003",
+      "drugName": "MeCure's Diclopar Tablet",
+      "expiryDate": "2027-08-31",
+      "evidenceKey": "registration-guideline",
+      "tokenId": "3",
+      "manufacturer": "Me Cure Industries Limited",
+      "manufacturerAddress": "0x77560499e8452B08f59F7Df36e12e24BEE132CBc",
+      "batchId": "10",
+      "transactionHash": "0x882ad8703468a132560a2ecd024182b012524e7a80472f51bb427c2a220d52ba",
+      "explorerUrl": "https://monadscan.com/tx/0x882ad8703468a132560a2ecd024182b012524e7a80472f51bb427c2a220d52ba",
+      "evidenceCid": "QmcLDTzmLU8rdBkEChr9kt7SCk7fL2G3L82ptLzkptfK1m"
+    },
+    {
+      "nrn": "A11-101341",
+      "batchNumber": "DEMO-AR-001",
+      "drugName": "AFRAB AZITHROMYCIN 500MG TABLETS",
+      "expiryDate": "2027-12-31",
+      "evidenceKey": "registration-guideline",
+      "tokenId": "4",
+      "manufacturer": "Afrab-Chem Limited",
+      "manufacturerAddress": "0x802B8977636AB97Bc65c9afc645d10B50d3706E3",
+      "batchId": "11",
+      "transactionHash": "0xd2a180621cb7d3eaf051454735ad09477664e09d7a68cca84687ee9c0458bb07",
+      "explorerUrl": "https://monadscan.com/tx/0xd2a180621cb7d3eaf051454735ad09477664e09d7a68cca84687ee9c0458bb07",
+      "evidenceCid": "QmcLDTzmLU8rdBkEChr9kt7SCk7fL2G3L82ptLzkptfK1m"
+    },
+    {
+      "nrn": "A11-101341",
+      "batchNumber": "DEMO-AR-002",
+      "drugName": "AFRAB AZITHROMYCIN 500MG TABLETS",
+      "expiryDate": "2027-12-31",
+      "evidenceKey": "registration-guideline",
+      "tokenId": "4",
+      "manufacturer": "Afrab-Chem Limited",
+      "manufacturerAddress": "0x802B8977636AB97Bc65c9afc645d10B50d3706E3",
+      "batchId": "12",
+      "transactionHash": "0x09adfe1e54cdeb4011b9239f9ea4eee671c43af671ac7387ea199583a33ac0aa",
+      "explorerUrl": "https://monadscan.com/tx/0x09adfe1e54cdeb4011b9239f9ea4eee671c43af671ac7387ea199583a33ac0aa",
+      "evidenceCid": "QmcLDTzmLU8rdBkEChr9kt7SCk7fL2G3L82ptLzkptfK1m"
+    },
+    {
+      "nrn": "A11-101341",
+      "batchNumber": "DEMO-AR-003",
+      "drugName": "AFRAB AZITHROMYCIN 500MG TABLETS",
+      "expiryDate": "2027-12-31",
+      "evidenceKey": "registration-guideline",
+      "tokenId": "4",
+      "manufacturer": "Afrab-Chem Limited",
+      "manufacturerAddress": "0x802B8977636AB97Bc65c9afc645d10B50d3706E3",
+      "batchId": "13",
+      "transactionHash": "0x6baa3140e15aba3932dd5b46e56432798e30ee0f6aa7a31d14f5b3006f70fc7d",
+      "explorerUrl": "https://monadscan.com/tx/0x6baa3140e15aba3932dd5b46e56432798e30ee0f6aa7a31d14f5b3006f70fc7d",
+      "evidenceCid": "QmcLDTzmLU8rdBkEChr9kt7SCk7fL2G3L82ptLzkptfK1m"
+    },
+    {
+      "nrn": "A11-0731",
+      "batchNumber": "DEMO-FH-001",
+      "drugName": "Forste Suspension — Azithromycin 200 mg/5 mL",
+      "expiryDate": "2027-12-31",
+      "evidenceKey": "registration-guideline",
+      "tokenId": "5",
+      "manufacturer": "Fidson Healthcare PLC",
+      "manufacturerAddress": "0xf86fa1c21Cc1D3CE90D43bbcFD48D7A3f34e542A",
+      "batchId": "14",
+      "transactionHash": "0xc1717965a411f16d82f3cac7e009f3ba01c2a1dc26cc3a9fb40a4b3756e2941c",
+      "explorerUrl": "https://monadscan.com/tx/0xc1717965a411f16d82f3cac7e009f3ba01c2a1dc26cc3a9fb40a4b3756e2941c",
+      "evidenceCid": "QmcLDTzmLU8rdBkEChr9kt7SCk7fL2G3L82ptLzkptfK1m"
+    },
+    {
+      "nrn": "A11-0731",
+      "batchNumber": "DEMO-FH-002",
+      "drugName": "Forste Suspension — Azithromycin 200 mg/5 mL",
+      "expiryDate": "2027-12-31",
+      "evidenceKey": "registration-guideline",
+      "tokenId": "5",
+      "manufacturer": "Fidson Healthcare PLC",
+      "manufacturerAddress": "0xf86fa1c21Cc1D3CE90D43bbcFD48D7A3f34e542A",
+      "batchId": "15",
+      "transactionHash": "0xbdfaeabf71415078f194102ed9d8bd83d2dd3235ae662afeac181ffd1169da2f",
+      "explorerUrl": "https://monadscan.com/tx/0xbdfaeabf71415078f194102ed9d8bd83d2dd3235ae662afeac181ffd1169da2f",
+      "evidenceCid": "QmcLDTzmLU8rdBkEChr9kt7SCk7fL2G3L82ptLzkptfK1m"
+    },
+    {
+      "nrn": "A11-0731",
+      "batchNumber": "DEMO-FH-003",
+      "drugName": "Forste Suspension — Azithromycin 200 mg/5 mL",
+      "expiryDate": "2027-12-31",
+      "evidenceKey": "registration-guideline",
+      "tokenId": "5",
+      "manufacturer": "Fidson Healthcare PLC",
+      "manufacturerAddress": "0xf86fa1c21Cc1D3CE90D43bbcFD48D7A3f34e542A",
+      "batchId": "16",
+      "transactionHash": "0x9faed060a23425dd6ee09432c9018cac297a954fde96ce1bf33ff148b34a0303",
+      "explorerUrl": "https://monadscan.com/tx/0x9faed060a23425dd6ee09432c9018cac297a954fde96ce1bf33ff148b34a0303",
+      "evidenceCid": "QmcLDTzmLU8rdBkEChr9kt7SCk7fL2G3L82ptLzkptfK1m"
+    }
+  ],
+  "verifyUrls": [
+    "https://pharmchain.vercel.app/verify/A11-0550",
+    "https://pharmchain.vercel.app/verify/A4-8982",
+    "https://pharmchain.vercel.app/verify/A4-3164",
+    "https://pharmchain.vercel.app/verify/A4-4958",
+    "https://pharmchain.vercel.app/verify/A11-100255",
+    "https://pharmchain.vercel.app/verify/A11-100025",
+    "https://pharmchain.vercel.app/verify/A11-100744",
+    "https://pharmchain.vercel.app/verify/A4-0201",
+    "https://pharmchain.vercel.app/verify/A11-0262",
+    "https://pharmchain.vercel.app/verify/A11-101341",
+    "https://pharmchain.vercel.app/verify/A11-0731"
+  ],
+  "qrFiles": [
+    {
+      "nafdacNumber": "A11-0550",
+      "url": "https://pharmchain.vercel.app/verify/A11-0550",
+      "file": "A11-0550.svg"
+    },
+    {
+      "nafdacNumber": "A4-8982",
+      "url": "https://pharmchain.vercel.app/verify/A4-8982",
+      "file": "A4-8982.svg"
+    },
+    {
+      "nafdacNumber": "A4-3164",
+      "url": "https://pharmchain.vercel.app/verify/A4-3164",
+      "file": "A4-3164.svg"
+    },
+    {
+      "nafdacNumber": "A4-4958",
+      "url": "https://pharmchain.vercel.app/verify/A4-4958",
+      "file": "A4-4958.svg"
+    },
+    {
+      "nafdacNumber": "A11-100255",
+      "url": "https://pharmchain.vercel.app/verify/A11-100255",
+      "file": "A11-100255.svg"
+    },
+    {
+      "nafdacNumber": "A11-100025",
+      "url": "https://pharmchain.vercel.app/verify/A11-100025",
+      "file": "A11-100025.svg"
+    },
+    {
+      "nafdacNumber": "A11-100744",
+      "url": "https://pharmchain.vercel.app/verify/A11-100744",
+      "file": "A11-100744.svg"
+    },
+    {
+      "nafdacNumber": "A4-0201",
+      "url": "https://pharmchain.vercel.app/verify/A4-0201",
+      "file": "A4-0201.svg"
+    },
+    {
+      "nafdacNumber": "A11-0262",
+      "url": "https://pharmchain.vercel.app/verify/A11-0262",
+      "file": "A11-0262.svg"
+    },
+    {
+      "nafdacNumber": "A11-101341",
+      "url": "https://pharmchain.vercel.app/verify/A11-101341",
+      "file": "A11-101341.svg"
+    },
+    {
+      "nafdacNumber": "A11-0731",
+      "url": "https://pharmchain.vercel.app/verify/A11-0731",
+      "file": "A11-0731.svg"
+    }
+  ]
+}

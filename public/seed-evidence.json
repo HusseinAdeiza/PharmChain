@@ -1,0 +1,38 @@
+{
+  "network": "Monad Mainnet",
+  "chainId": 143,
+  "evidence": [
+    {
+      "key": "registration-guideline",
+      "filename": "nafdac-registration-guideline.pdf",
+      "sourceUrl": "https://nafdac.gov.ng/wp-content/uploads/Files/Resources/Guidelines/DR&R_2025/Guidelines-for-Registration-of-Drug-Products-Made-in-Nigeria-Human-and-Veterinary-Drug.pdf",
+      "keccak256": "0x5cb585ee5861dfb7c0720dfd6d1484f5770b9fdd486564816a8a77f8390cfdf4",
+      "cid": "QmcLDTzmLU8rdBkEChr9kt7SCk7fL2G3L82ptLzkptfK1m",
+      "ipfsUrl": "https://gateway.pinata.cloud/ipfs/QmcLDTzmLU8rdBkEChr9kt7SCk7fL2G3L82ptLzkptfK1m"
+    },
+    {
+      "key": "recall-guideline",
+      "filename": "nafdac-recall-guideline.pdf",
+      "sourceUrl": "https://nafdac.gov.ng/wp-content/uploads/Files/Resources/Guidelines/PMS_Guidelines_2024/NAFDAC-Guidelines-for-the-Recall-of-Defective-Medical-Products.pdf",
+      "keccak256": "0x2700dd358660b776471a95c9d8de6dcb9da3d685ae0d1ef272b4b91deef77992",
+      "cid": "QmTrfPpNnjcx2KGT8kJxRwVm19wRiCCU9eVvQHZvVjxTzC",
+      "ipfsUrl": "https://gateway.pinata.cloud/ipfs/QmTrfPpNnjcx2KGT8kJxRwVm19wRiCCU9eVvQHZvVjxTzC"
+    },
+    {
+      "key": "gmp-guideline",
+      "filename": "nafdac-gmp-guideline.pdf",
+      "sourceUrl": "https://nafdac.gov.ng/wp-content/uploads/Files/Resources/Guidelines/DRUG_GUIDELINES/NAFDAC-GMP-GUIDELINES.pdf",
+      "keccak256": "0x478798460bbc265092cb1a377f0da26eca92ebed40e06ebb0f4b2d28ed4e885c",
+      "cid": "QmSg5KNxBDzzBNx2jicLXRYzrBadkt9DRRen1wVkwJozPo",
+      "ipfsUrl": "https://gateway.pinata.cloud/ipfs/QmSg5KNxBDzzBNx2jicLXRYzrBadkt9DRRen1wVkwJozPo"
+    },
+    {
+      "key": "label-guidance",
+      "filename": "nafdac-label-guidance.pdf",
+      "sourceUrl": "https://nafdac.gov.ng/wp-content/uploads/Files/Resources/Guidelines/DR_And_R_Guidelines/Label-Guidance-For-Pharmaceutical-Products.pdf",
+      "keccak256": "0x3403ed83c356c71e677ac59c329e3917e58c0290e208c411240cf7af5d9b6f4f",
+      "cid": "QmQbzc1uaKKxyWy4Webh6PderNuXF6u9m59ehepVnpkJmS",
+      "ipfsUrl": "https://gateway.pinata.cloud/ipfs/QmQbzc1uaKKxyWy4Webh6PderNuXF6u9m59ehepVnpkJmS"
+    }
+  ]
+}

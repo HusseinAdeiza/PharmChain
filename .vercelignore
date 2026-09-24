@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+cache
+broadcast
+lib/openzeppelin-contracts
+lib/forge-std
+test
+src
+script
+scripts
+evidence
+*.log
