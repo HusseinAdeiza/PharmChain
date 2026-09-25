@@ -1,16 +1,15 @@
 "use client";
 
-import { useAccount, useConnect, useDisconnect, useSwitchChain } from "wagmi";
+import { useAccount, useDisconnect, useSwitchChain } from "wagmi";
 import { LoaderCircle, LogOut, Wallet } from "lucide-react";
 import { Button, cn } from "@/components/ui/button";
-import { errorMessage } from "@/lib/errors";
+import { useWalletSelection } from "@/components/wallet-selection";
 import { shortAddress } from "@/lib/format";
 import { MONAD_MAINNET_ID } from "@/lib/monad";
 
 export function WalletButton({ compact = false }: { compact?: boolean }) {
   const { address, isConnected, chainId } = useAccount();
-  const { connectors, connect, error: connectError, isPending: isConnecting } =
-    useConnect();
+  const { openPicker, isConnecting, hasConnector } = useWalletSelection();
   const { disconnect } = useDisconnect();
   const { switchChain, isPending: isSwitching } = useSwitchChain();
   const needsMonad = isConnected && chainId !== MONAD_MAINNET_ID;
@@ -56,33 +55,26 @@ export function WalletButton({ compact = false }: { compact?: boolean }) {
   }
 
   return (
-    <div className="relative">
-      <Button
-        size={compact ? "sm" : "md"}
-        onClick={() => {
-          const connector = connectors[0];
-          if (connector) {
-            connect({ connector });
-          }
-        }}
-        disabled={isConnecting || connectors.length === 0}
-        className={cn(compact && "px-3")}
-      >
-        {isConnecting ? (
-          <LoaderCircle className="h-4 w-4 animate-spin" />
-        ) : (
-          <Wallet className="h-4 w-4" />
-        )}
-        {connectors.length === 0 ? "No wallet" : compact ? "Connect" : "Connect wallet"}
-      </Button>
-      {connectError ? (
-        <div
-          className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-72 rounded-2xl border border-danger/50 bg-panel p-3 text-left font-mono text-xs leading-5 text-frost shadow-glow-red"
-          role="alert"
-        >
-          {errorMessage(connectError)}
-        </div>
-      ) : null}
-    </div>
+    <Button
+      size={compact ? "sm" : "md"}
+      onClick={openPicker}
+      disabled={isConnecting}
+      aria-haspopup="dialog"
+      aria-controls="wallet-selector-title"
+      className={cn(compact && "px-3")}
+    >
+      {isConnecting ? (
+        <LoaderCircle className="h-4 w-4 animate-spin" />
+      ) : (
+        <Wallet className="h-4 w-4" />
+      )}
+      {isConnecting
+        ? "Opening…"
+        : hasConnector
+          ? compact
+            ? "Select wallet"
+            : "Choose wallet"
+          : "Install wallet"}
+    </Button>
   );
 }

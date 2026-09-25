@@ -3,7 +3,6 @@
 import { useState } from "react";
 import {
   useAccount,
-  useConnect,
   useSwitchChain,
   useWaitForTransactionReceipt,
   useWriteContract,
@@ -14,6 +13,7 @@ import {
 } from "@/lib/contracts";
 import { errorMessage } from "@/lib/errors";
 import { MONAD_MAINNET_ID, monadMainnet } from "@/lib/monad";
+import { useWalletSelection } from "@/components/wallet-selection";
 
 export type RegistryWriteRequest =
   | {
@@ -42,8 +42,7 @@ export type RegistryWriteRequest =
 
 export function useRegistryAction() {
   const { address: accountAddress, chainId, isConnected } = useAccount();
-  const { connectors, connect, error: connectHookError, isPending: isConnecting } =
-    useConnect();
+  const { openPicker, hasConnector, isConnecting } = useWalletSelection();
   const { switchChain, error: switchHookError, isPending: isSwitching } =
     useSwitchChain();
   const {
@@ -61,18 +60,9 @@ export function useRegistryAction() {
     },
   });
   const error = requestError ?? writeHookError?.message ?? receipt.error?.message ??
-    (connectHookError ? errorMessage(connectHookError) : undefined) ??
     (switchHookError ? errorMessage(switchHookError) : undefined);
 
-  const connectWallet = () => {
-    const connector = connectors[0];
-    if (!connector) {
-      setRequestError("No injected wallet was detected. Install a browser wallet and refresh the page.");
-      return;
-    }
-    setRequestError(undefined);
-    connect({ connector });
-  };
+  const connectWallet = openPicker;
 
   const switchToMonad = () => {
     setRequestError(undefined);
@@ -150,7 +140,7 @@ export function useRegistryAction() {
     clear,
     connectWallet,
     error: error ? errorMessage(error) : undefined,
-    hasInjectedConnector: connectors.length > 0,
+    hasInjectedConnector: hasConnector,
     isConfirmed: receipt.isSuccess && receipt.data?.status === "success",
     isConfirming: Boolean(transactionHash) && receipt.isLoading,
     isConnected,

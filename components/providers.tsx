@@ -6,11 +6,12 @@ import { http, createConfig } from "wagmi";
 import { injected } from "wagmi/connectors";
 import { WagmiProvider } from "wagmi";
 import { monadMainnet } from "@/lib/monad";
+import { WalletSelectionProvider } from "@/components/wallet-selection";
 
 const config = createConfig({
   chains: [monadMainnet],
   connectors: [injected()],
-  multiInjectedProviderDiscovery: false,
+  multiInjectedProviderDiscovery: true,
   ssr: true,
   transports: {
     [monadMainnet.id]: http(),
@@ -33,7 +34,9 @@ export function Providers({ children }: { children: ReactNode }) {
 
   return (
     <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <WalletSelectionProvider>{children}</WalletSelectionProvider>
+      </QueryClientProvider>
     </WagmiProvider>
   );
 }

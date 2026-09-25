@@ -4,7 +4,6 @@ import { useState } from "react";
 import { decodeEventLog, type Address } from "viem";
 import {
   useAccount,
-  useConnect,
   useReadContract,
   useSwitchChain,
   useWaitForTransactionReceipt,
@@ -17,6 +16,7 @@ import {
 } from "@/lib/contracts";
 import { errorMessage } from "@/lib/errors";
 import { MONAD_MAINNET_ID, monadMainnet } from "@/lib/monad";
+import { useWalletSelection } from "@/components/wallet-selection";
 
 export type CredentialMintRequest = {
   manufacturer: Address;
@@ -59,8 +59,7 @@ function credentialMintedTokenId(
 
 export function useManufacturerCredentialMint() {
   const { address: accountAddress, chainId, isConnected } = useAccount();
-  const { connectors, connect, error: connectError, isPending: isConnecting } =
-    useConnect();
+  const { openPicker, hasConnector, isConnecting } = useWalletSelection();
   const { switchChain, error: switchError, isPending: isSwitching } =
     useSwitchChain();
   const {
@@ -103,18 +102,9 @@ export function useManufacturerCredentialMint() {
   const error = requestError ??
     (writeError ? errorMessage(writeError) : undefined) ??
     (receipt.error ? errorMessage(receipt.error) : undefined) ??
-    (connectError ? errorMessage(connectError) : undefined) ??
     (switchError ? errorMessage(switchError) : undefined);
 
-  const connectWallet = () => {
-    const connector = connectors[0];
-    if (!connector) {
-      setRequestError("No injected wallet was detected. Install a browser wallet and refresh the page.");
-      return;
-    }
-    setRequestError(undefined);
-    connect({ connector });
-  };
+  const connectWallet = openPicker;
 
   const switchToMonad = () => {
     setRequestError(undefined);
@@ -190,7 +180,7 @@ export function useManufacturerCredentialMint() {
     clear,
     connectWallet,
     error,
-    hasInjectedConnector: connectors.length > 0,
+    hasInjectedConnector: hasConnector,
     isConfirmed: receipt.isSuccess && receipt.data?.status === "success",
     isConfirming: Boolean(transactionHash) && receipt.isLoading,
     isConnected,

@@ -259,9 +259,9 @@ export function ManufacturerCredentialForm() {
                   <Button
                     size="sm"
                     onClick={action.connectWallet}
-                    disabled={action.isConnecting || !action.hasInjectedConnector}
+                    disabled={action.isConnecting}
                   >
-                    {action.isConnecting ? "Connecting…" : "Connect wallet"}
+                    {action.isConnecting ? "Opening…" : "Choose wallet"}
                   </Button>
                 </div>
               ) : null}
