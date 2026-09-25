@@ -43,7 +43,7 @@ All addresses, transaction hashes, block numbers, and CIDs below were returned b
 | `seed-output.json` path | `demo/seed/seed-output.json` |
 | QR SVG output path | `demo/seed/*.svg` (11 passport QR files) |
 | Approved public application URL | https://pharmchain.vercel.app |
-| Vercel production deployment | `dpl_B1ERYEZihZMF1XNj1Gi6Z7ro8c3z` |
+| Vercel production deployment | `dpl_CiWU2s8MdLjShSqcA9rwtWyxPcQH` |
 | Receipt confirmation record | 24/24 seed transactions returned successful receipts |
 | Monad `Finalized` record | PENDING |
 | Monad `Verified` state-root record | PENDING |
@@ -66,7 +66,7 @@ All addresses, transaction hashes, block numbers, and CIDs below were returned b
 ## Frontend deployment record
 
 - Production URL: https://pharmchain.vercel.app
-- Vercel deployment: `dpl_B1ERYEZihZMF1XNj1Gi6Z7ro8c3z`
+- Vercel deployment: `dpl_CiWU2s8MdLjShSqcA9rwtWyxPcQH`
 - Public route checks: `/`, `/register`, `/report`, and `/verify/A11-0550` returned HTTP 200.
 - The deployed frontend is configured for the verified registry and credential addresses above.
 

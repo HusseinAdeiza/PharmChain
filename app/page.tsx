@@ -15,13 +15,13 @@ import Link from "next/link";
 import { ProductScanner } from "@/components/product-scanner";
 import { ConfigurationNotice } from "@/components/configuration-notice";
 import { buttonStyles } from "@/components/ui/button";
-import { isRegistryConfigured, registryAddress } from "@/lib/contracts";
+import { isRegistryConfigured, manufacturerCredentialAddress, registryAddress } from "@/lib/contracts";
 import { monadAddressUrl, MONAD_EXPLORER_URL } from "@/lib/monad";
 
 export const metadata: Metadata = {
   title: "Verify medicine",
   description:
-    "Scan a PharmChain QR passport or enter a NAFDAC number to check medicine credentials on Monad Mainnet.",
+    "For people buying or handling medicine in Nigeria: scan a pack to check its product, batch, expiry, recall, and counterfeit signals on Monad Mainnet.",
 };
 
 const steps = [
@@ -52,30 +52,30 @@ const capabilities = [
   {
     number: "A",
     icon: Box,
-    title: "Batch provenance",
+    title: "Product is not batch",
     description:
-      "Registration links a medicine identity to an authorized manufacturer credential, printed batch, expiry date, and evidence commitment.",
+      "A NAFDAC number identifies a product record. PharmChain keeps the printed batch, expiry, and evidence commitment beside it.",
   },
   {
     number: "B",
     icon: BadgeCheck,
-    title: "Portable passport",
+    title: "Credential bound to a wallet",
     description:
-      "The QR destination can be opened without an account. The underlying credential cannot be sold or transferred.",
+      "A soulbound ERC-721 credential ties the attestation to an active manufacturer wallet that cannot be silently resold.",
   },
   {
     number: "C",
     icon: ShieldAlert,
-    title: "Safety signals",
+    title: "Recall stays specific",
     description:
-      "Recall and counterfeit reports are separate signals with their own on-chain context.",
+      "The demo shows a recall on historical batch DC.319 instead of treating every product with the same ingredient as unsafe.",
   },
   {
     number: "D",
     icon: Fingerprint,
-    title: "Clear provenance",
+    title: "Every write is inspectable",
     description:
-      "Read operations and transaction results link to the public Monad Mainnet explorer.",
+      "Attestation, recall, and counterfeit decisions resolve to public transaction links on Monad Mainnet.",
   },
 ];
 
@@ -89,31 +89,31 @@ export default function HomePage() {
               <span className="absolute inline-flex h-full w-full rounded-full bg-electric motion-safe:animate-status-pulse" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-electric" />
             </span>
-            Monad Mainnet · Chain 143
+            Medicine verification · Nigeria
           </p>
           <h1 className="mt-8 font-display text-6xl font-bold leading-[0.95] tracking-[-0.03em] sm:text-7xl lg:text-[5.5rem]">
             <span className="text-electric-gradient block">Scan a drug.</span>
             <span className="mt-1 block text-frost">Know if it&apos;s real.</span>
           </h1>
           <p className="mx-auto mt-8 max-w-2xl text-balance text-lg leading-8 text-muted sm:text-xl">
-            Check a medicine&apos;s on-chain passport, review recall and counterfeit
-            signals, and give patients a credential they can inspect for themselves.
+            For people buying or handling medicine in Nigeria: check the exact product,
+            batch, expiry, and recall signal before a pack reaches a patient.
           </p>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <a href="#scanner" className={buttonStyles("primary", "lg")}>
-              Scan a passport
+            <Link href="/verify/A4-0201" className={buttonStyles("primary", "lg")}>
+              Open a live passport
               <ArrowRight className="h-4 w-4" />
-            </a>
-            <Link href="/register" className={buttonStyles("outline", "lg")}>
-              Register a batch
             </Link>
+            <a href="#scanner" className={buttonStyles("outline", "lg")}>
+              Scan a pack
+            </a>
           </div>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-muted/80">
             <span className="inline-flex items-center gap-2">
-              <LockKeyhole className="h-4 w-4 text-electric" /> Non-transferable ERC-721 credential
+              <LockKeyhole className="h-4 w-4 text-electric" /> No account for public reads
             </span>
             <span className="inline-flex items-center gap-2">
-              <Fingerprint className="h-4 w-4 text-electric" /> Public read verification
+              <Fingerprint className="h-4 w-4 text-electric" /> Monad Mainnet · chain 143
             </span>
           </div>
         </div>
@@ -133,37 +133,131 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="border-t border-white/5">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-gold">
+                Proof, not promises
+              </p>
+              <h2 className="mt-2 max-w-3xl font-display text-4xl font-extrabold uppercase leading-[0.95] tracking-[-0.02em] text-frost sm:text-5xl">
+                A real registry you can inspect before you decide.
+              </h2>
+            </div>
+            <p className="max-w-md text-sm leading-6 text-muted lg:text-right">
+              These are seeded demonstration records on Monad Mainnet. They are product
+              evidence, not customer testimonials or clinical outcome claims.
+            </p>
+          </div>
+
+          <div className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-5">
+            {[
+              ["5", "credentials"],
+              ["16", "attested batches"],
+              ["1", "historical recall"],
+              ["1", "validated counterfeit flag"],
+              ["4", "pinned evidence PDFs"],
+            ].map(([value, label]) => (
+              <div key={label} className="bg-black/50 p-4 sm:p-5">
+                <p className="font-display text-4xl font-extrabold leading-none text-electric">{value}</p>
+                <p className="mt-2 font-mono text-[10px] font-bold uppercase leading-4 tracking-[0.12em] text-muted">{label}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="glass rounded-3xl p-5 sm:p-6">
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-electric">
+                Open the actual records
+              </p>
+              <div className="mt-5 divide-y divide-white/10 border-y border-white/10">
+                <Link href="/verify/A4-0201" className="group flex items-center justify-between gap-4 py-4">
+                  <span>
+                    <span className="block font-mono text-xs font-bold uppercase tracking-[0.1em] text-frost">A4-0201 · historical recall</span>
+                    <span className="mt-1 block text-xs leading-5 text-muted">Batch DC.319 · expired · recall reason</span>
+                  </span>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-muted transition-colors group-hover:text-electric" />
+                </Link>
+                <Link href="/verify/A11-100025" className="group flex items-center justify-between gap-4 py-4">
+                  <span>
+                    <span className="block font-mono text-xs font-bold uppercase tracking-[0.1em] text-frost">A11-100025 · counterfeit signal</span>
+                    <span className="mt-1 block text-xs leading-5 text-muted">Two tablet batches · validated report</span>
+                  </span>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-muted transition-colors group-hover:text-electric" />
+                </Link>
+              </div>
+              <p className="mt-4 text-xs leading-5 text-muted">Read the same contract-backed pages a buyer, pharmacist, or investigator would inspect.</p>
+            </div>
+
+            <div className="rounded-3xl border border-white/10 bg-black/30 p-5 sm:p-6">
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-muted">
+                Technical surface
+              </p>
+              <dl className="mt-5 space-y-4 text-xs">
+                <div className="flex items-start justify-between gap-4 border-b border-white/10 pb-3">
+                  <dt className="font-mono uppercase tracking-[0.1em] text-muted">Registry</dt>
+                  <dd className="text-right font-mono text-electric">
+                    {registryAddress ? <a href={monadAddressUrl(registryAddress)} target="_blank" rel="noreferrer" className="underline decoration-electric/30 underline-offset-4">{registryAddress.slice(0, 10)}…{registryAddress.slice(-6)}</a> : "configured at runtime"}
+                  </dd>
+                </div>
+                <div className="flex items-start justify-between gap-4 border-b border-white/10 pb-3">
+                  <dt className="font-mono uppercase tracking-[0.1em] text-muted">Credential</dt>
+                  <dd className="text-right font-mono text-electric">
+                    {manufacturerCredentialAddress ? <a href={monadAddressUrl(manufacturerCredentialAddress)} target="_blank" rel="noreferrer" className="underline decoration-electric/30 underline-offset-4">{manufacturerCredentialAddress.slice(0, 10)}…{manufacturerCredentialAddress.slice(-6)}</a> : "configured at runtime"}
+                  </dd>
+                </div>
+                <div className="flex items-start justify-between gap-4 border-b border-white/10 pb-3">
+                  <dt className="font-mono uppercase tracking-[0.1em] text-muted">Read path</dt>
+                  <dd className="text-right font-mono text-frost">getDrugPassport + getBatchPage</dd>
+                </div>
+                <div className="flex items-start justify-between gap-4">
+                  <dt className="font-mono uppercase tracking-[0.1em] text-muted">Evidence</dt>
+                  <dd className="text-right font-mono text-electric"><a href="/seed-evidence.json" className="underline decoration-electric/30 underline-offset-4">Pinned manifest</a></dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="relative border-t border-white/5">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <h2 className="font-display text-4xl font-extrabold uppercase leading-[0.95] tracking-[-0.02em] text-frost sm:text-5xl">
-              How to verify
-            </h2>
+            <div>
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-electric">
+                The verification protocol
+              </p>
+              <h2 className="mt-2 font-display text-4xl font-extrabold uppercase leading-[0.95] tracking-[-0.02em] text-frost sm:text-5xl">
+                Three checks. One decision.
+              </h2>
+            </div>
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-muted">
-              Procedure 01–03
+              Public read · no account
             </p>
           </div>
-          <div className="mt-8 grid gap-4 lg:grid-cols-12">
+          <div className="mt-8 border-y border-white/10">
             {steps.map((step, index) => {
               const Icon = step.icon;
-              const span = index === 1 ? "lg:col-span-4 lg:mt-10" : "lg:col-span-4";
               return (
                 <article
                   key={step.number}
-                  className={`glass rounded-3xl p-6 transition-[box-shadow,transform] duration-300 motion-safe:hover:-translate-y-1 motion-safe:hover:shadow-glow-cyan sm:p-7 ${span}`}
+                  className="group grid grid-cols-[auto_1fr] gap-5 border-b border-white/10 py-7 last:border-b-0 sm:grid-cols-[5rem_3rem_1fr_auto] sm:items-center sm:gap-6"
                 >
-                  <div className="flex items-baseline justify-between gap-4">
-                    <span className="head-glow font-display text-4xl font-extrabold leading-none text-electric">
-                      {step.number}
-                    </span>
-                    <span className="grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-white/5 text-electric">
-                      <Icon className="h-5 w-5" />
-                    </span>
+                  <span className="font-display text-4xl font-extrabold leading-none text-electric">
+                    {step.number}
+                  </span>
+                  <span className="grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-white/5 text-electric transition-colors group-hover:border-electric/40 group-hover:bg-electric/10">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <h3 className="font-display text-xl font-bold uppercase leading-tight tracking-[-0.01em] text-frost">
+                      {step.title}
+                    </h3>
+                    <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">{step.description}</p>
                   </div>
-                  <h3 className="mt-5 font-display text-xl font-bold uppercase leading-tight tracking-[-0.01em] text-frost">
-                    {step.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-6 text-muted">{step.description}</p>
+                  <span className="col-start-2 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-muted/70 sm:col-start-auto">
+                    Field {String(index + 1).padStart(2, "0")}
+                  </span>
                 </article>
               );
             })}
@@ -176,15 +270,15 @@ export default function HomePage() {
           <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
             <div className="lg:sticky lg:top-28 lg:self-start">
               <p className="font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-gold">
-                Built for trust
+                Why it exists
               </p>
               <h2 className="mt-5 text-balance font-display text-4xl font-extrabold uppercase leading-[0.95] tracking-[-0.02em] text-frost sm:text-5xl">
-                A passport is evidence, not a substitute for care.
+                The number on the pack is not enough.
               </h2>
               <p className="mt-6 max-w-md text-base leading-7 text-muted">
-                PharmChain makes registry activity inspectable. It does not diagnose,
-                replace a regulator, or guarantee that packaging has not been tampered
-                with after manufacture.
+                A copied NAFDAC number cannot tell you which batch is in your hand, who
+                attested it, or whether that batch was recalled. PharmChain adds those
+                checks without pretending the registry replaces a regulator or a clinician.
               </p>
               <Link href="/report" className={buttonStyles("secondary", "md", "mt-8")}>
                 <ShieldAlert className="h-4 w-4" />
