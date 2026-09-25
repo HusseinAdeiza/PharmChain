@@ -16,4 +16,5 @@ demo/*
 !demo/seed/
 demo/seed/*
 !demo/seed/seed-output.json
+!demo/seed/demo-scenarios-output.json
 !demo/seed/*.svg

@@ -6,7 +6,7 @@
 **Seed status:** **BROADCAST SUCCESS**
 **Live application:** https://pharmchain.vercel.app
 
-Contracts are deployed and source-verified on Monad Mainnet (`chainId 143`), the frontend is live, and the mainnet seed completed with 24 successful transactions. IPFS evidence was independently retrieved from the Pinata gateway; durability beyond the provider's pin service is not independently proven.
+Contracts are deployed and source-verified on Monad Mainnet (`chainId 143`), the frontend is live, the base seed completed with 24 successful transactions, and the three approved demo scenarios added 6 more successful transactions. IPFS evidence was independently retrieved from the Pinata gateway; durability beyond the provider's pin service is not independently proven. Current on-chain totals are 6 credentials, 18 batches, and 2 counterfeit reports.
 
 All addresses, transaction hashes, block numbers, and CIDs below were returned by actual mainnet tooling or public gateways.
 
@@ -43,7 +43,8 @@ All addresses, transaction hashes, block numbers, and CIDs below were returned b
 | `seed-output.json` path | `demo/seed/seed-output.json` |
 | QR SVG output path | `demo/seed/*.svg` (11 passport QR files) |
 | Approved public application URL | https://pharmchain.vercel.app |
-| Vercel production deployment | `dpl_CiWU2s8MdLjShSqcA9rwtWyxPcQH` |
+| Vercel production deployment | `dpl_5F9Nug15PE2jDjBv9C5RLxyxUCnf` |
+| Frontend contract configuration | No local `.env` file; Vercel production env is set to the verified registry `0x0f784017793776A8D6537F827421696077aDb396` and credential `0xb1B2b43dBb26C12b25e3eBd85418830413c55B0A`; confirmed by live A4-0425 read |
 | Receipt confirmation record | 24/24 seed transactions returned successful receipts |
 | Monad `Finalized` record | PENDING |
 | Monad `Verified` state-root record | PENDING |
@@ -66,7 +67,7 @@ All addresses, transaction hashes, block numbers, and CIDs below were returned b
 ## Frontend deployment record
 
 - Production URL: https://pharmchain.vercel.app
-- Vercel deployment: `dpl_CiWU2s8MdLjShSqcA9rwtWyxPcQH`
+- Vercel deployment: `dpl_5F9Nug15PE2jDjBv9C5RLxyxUCnf`
 - Public route checks: `/`, `/register`, `/report`, and `/verify/A11-0550` returned HTTP 200.
 - The deployed frontend is configured for the verified registry and credential addresses above.
 
@@ -81,6 +82,15 @@ All addresses, transaction hashes, block numbers, and CIDs below were returned b
 - Receipts: 24/24 successful (`5` mints + `16` attestations + recall + report + validation).
 - Passport URLs: [A11-0550](https://pharmchain.vercel.app/verify/A11-0550), [A4-0201](https://pharmchain.vercel.app/verify/A4-0201), [A11-100025](https://pharmchain.vercel.app/verify/A11-100025).
 - Full transaction list, all batch fields, hashes, evidence digests, and QR output paths: [`demo/seed/seed-output.json`](./demo/seed/seed-output.json).
+
+## Approved demo scenarios
+
+These are explicitly labeled demo records for the hackathon narrative, not claims of regulatory registration or physical-package authentication.
+
+- [A4-0425 — VERIFIED](https://pharmchain.vercel.app/verify/A4-0425): paracetamol batch `DEMO-EMZOR-0425`, credential `6`, manufacturer label Emzor Nigeria Ltd. [Attestation transaction](https://monadscan.com/tx/0x4f15282dd06d8d19225145a726f7ad43eb3291fc2d93ce285c26c69df388127d).
+- [A4-0426 — RECALLED](https://pharmchain.vercel.app/verify/A4-0426): amoxicillin batch `DEMO-FIDSON-0426`, reason “Elevated impurity levels detected in batch QA sample”. [Recall transaction](https://monadscan.com/tx/0x984980f8a64018fccfceff71a540a0619ed8f014dbc6f4616cf1c7842c96aa3f).
+- [A4-0427 — COUNTERFEIT FLAGGED](https://pharmchain.vercel.app/verify/A4-0427): report `2` records Unverified Labs Ltd claiming the same product key as the verified A4-0425 Emzor batch. [Report transaction](https://monadscan.com/tx/0xbd9dd2826e9fe7fbe9faa3bbac7acc324a49e1d426d43a17f71f282c1708d54b) · [validation transaction](https://monadscan.com/tx/0x5223aaef1deba0e60b6e670a716addbbc36ab9010be47990e2ebfa26890929e4).
+- Full scenario output, on-chain checks, and all six demo transaction links: [`demo/seed/demo-scenarios-output.json`](./demo/seed/demo-scenarios-output.json).
 
 ## Implemented in this repository
 
@@ -183,7 +193,9 @@ No deployment credentials were needed for these checks:
 | Mainnet deployment | SUCCESS; credential and registry receipts status `0x1` |
 | Source verification | SUCCESS via MonadVision Sourcify; exact creation/runtime matches |
 | IPFS upload | SUCCESS; 4 CIDs returned HTTP 200 from the Pinata gateway |
-| Mainnet seed | SUCCESS; 24/24 receipts successful; on-chain totals are 16 batches and 1 report |
+| Mainnet seed | SUCCESS; 24/24 base receipts successful; on-chain totals are 16 batches and 1 report |
+| Approved demo scenarios | SUCCESS; A4-0425 VERIFIED, A4-0426 RECALLED, A4-0427 COUNTERFEIT_FLAGGED; 6/6 scenario receipts successful |
+| Live A4-0425 passport | VERIFIED on https://pharmchain.vercel.app/verify/A4-0425 after client-side render |
 | Frontend deployment | SUCCESS; Vercel production deployment is ready and public |
 
 The fourteen passing tests cover core mint/revoke/soulbound behavior, credential-gated attestation, recall authority, owner validation, duplicate rejection, pause, historical batch recording, and revoked-credential rejection. They are not an external audit; the Monad-mode run uses the official 1.8.1 executable but is not a mainnet fork test.

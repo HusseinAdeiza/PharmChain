@@ -14,8 +14,9 @@ The implementation contains:
 ## Current status
 
 - **Mainnet contracts are deployed and source-verified** on Monad Mainnet (`chainId 143`); addresses and receipts are recorded in [`SUBMISSION.md`](./SUBMISSION.md).
-- **Mainnet seed is complete:** 5 credentials, 16 batches, 1 active recall, 1 validated counterfeit flag, 4 IPFS PDFs, and 24/24 successful receipts; details are in [`demo/seed/seed-output.json`](./demo/seed/seed-output.json).
-- **Live frontend:** https://pharmchain.vercel.app (production deployment `dpl_CiWU2s8MdLjShSqcA9rwtWyxPcQH`).
+- **Mainnet seed is complete:** 5 credentials, 16 base batches, 1 active recall, 1 validated counterfeit flag, 4 IPFS PDFs, and 24/24 successful receipts; details are in [`demo/seed/seed-output.json`](./demo/seed/seed-output.json).
+- **Approved demo scenarios are live:** [A4-0425 VERIFIED](https://pharmchain.vercel.app/verify/A4-0425), [A4-0426 RECALLED](https://pharmchain.vercel.app/verify/A4-0426), and [A4-0427 COUNTERFEIT FLAG](https://pharmchain.vercel.app/verify/A4-0427); details are in [`demo/seed/demo-scenarios-output.json`](./demo/seed/demo-scenarios-output.json).
+- **Live frontend:** https://pharmchain.vercel.app (production deployment `dpl_5F9Nug15PE2jDjBv9C5RLxyxUCnf`).
 - The Solidity source, Foundry configuration, deployment script, viem seed script, frontend ABI, and 14 local contract tests are present.
 - The official Foundry 1.8.1 executable is installed at `%USERPROFILE%\.foundry\versions\foundry-rs\foundry\v1.8.1\forge.exe`; the default PATH also contains 1.7.1. Use the 1.8.1 executable for Monad execution rules.
 - The frontend is hardcoded to Monad chain `143`, public RPC `https://rpc.monad.xyz`, and MonadScan.

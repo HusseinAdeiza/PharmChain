@@ -1,0 +1,153 @@
+{
+  "demo": true,
+  "chainId": 143,
+  "contractAddresses": {
+    "manufacturerCredential": "0xb1B2b43dBb26C12b25e3eBd85418830413c55B0A",
+    "drugRegistry": "0x0f784017793776A8D6537F827421696077aDb396"
+  },
+  "scenarios": {
+    "A4_0425": {
+      "state": "VERIFIED",
+      "batchId": "17",
+      "verifyUrl": "https://pharmchain.vercel.app/verify/A4-0425"
+    },
+    "A4_0426": {
+      "state": "RECALLED",
+      "batchId": "18",
+      "verifyUrl": "https://pharmchain.vercel.app/verify/A4-0426"
+    },
+    "A4_0427": {
+      "state": "COUNTERFEIT_FLAGGED",
+      "reportId": "2",
+      "verifyUrl": "https://pharmchain.vercel.app/verify/A4-0427"
+    }
+  },
+  "transactions": [
+    {
+      "action": "mint Emzor demo credential",
+      "hash": "0xc345aa01cd120738b44cf0b98257ca9a13dc1c6e20b517386b70223780082583",
+      "explorerUrl": "https://monadscan.com/tx/0xc345aa01cd120738b44cf0b98257ca9a13dc1c6e20b517386b70223780082583",
+      "credentialId": "6"
+    },
+    {
+      "action": "attest A4-0425 verified paracetamol demo batch",
+      "hash": "0x4f15282dd06d8d19225145a726f7ad43eb3291fc2d93ce285c26c69df388127d",
+      "explorerUrl": "https://monadscan.com/tx/0x4f15282dd06d8d19225145a726f7ad43eb3291fc2d93ce285c26c69df388127d",
+      "batchId": "17"
+    },
+    {
+      "action": "attest A4-0426 recalled amoxicillin demo batch",
+      "hash": "0x84deb476566ef87fb36f6495d6d7ae544a9cf96c4f2895b52416a4611d0ded08",
+      "explorerUrl": "https://monadscan.com/tx/0x84deb476566ef87fb36f6495d6d7ae544a9cf96c4f2895b52416a4611d0ded08",
+      "batchId": "18"
+    },
+    {
+      "action": "flag A4-0426 demo recall",
+      "hash": "0x984980f8a64018fccfceff71a540a0619ed8f014dbc6f4616cf1c7842c96aa3f",
+      "explorerUrl": "https://monadscan.com/tx/0x984980f8a64018fccfceff71a540a0619ed8f014dbc6f4616cf1c7842c96aa3f",
+      "batchId": "18"
+    },
+    {
+      "action": "flag A4-0427 demo counterfeit claim",
+      "hash": "0xbd9dd2826e9fe7fbe9faa3bbac7acc324a49e1d426d43a17f71f282c1708d54b",
+      "explorerUrl": "https://monadscan.com/tx/0xbd9dd2826e9fe7fbe9faa3bbac7acc324a49e1d426d43a17f71f282c1708d54b",
+      "reportId": "2"
+    },
+    {
+      "action": "validate A4-0427 demo counterfeit report",
+      "hash": "0x5223aaef1deba0e60b6e670a716addbbc36ab9010be47990e2ebfa26890929e4",
+      "explorerUrl": "https://monadscan.com/tx/0x5223aaef1deba0e60b6e670a716addbbc36ab9010be47990e2ebfa26890929e4",
+      "reportId": "2"
+    }
+  ],
+  "onChainChecks": {
+    "verifiedPassport": [
+      [
+        true,
+        "A4-0425",
+        "1",
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      [
+        "17"
+      ],
+      []
+    ],
+    "recalledPassport": [
+      [
+        true,
+        "A4-0426",
+        "1",
+        "1",
+        "0",
+        "0",
+        "0"
+      ],
+      [
+        "18"
+      ],
+      []
+    ],
+    "counterfeitPassport": [
+      [
+        true,
+        "A4-0427",
+        "0",
+        "0",
+        "1",
+        "0",
+        "1"
+      ],
+      [],
+      [
+        "2"
+      ]
+    ],
+    "verifiedBatch": [
+      "17",
+      "6",
+      "0xf8bbf36018301cdff0B88A0f390350519c887bC9",
+      "A4-0425",
+      "DEMO-EMZOR-0425",
+      "Paracetamol 500 mg — Emzor Nigeria Ltd (demo)",
+      "1821909371",
+      "0x5cb585ee5861dfb7c0720dfd6d1484f5770b9fdd486564816a8a77f8390cfdf4",
+      "0xf8bbf36018301cdff0B88A0f390350519c887bC9",
+      "1790373372",
+      false,
+      "",
+      "0",
+      "0x0000000000000000000000000000000000000000"
+    ],
+    "recalledBatch": [
+      "18",
+      "5",
+      "0xf86fa1c21Cc1D3CE90D43bbcFD48D7A3f34e542A",
+      "A4-0426",
+      "DEMO-FIDSON-0426",
+      "Amoxicillin 500 mg — Fidson Healthcare PLC (demo)",
+      "1821909371",
+      "0x2700dd358660b776471a95c9d8de6dcb9da3d685ae0d1ef272b4b91deef77992",
+      "0xf86fa1c21Cc1D3CE90D43bbcFD48D7A3f34e542A",
+      "1790373373",
+      true,
+      "Elevated impurity levels detected in batch QA sample (demo scenario).",
+      "1790373374",
+      "0xf86fa1c21Cc1D3CE90D43bbcFD48D7A3f34e542A"
+    ],
+    "finalReport": [
+      "2",
+      "A4-0427",
+      "DEMO SCENARIO: Unverified Labs Ltd claims the same product key as the verified Emzor Nigeria Ltd paracetamol batch under A4-0425. The registry keeps the claims separate and flags the duplicate manufacturer claim.",
+      "0xf86fa1c21Cc1D3CE90D43bbcFD48D7A3f34e542A",
+      "1790373375",
+      true,
+      true,
+      "0xf8bbf36018301cdff0B88A0f390350519c887bC9",
+      "1790373593"
+    ]
+  }
+}
