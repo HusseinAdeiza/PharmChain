@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { ProductScanner } from "@/components/product-scanner";
+import { TranslatedText } from "@/components/translated-text";
 import { ConfigurationNotice } from "@/components/configuration-notice";
 import { buttonStyles } from "@/components/ui/button";
 import { isRegistryConfigured, manufacturerCredentialAddress, registryAddress } from "@/lib/contracts";
@@ -21,7 +22,7 @@ import { monadAddressUrl, MONAD_EXPLORER_URL } from "@/lib/monad";
 export const metadata: Metadata = {
   title: "Verify medicine",
   description:
-    "For people buying or handling medicine in Nigeria: scan a pack to check its product, batch, expiry, recall, and counterfeit signals on Monad Mainnet.",
+    "Scan a medicine passport, check jurisdiction-aware product records, and inspect on-chain batch signals on Monad Mainnet.",
 };
 
 const steps = [
@@ -89,23 +90,22 @@ export default function HomePage() {
               <span className="absolute inline-flex h-full w-full rounded-full bg-electric motion-safe:animate-status-pulse" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-electric" />
             </span>
-            Medicine verification · Nigeria
+            <TranslatedText messageKey="hero_eyebrow" />
           </p>
           <h1 className="mt-8 font-display text-6xl font-bold leading-[0.95] tracking-[-0.03em] sm:text-7xl lg:text-[5.5rem]">
-            <span className="text-electric-gradient block">Scan a drug.</span>
-            <span className="mt-1 block text-frost">Know if it&apos;s real.</span>
+            <TranslatedText className="text-electric-gradient block" messageKey="hero_title_one" />
+            <TranslatedText className="mt-1 block text-frost" messageKey="hero_title_two" />
           </h1>
           <p className="mx-auto mt-8 max-w-2xl text-balance text-lg leading-8 text-muted sm:text-xl">
-            For people buying or handling medicine in Nigeria: check the exact product,
-            batch, expiry, and recall signal before a pack reaches a patient.
+            <TranslatedText messageKey="hero_body" />
           </p>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link href="/verify/A4-0201" className={buttonStyles("primary", "lg")}>
-              Open a live passport
+              <TranslatedText messageKey="hero_primary" />
               <ArrowRight className="h-4 w-4" />
             </Link>
             <a href="#scanner" className={buttonStyles("outline", "lg")}>
-              Scan a pack
+              <TranslatedText messageKey="hero_secondary" />
             </a>
           </div>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-muted/80">

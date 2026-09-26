@@ -6,6 +6,7 @@ import { http, createConfig } from "wagmi";
 import { injected } from "wagmi/connectors";
 import { WagmiProvider } from "wagmi";
 import { monadMainnet } from "@/lib/monad";
+import { LanguageProvider } from "@/components/language-provider";
 import { WalletSelectionProvider } from "@/components/wallet-selection";
 
 const config = createConfig({
@@ -35,7 +36,9 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <WalletSelectionProvider>{children}</WalletSelectionProvider>
+        <LanguageProvider>
+          <WalletSelectionProvider>{children}</WalletSelectionProvider>
+        </LanguageProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );

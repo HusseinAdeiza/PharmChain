@@ -23,6 +23,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { usePublicClient, useReadContract } from "wagmi";
 import { ConfigurationNotice } from "@/components/configuration-notice";
+import { useLanguage } from "@/components/language-provider";
 import { PassportQr } from "@/components/passport-qr";
 import { TransactionEventExplorer } from "@/components/transaction-event-explorer";
 import { Button, buttonStyles, cn } from "@/components/ui/button";
@@ -45,6 +46,7 @@ import { errorMessage } from "@/lib/errors";
 import { formatTimestamp, shortAddress } from "@/lib/format";
 import { MONAD_MAINNET_ID, monadAddressUrl } from "@/lib/monad";
 import { nafdacFromInput, passportPath } from "@/lib/nafdac";
+import { createRegulatoryKey, parseRegulatoryKey, registryLabel, type RegistryId } from "@/lib/regulatory";
 
 const zeroAddress = "0x0000000000000000000000000000000000000000";
 const pageSize = 100n;
@@ -57,8 +59,8 @@ type EvidenceEntry = {
 };
 
 type GreenBookProduct = {
-  id: number | null;
-  nrn: string;
+  id: string;
+  registrationId: string;
   name: string;
   ingredient: string | null;
   form: string | null;
@@ -73,10 +75,14 @@ type GreenBookProduct = {
 };
 
 type GreenBookLookup = {
-  nrn: string;
+  registry: RegistryId;
+  jurisdiction: string;
+  registrationId: string;
+  canonicalKey: string;
   products: GreenBookProduct[];
   source: string;
   sourceUrl: string;
+  sourceLabel: string;
   checkedAt: string;
 };
 
@@ -169,6 +175,7 @@ const resultStateStampWord: Record<PassportVerificationState, string> = {
 };
 
 function ResultStatePanel({ state }: { state: PassportVerificationState }) {
+  const { t } = useLanguage();
   const content = resultStateContent[state];
   const counterfeit = state === "counterfeit";
   const recalled = state === "recalled";
@@ -216,7 +223,13 @@ function ResultStatePanel({ state }: { state: PassportVerificationState }) {
                   : "border-white/10 bg-black/20 text-muted",
               )}
             >
-              {resultStateContent[item].label}
+              {item === "verified"
+                ? t("status_verified")
+                : item === "recalled"
+                  ? t("status_recalled")
+                  : item === "counterfeit"
+                    ? t("status_counterfeit")
+                    : t("status_review")}
               {itemActive ? <span className="ml-auto text-electric">●</span> : null}
             </div>
           );
@@ -430,23 +443,24 @@ function ProductLookupFallback({
   error,
   isLoading,
   lookup,
-  nrn,
+  registrationId,
   onRetry,
 }: {
   error: boolean;
   isLoading: boolean;
   lookup?: GreenBookLookup;
-  nrn: string;
+  registrationId: string;
   onRetry: () => void;
 }) {
+  const { t } = useLanguage();
   if (isLoading) {
     return (
       <section className="glass mt-8 rounded-3xl border border-electric/30 p-6 sm:p-8">
         <div className="flex items-center gap-3 font-mono text-sm uppercase tracking-[0.12em] text-electric">
           <LoaderCircle className="h-4 w-4 animate-spin" />
-          Checking the official NAFDAC Green Book
+          {t("official_lookup_loading")}
         </div>
-        <p className="mt-3 text-sm leading-6 text-muted">Looking for an official product record for {nrn}.</p>
+        <p className="mt-3 text-sm leading-6 text-muted">Looking for an official product record for {registrationId}.</p>
       </section>
     );
   }
@@ -456,11 +470,11 @@ function ProductLookupFallback({
         <div className="flex items-start gap-3">
           <CircleAlert className="mt-0.5 h-5 w-5 shrink-0 text-gold" />
           <div>
-            <h2 className="font-display text-2xl font-extrabold uppercase text-frost">Official lookup unavailable</h2>
-            <p className="mt-2 text-sm leading-6 text-muted">The on-chain registry has no passport for {nrn}, and the NAFDAC Green Book lookup could not be completed.</p>
+            <h2 className="font-display text-2xl font-extrabold uppercase text-frost">{t("official_lookup_unavailable")}</h2>
+            <p className="mt-2 text-sm leading-6 text-muted">The on-chain registry has no passport for {registrationId}, and the official product lookup could not be completed.</p>
             <Button variant="outline" size="sm" className="mt-4" onClick={onRetry}>
               <RefreshCw className="h-4 w-4" />
-              Retry official lookup
+              {t("retry_lookup")}
             </Button>
           </div>
         </div>
@@ -473,15 +487,15 @@ function ProductLookupFallback({
         <span className="mx-auto grid h-12 w-12 place-items-center rounded-xl border border-white/15 text-muted">
           <Search className="h-5 w-5" />
         </span>
-        <h2 className="mt-4 font-display text-2xl font-extrabold uppercase text-frost">No official product match</h2>
-        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-muted">No NAFDAC Green Book product matched {nrn} at lookup time. Check the number, or report a suspected product concern.</p>
+        <h2 className="mt-4 font-display text-2xl font-extrabold uppercase text-frost">{t("no_official_match")}</h2>
+        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-muted">{t("no_official_match")} for {registrationId} at lookup time. Check the number, or report a suspected product concern.</p>
         <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
           <Button variant="outline" size="sm" onClick={onRetry}>
             <RefreshCw className="h-4 w-4" />
             Retry lookup
           </Button>
           <Link href="/report" className={buttonStyles("secondary", "sm")}>
-            Report a concern
+            {t("report_concern")}
           </Link>
         </div>
       </section>
@@ -491,18 +505,21 @@ function ProductLookupFallback({
     <section className="glass mt-8 rounded-3xl border border-gold/45 p-5 sm:p-7">
       <div className="flex flex-col gap-4 border-b border-gold/20 pb-5 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-gold">Product found · not yet on-chain</p>
-          <h2 className="mt-2 font-display text-3xl font-extrabold uppercase leading-none text-frost">Official product record</h2>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-muted">NAFDAC Green Book returned a product for {nrn}, but PharmChain has no on-chain batch passport for it yet. This is product information, not a PharmChain verification.</p>
+          <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-gold">{t("official_product_found")}</p>
+          <p className="mt-1 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-muted">
+            {lookup.jurisdiction} · {lookup.canonicalKey}
+          </p>
+          <h2 className="mt-2 font-display text-3xl font-extrabold uppercase leading-none text-frost">{t("official_product_record")}</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-muted">{lookup.sourceLabel} returned a product for {registrationId}, but PharmChain has no on-chain batch passport for it yet. This is product information, not a PharmChain verification.</p>
         </div>
-        <span className="w-fit border border-gold/50 bg-gold/10 px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.12em] text-gold">Not verified on-chain</span>
+        <span className="w-fit border border-gold/50 bg-gold/10 px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.12em] text-gold">{t("not_verified_onchain")}</span>
       </div>
       <div className="mt-5 space-y-3">
         {lookup.products.map((product) => (
-          <article key={`${product.id ?? product.nrn}-${product.name}`} className="border border-white/10 bg-black/30 p-4">
+          <article key={`${product.id}-${product.name}`} className="border border-white/10 bg-black/30 p-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
-                <p className="font-mono text-xs font-bold uppercase tracking-[0.1em] text-electric">{product.nrn}</p>
+                <p className="font-mono text-xs font-bold uppercase tracking-[0.1em] text-electric">{product.registrationId}</p>
                 <h3 className="mt-2 font-display text-xl font-extrabold uppercase text-frost">{product.name}</h3>
               </div>
               {product.status ? <span className="w-fit border border-teal/40 bg-teal/10 px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-teal">{product.status}</span> : null}
@@ -512,11 +529,11 @@ function ProductLookupFallback({
                 ["Applicant", product.applicant],
                 ["Form / route", [product.form, product.route].filter(Boolean).join(" · ")],
                 ["Strength", product.strength],
-                ["Green Book expiry", product.expiryDate],
+                ["Registry expiry", product.expiryDate],
               ].map(([label, value]) => value ? <div key={String(label)}><dt className="font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-muted">{label}</dt><dd className="mt-1 text-frost">{value}</dd></div> : null)}
             </dl>
             <a href={product.sourceUrl} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-1.5 font-mono text-xs font-bold uppercase tracking-[0.1em] text-electric underline decoration-electric/30 underline-offset-4">
-              Open official Green Book record
+              Open official {lookup.source} record
               <ExternalLink className="h-3.5 w-3.5" />
             </a>
           </article>
@@ -525,8 +542,12 @@ function ProductLookupFallback({
       <div className="mt-5 flex flex-col gap-3 border-t border-white/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-2xl text-xs leading-5 text-muted">To make this product verifiable here, a verified manufacturer must attest a batch and its evidence.</p>
         <div className="flex flex-col gap-3 sm:flex-row">
-          <Link href="/register" className={buttonStyles("secondary", "sm")}>Register a batch</Link>
-          <Link href="/report" className={buttonStyles("outline", "sm")}>Report a concern</Link>
+          <Link href="/register" className={buttonStyles("secondary", "sm")}>
+            {t("register_batch")}
+          </Link>
+          <Link href="/report" className={buttonStyles("outline", "sm")}>
+            {t("report_concern")}
+          </Link>
         </div>
       </div>
     </section>
@@ -681,18 +702,23 @@ function PassportResult({
 }
 
 export function VerifyPassport({ initialNafdacNumber }: { initialNafdacNumber: string }) {
+  const { t } = useLanguage();
   const router = useRouter();
   const publicClient = usePublicClient({ chainId: MONAD_MAINNET_ID });
   const [input, setInput] = useState(initialNafdacNumber);
   const [formError, setFormError] = useState<string>();
   const [refreshVersion, setRefreshVersion] = useState(0);
+  const regulatoryKey = parseRegulatoryKey(initialNafdacNumber);
+  const [registry, setRegistry] = useState<RegistryId>(regulatoryKey.registry);
+  const hasChainLookup = Boolean(regulatoryKey.chainLookupKey);
+  const chainLookupKey = regulatoryKey.chainLookupKey ?? "";
   const passportQuery = useReadContract({
     address: registryAddress,
     abi: DRUG_REGISTRY_ABI,
     functionName: "getDrugPassport",
-    args: [initialNafdacNumber],
+    args: [chainLookupKey],
     query: {
-      enabled: isRegistryConfigured && Boolean(initialNafdacNumber),
+      enabled: isRegistryConfigured && hasChainLookup,
     },
   });
   const passportResult = parseDrugPassportResult(passportQuery.data);
@@ -715,11 +741,12 @@ export function VerifyPassport({ initialNafdacNumber }: { initialNafdacNumber: s
     queryKey: [
       "drug-registry-passport-pages",
       registryAddress,
-      initialNafdacNumber,
+      regulatoryKey.canonicalKey,
       refreshVersion,
     ],
     enabled:
       isRegistryConfigured &&
+      hasChainLookup &&
       Boolean(publicClient) &&
       Boolean(passport?.exists),
     queryFn: async () => {
@@ -737,7 +764,7 @@ export function VerifyPassport({ initialNafdacNumber }: { initialNafdacNumber: s
             address,
             abi: DRUG_REGISTRY_ABI,
             functionName: "getBatchPage",
-            args: [initialNafdacNumber, offset, pageSize],
+            args: [chainLookupKey, offset, pageSize],
           });
           const result = parseBatchPageResult(response);
           records.push(...result.page);
@@ -760,7 +787,7 @@ export function VerifyPassport({ initialNafdacNumber }: { initialNafdacNumber: s
             address,
             abi: DRUG_REGISTRY_ABI,
             functionName: "getCounterfeitReportPage",
-            args: [initialNafdacNumber, offset, pageSize],
+            args: [chainLookupKey, offset, pageSize],
           });
           const result = parseCounterfeitReportPageResult(response);
           records.push(...result.page);
@@ -785,15 +812,13 @@ export function VerifyPassport({ initialNafdacNumber }: { initialNafdacNumber: s
   });
 
   const productLookup = useQuery<GreenBookLookup>({
-    queryKey: ["greenbook-product-lookup", initialNafdacNumber],
+    queryKey: ["official-product-lookup", regulatoryKey.canonicalKey],
     enabled:
       isRegistryConfigured &&
-      passportQuery.isSuccess &&
-      !passport?.exists &&
-      Boolean(initialNafdacNumber),
+      (!hasChainLookup || (passportQuery.isSuccess && !passport?.exists)),
     queryFn: async () => {
       const response = await fetch(
-        `/api/products/lookup?nrn=${encodeURIComponent(initialNafdacNumber)}`,
+        `/api/products/lookup?id=${encodeURIComponent(regulatoryKey.registrationId)}&registry=${encodeURIComponent(regulatoryKey.registry)}`,
       );
       if (!response.ok) {
         throw new Error("The official product lookup could not be completed.");
@@ -806,13 +831,16 @@ export function VerifyPassport({ initialNafdacNumber }: { initialNafdacNumber: s
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const nafdacNumber = nafdacFromInput(input);
-    if (!nafdacNumber) {
-      setFormError("Enter a valid NAFDAC registry key or PharmChain passport URL.");
+    const inputKey = nafdacFromInput(input);
+    if (!inputKey) {
+      setFormError("Enter a valid registry number or PharmChain passport URL.");
       return;
     }
+    const nextKey = inputKey.includes(":")
+      ? parseRegulatoryKey(inputKey)
+      : createRegulatoryKey(registry, inputKey);
     setFormError(undefined);
-    router.push(passportPath(nafdacNumber));
+    router.push(passportPath(nextKey.canonicalKey));
   };
 
   const refresh = () => {
@@ -825,11 +853,14 @@ export function VerifyPassport({ initialNafdacNumber }: { initialNafdacNumber: s
 
   const isLoading =
     isRegistryConfigured &&
+    hasChainLookup &&
     (passportQuery.isLoading ||
       (Boolean(passport?.exists) && pagesQuery.isPending));
-  const readFailed = isRegistryConfigured && passportQuery.isError;
-  const pagesFailed = Boolean(passport?.exists) && pagesQuery.isError;
-  const noPassport = isRegistryConfigured && passportQuery.isSuccess && !passport?.exists;
+  const readFailed = isRegistryConfigured && hasChainLookup && passportQuery.isError;
+  const pagesFailed = hasChainLookup && Boolean(passport?.exists) && pagesQuery.isError;
+  const noPassport =
+    isRegistryConfigured &&
+    (!hasChainLookup || (passportQuery.isSuccess && !passport?.exists));
   const batches = pagesQuery.data?.batches ?? [];
   const reports = pagesQuery.data?.reports ?? [];
 
@@ -837,14 +868,13 @@ export function VerifyPassport({ initialNafdacNumber }: { initialNafdacNumber: s
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
       <div className="border-l border-electric/60 pl-5 sm:pl-6">
         <p className="font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-electric">
-          Form PC-2 · Public passport lookup
+          {t("verify_eyebrow")}
         </p>
         <h1 className="mt-3 font-display text-5xl font-extrabold uppercase leading-[0.92] tracking-[-0.02em] text-frost sm:text-6xl">
-          Check a medicine passport
+          {t("verify_title")}
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-muted">
-          Read the configured DrugRegistry on Monad Mainnet. This checks registry records
-          and signals; it does not prove that a physical package is genuine or safe.
+          {t("verify_body")}
         </p>
       </div>
 
@@ -853,19 +883,30 @@ export function VerifyPassport({ initialNafdacNumber }: { initialNafdacNumber: s
         className="glass mx-auto mt-8 flex max-w-3xl flex-col gap-3 rounded-3xl p-4 sm:flex-row sm:p-5"
         noValidate
       >
-        <div className="relative flex-1">
-          <Search className="pointer-events-none absolute left-4 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-muted" />
-          <Input
-            aria-label="NAFDAC number"
-            value={input}
-            onChange={(event) => setInput(event.target.value)}
-            placeholder="Enter NAFDAC registry key"
-            className="pl-11"
-            autoComplete="off"
-          />
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <select
+            value={registry}
+            onChange={(event) => setRegistry(event.target.value as RegistryId)}
+            aria-label="Regulatory source"
+            className="min-h-12 rounded-2xl border border-white/15 bg-black/30 px-4 font-mono text-xs font-bold uppercase tracking-[0.1em] text-frost outline-none transition focus:border-electric focus:shadow-glow-cyan sm:max-w-[15rem]"
+          >
+            <option value="nafdac" className="bg-panel text-frost">{registryLabel("nafdac")}</option>
+            <option value="fda-ndc" className="bg-panel text-frost">{registryLabel("fda-ndc")}</option>
+          </select>
+          <div className="relative flex-1">
+            <Search className="pointer-events-none absolute left-4 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-muted" />
+            <Input
+              aria-label={t("registry_number")}
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              placeholder="Enter registry number"
+              className="pl-11"
+              autoComplete="off"
+            />
+          </div>
         </div>
         <Button type="submit" size="lg">
-          Check passport
+          {t("check_passport")}
           <ArrowRight className="h-4 w-4" />
         </Button>
       </form>
@@ -909,7 +950,7 @@ export function VerifyPassport({ initialNafdacNumber }: { initialNafdacNumber: s
           error={productLookup.isError}
           isLoading={productLookup.isPending}
           lookup={productLookup.data}
-          nrn={initialNafdacNumber}
+          registrationId={regulatoryKey.registrationId}
           onRetry={() => void productLookup.refetch()}
         />
       ) : null}
@@ -921,7 +962,7 @@ export function VerifyPassport({ initialNafdacNumber }: { initialNafdacNumber: s
           reportIds={passportResult?.reportIds ?? []}
           batches={batches}
           reports={reports}
-          requestedNafdacNumber={initialNafdacNumber}
+          requestedNafdacNumber={chainLookupKey || initialNafdacNumber}
           refreshVersion={refreshVersion}
           evidenceByHash={evidenceByHash}
         />

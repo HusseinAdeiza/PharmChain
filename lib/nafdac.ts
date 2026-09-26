@@ -37,7 +37,7 @@ export function nafdacFromInput(value: string) {
     }
   }
 
-  const candidate = input.replace(/^#/, "");
+  const candidate = safeDecode(input.replace(/^#/, ""));
   return isValidNafdacNumber(candidate) ? candidate : undefined;
 }
 

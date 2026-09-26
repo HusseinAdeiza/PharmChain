@@ -2,6 +2,7 @@
 
 import {
   BadgePlus,
+  Languages,
   ScanLine,
   Siren,
 } from "lucide-react";
@@ -9,14 +10,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
+import { useLanguage } from "@/components/language-provider";
 import { WalletButton } from "@/components/wallet-button";
 import { MONAD_MAINNET_ID, monadMainnet } from "@/lib/monad";
 
 const navigation = [
-  { href: "/", label: "Verify", icon: ScanLine },
-  { href: "/register", label: "Register", icon: BadgePlus },
-  { href: "/report", label: "Report", icon: Siren },
-];
+  { href: "/", label: "nav_verify", icon: ScanLine },
+  { href: "/register", label: "nav_register", icon: BadgePlus },
+  { href: "/report", label: "nav_report", icon: Siren },
+] as const;
 
 function isActive(pathname: string, href: string) {
   return href === "/" ? pathname === "/" || pathname.startsWith("/verify") : pathname.startsWith(href);
@@ -24,6 +26,7 @@ function isActive(pathname: string, href: string) {
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const { language, setLanguage, t } = useLanguage();
 
   return (
     <>
@@ -69,13 +72,27 @@ export function SiteHeader() {
                         : "border-transparent text-muted hover:text-frost",
                     )}
                   >
-                    {item.label}
+                    {t(item.label)}
                   </Link>
                 );
               })}
             </nav>
 
             <div className="flex items-center gap-3">
+              <label className="flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.12em] text-muted">
+                <Languages className="h-3.5 w-3.5 text-electric" />
+                <span className="sr-only">{t("language_label")}</span>
+                <select
+                  value={language}
+                  onChange={(event) => setLanguage(event.target.value as "en" | "fr" | "es")}
+                  aria-label={t("language_label")}
+                  className="border-0 bg-transparent font-mono text-[10px] font-bold uppercase tracking-[0.12em] text-frost outline-none"
+                >
+                  <option value="en" className="bg-panel text-frost">EN</option>
+                  <option value="fr" className="bg-panel text-frost">FR</option>
+                  <option value="es" className="bg-panel text-frost">ES</option>
+                </select>
+              </label>
               <WalletButton />
             </div>
           </div>
@@ -102,7 +119,7 @@ export function SiteHeader() {
               )}
             >
               <Icon className="h-[18px] w-[18px]" />
-              {item.label}
+              {t(item.label)}
             </Link>
           );
         })}

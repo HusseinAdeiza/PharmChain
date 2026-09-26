@@ -43,7 +43,7 @@ All addresses, transaction hashes, block numbers, and CIDs below were returned b
 | `seed-output.json` path | `demo/seed/seed-output.json` |
 | QR SVG output path | `demo/seed/*.svg` (11 passport QR files) |
 | Approved public application URL | https://pharmchain.vercel.app |
-| Vercel production deployment | `dpl_H4EZ83KfXreiyS4H8kEmx6hKPn8r` |
+| Vercel production deployment | `dpl_DowFSNCi4mkRv94iozRcvugwNKtA` |
 | Frontend contract configuration | No local `.env` file; Vercel production env is set to the verified registry `0x0f784017793776A8D6537F827421696077aDb396` and credential `0xb1B2b43dBb26C12b25e3eBd85418830413c55B0A`; confirmed by live A4-0425 read |
 | Receipt confirmation record | 24/24 seed transactions returned successful receipts |
 | Monad `Finalized` record | PENDING |
@@ -67,7 +67,7 @@ All addresses, transaction hashes, block numbers, and CIDs below were returned b
 ## Frontend deployment record
 
 - Production URL: https://pharmchain.vercel.app
-- Vercel deployment: `dpl_H4EZ83KfXreiyS4H8kEmx6hKPn8r`
+- Vercel deployment: `dpl_DowFSNCi4mkRv94iozRcvugwNKtA`
 - Public route checks: `/`, `/register`, `/report`, and `/verify/A11-0550` returned HTTP 200.
 - The deployed frontend is configured for the verified registry and credential addresses above.
 
@@ -100,6 +100,8 @@ These are explicitly labeled demo records for the hackathon narrative, not claim
 - Mainnet-guarded Foundry script that reverts unless chain ID is `143`.
 - Viem/wagmi frontend restricted to Monad Mainnet.
 - Server-side NAFDAC Green Book fallback for real NRNs without on-chain passports, explicitly labeled “Product found · not yet on-chain.”
+- Second official adapter: US FDA NDC Directory through `fda-ndc:US:<NDC>` with source URL, retrieval timestamp, and the same non-verification boundary.
+- Canonical jurisdiction keys (`nafdac:NG:*`, `fda-ndc:US:*`) and core EN/FR/ES localization with a persisted language switch.
 - Frontend ABIs matching the current contract structs and function signatures.
 - Full-page traversal through `getBatchPage` and `getCounterfeitReportPage` with a maximum page size of 100.
 - Viem seed script requiring one owner/deployer and exactly five unique funded manufacturer signer keys.

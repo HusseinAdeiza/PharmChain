@@ -97,7 +97,12 @@ Green Book status is a product-record status at access time, not independent pro
 
 Sources: [Cikatem](https://nafdac.gov.ng/public-alert-no-05-2025-alert-on-the-circulation-of-falsified-cikatem-artemether-180mg-lumefantrine-1080mg-with-falsified-nafdac-registration-number-nrn-a11-100025/), [Xalatan](https://nafdac.gov.ng/public-alert-no-0019-2019-alert-on-voluntary-recall-of-xalatan-eye-drops-lot-numbers-w67369-and-ak4753/), [Dostinex](https://nafdac.gov.ng/public-alert-no-07-2026-alert-on-surveillance-and-mop-up-of-counterfeit-dostinex-0-5mg-tablets-found-in-circulation/), [BETACLOX](https://nafdac.gov.ng/public-alert-no-37-2025-alert-on-the-report-of-substandard-and-falsified-sf-betaclox-found-in-nigeria/), [Tavanic](https://nafdac.gov.ng/public-alert-no-01-2026-sale-of-falsified-tavanic-500mg-tablet-in-nigeria/), [Prevenar](https://nafdac.gov.ng/public-alert-no-02-2024-pfizer-warns-against-tampered-expiry-date-on-prevenar-13-batch-cl-3337/), [Augmentin](https://nafdac.gov.ng/public-alert-no-024-2026-alert-on-counterfeit-augmentin-625mg-tablets-batch-no-ac3n-in-nigeria/), and [WHO fact sheet](https://www.who.int/news-room/fact-sheets/detail/substandard-and-falsified-medical-products).
 
-## Official Monad Mainnet facts
+## Second regulator source: US FDA NDC
+
+The global-readiness prototype uses the official [openFDA NDC Directory](https://open.fda.gov/apis/drug/ndc/) as adapter #2. The directory is updated daily and exposes National Drug Code, brand/generic name, labeler, dosage form, route, and marketing category. The public documentation explicitly warns that an NDC listing is not FDA approval or a determination of clinical safety; PharmChain therefore labels this result **“Product found · not yet on-chain”** and never turns it into a VERIFIED state.
+
+Example live lookup used for the demo: `fda-ndc:US:50580-590` returns **TYLENOL Extra Strength**, labeler **Kenvue Brands LLC**, from the official NDC Directory. The lookup is server-side, cached for one hour, and preserves the source URL and retrieval timestamp. This is an adapter demonstration, not a claim of worldwide regulator coverage.
+
 
 The [official Monad network information](https://docs.monad.xyz/developer-essentials/network-information) accessed 2026-09-24 specifies:
 

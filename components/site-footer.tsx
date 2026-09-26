@@ -1,6 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { Logo } from "@/components/logo";
+import { TranslatedText } from "@/components/translated-text";
 import { MONAD_EXPLORER_URL, monadMainnet } from "@/lib/monad";
 
 const columns: Array<{
@@ -36,8 +37,9 @@ export function SiteFooter() {
               </p>
             </div>
             <p className="mt-5 max-w-lg text-sm leading-6 text-muted">
-              Public medicine verification anchored to {monadMainnet.name}. Always confirm
-              the connected registry deployment before submitting a transaction.
+              <TranslatedText messageKey="footer_tagline" />
+              <span className="ml-1">·</span>
+              {monadMainnet.name}
             </p>
             <p className="mt-4 max-w-lg border-l border-electric/50 pl-4 font-mono text-[11px] leading-5 text-muted/80">
               EVIDENCE, NOT A SUBSTITUTE FOR CARE · NO SIMULATED DATA
