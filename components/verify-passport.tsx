@@ -56,6 +56,30 @@ type EvidenceEntry = {
   filename: string;
 };
 
+type GreenBookProduct = {
+  id: number | null;
+  nrn: string;
+  name: string;
+  ingredient: string | null;
+  form: string | null;
+  route: string | null;
+  strength: string | null;
+  applicant: string | null;
+  manufacturer: string | null;
+  status: string | null;
+  approvalDate: string | null;
+  expiryDate: string | null;
+  sourceUrl: string;
+};
+
+type GreenBookLookup = {
+  nrn: string;
+  products: GreenBookProduct[];
+  source: string;
+  sourceUrl: string;
+  checkedAt: string;
+};
+
 function AddressValue({ address }: { address: `0x${string}` }) {
   if (address === zeroAddress) {
     return <span className="text-muted">Not set</span>;
@@ -402,6 +426,113 @@ function ReportCard({ report }: { report: CounterfeitReport }) {
   );
 }
 
+function ProductLookupFallback({
+  error,
+  isLoading,
+  lookup,
+  nrn,
+  onRetry,
+}: {
+  error: boolean;
+  isLoading: boolean;
+  lookup?: GreenBookLookup;
+  nrn: string;
+  onRetry: () => void;
+}) {
+  if (isLoading) {
+    return (
+      <section className="glass mt-8 rounded-3xl border border-electric/30 p-6 sm:p-8">
+        <div className="flex items-center gap-3 font-mono text-sm uppercase tracking-[0.12em] text-electric">
+          <LoaderCircle className="h-4 w-4 animate-spin" />
+          Checking the official NAFDAC Green Book
+        </div>
+        <p className="mt-3 text-sm leading-6 text-muted">Looking for an official product record for {nrn}.</p>
+      </section>
+    );
+  }
+  if (error) {
+    return (
+      <section className="glass mt-8 rounded-3xl border border-amber/40 p-6 sm:p-8">
+        <div className="flex items-start gap-3">
+          <CircleAlert className="mt-0.5 h-5 w-5 shrink-0 text-gold" />
+          <div>
+            <h2 className="font-display text-2xl font-extrabold uppercase text-frost">Official lookup unavailable</h2>
+            <p className="mt-2 text-sm leading-6 text-muted">The on-chain registry has no passport for {nrn}, and the NAFDAC Green Book lookup could not be completed.</p>
+            <Button variant="outline" size="sm" className="mt-4" onClick={onRetry}>
+              <RefreshCw className="h-4 w-4" />
+              Retry official lookup
+            </Button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+  if (!lookup || lookup.products.length === 0) {
+    return (
+      <section className="glass mt-8 rounded-3xl border border-white/10 p-6 text-center sm:p-8">
+        <span className="mx-auto grid h-12 w-12 place-items-center rounded-xl border border-white/15 text-muted">
+          <Search className="h-5 w-5" />
+        </span>
+        <h2 className="mt-4 font-display text-2xl font-extrabold uppercase text-frost">No official product match</h2>
+        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-muted">No NAFDAC Green Book product matched {nrn} at lookup time. Check the number, or report a suspected product concern.</p>
+        <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
+          <Button variant="outline" size="sm" onClick={onRetry}>
+            <RefreshCw className="h-4 w-4" />
+            Retry lookup
+          </Button>
+          <Link href="/report" className={buttonStyles("secondary", "sm")}>
+            Report a concern
+          </Link>
+        </div>
+      </section>
+    );
+  }
+  return (
+    <section className="glass mt-8 rounded-3xl border border-gold/45 p-5 sm:p-7">
+      <div className="flex flex-col gap-4 border-b border-gold/20 pb-5 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-gold">Product found · not yet on-chain</p>
+          <h2 className="mt-2 font-display text-3xl font-extrabold uppercase leading-none text-frost">Official product record</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-muted">NAFDAC Green Book returned a product for {nrn}, but PharmChain has no on-chain batch passport for it yet. This is product information, not a PharmChain verification.</p>
+        </div>
+        <span className="w-fit border border-gold/50 bg-gold/10 px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.12em] text-gold">Not verified on-chain</span>
+      </div>
+      <div className="mt-5 space-y-3">
+        {lookup.products.map((product) => (
+          <article key={`${product.id ?? product.nrn}-${product.name}`} className="border border-white/10 bg-black/30 p-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <p className="font-mono text-xs font-bold uppercase tracking-[0.1em] text-electric">{product.nrn}</p>
+                <h3 className="mt-2 font-display text-xl font-extrabold uppercase text-frost">{product.name}</h3>
+              </div>
+              {product.status ? <span className="w-fit border border-teal/40 bg-teal/10 px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-teal">{product.status}</span> : null}
+            </div>
+            <dl className="mt-4 grid gap-3 text-xs sm:grid-cols-2">
+              {[
+                ["Applicant", product.applicant],
+                ["Form / route", [product.form, product.route].filter(Boolean).join(" · ")],
+                ["Strength", product.strength],
+                ["Green Book expiry", product.expiryDate],
+              ].map(([label, value]) => value ? <div key={String(label)}><dt className="font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-muted">{label}</dt><dd className="mt-1 text-frost">{value}</dd></div> : null)}
+            </dl>
+            <a href={product.sourceUrl} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-1.5 font-mono text-xs font-bold uppercase tracking-[0.1em] text-electric underline decoration-electric/30 underline-offset-4">
+              Open official Green Book record
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          </article>
+        ))}
+      </div>
+      <div className="mt-5 flex flex-col gap-3 border-t border-white/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
+        <p className="max-w-2xl text-xs leading-5 text-muted">To make this product verifiable here, a verified manufacturer must attest a batch and its evidence.</p>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Link href="/register" className={buttonStyles("secondary", "sm")}>Register a batch</Link>
+          <Link href="/report" className={buttonStyles("outline", "sm")}>Report a concern</Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function PassportResult({
   passport,
   batchIds,
@@ -653,6 +784,26 @@ export function VerifyPassport({ initialNafdacNumber }: { initialNafdacNumber: s
     staleTime: 30_000,
   });
 
+  const productLookup = useQuery<GreenBookLookup>({
+    queryKey: ["greenbook-product-lookup", initialNafdacNumber],
+    enabled:
+      isRegistryConfigured &&
+      passportQuery.isSuccess &&
+      !passport?.exists &&
+      Boolean(initialNafdacNumber),
+    queryFn: async () => {
+      const response = await fetch(
+        `/api/products/lookup?nrn=${encodeURIComponent(initialNafdacNumber)}`,
+      );
+      if (!response.ok) {
+        throw new Error("The official product lookup could not be completed.");
+      }
+      return (await response.json()) as GreenBookLookup;
+    },
+    staleTime: 60 * 60 * 1000,
+    retry: 1,
+  });
+
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const nafdacNumber = nafdacFromInput(input);
@@ -667,6 +818,9 @@ export function VerifyPassport({ initialNafdacNumber }: { initialNafdacNumber: s
   const refresh = () => {
     setRefreshVersion((current) => current + 1);
     void passportQuery.refetch();
+    if (productLookup.isFetched) {
+      void productLookup.refetch();
+    }
   };
 
   const isLoading =
@@ -751,27 +905,13 @@ export function VerifyPassport({ initialNafdacNumber }: { initialNafdacNumber: s
       ) : null}
 
       {noPassport ? (
-        <div className="glass mt-8 rounded-3xl p-7 text-center">
-          <span className="mx-auto grid h-16 w-44 -rotate-3 place-items-center rounded-2xl border-2 border-white/25 font-display text-2xl font-extrabold uppercase text-frost/70 motion-safe:animate-stamp-in">
-            Not found
-          </span>
-          <h2 className="mt-6 font-display text-3xl font-extrabold uppercase tracking-[-0.02em] text-frost">
-            No passport found
-          </h2>
-          <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-muted">
-            The configured contract returned no batch or report for {initialNafdacNumber}.
-            A valid NAFDAC number does not imply an on-chain PharmChain passport.
-          </p>
-          <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-            <Button variant="outline" onClick={refresh}>
-              <RefreshCw className="h-4 w-4" />
-              Refresh result
-            </Button>
-            <Link href="/register" className={buttonStyles("primary", "md")}>
-              Register a batch
-            </Link>
-          </div>
-        </div>
+        <ProductLookupFallback
+          error={productLookup.isError}
+          isLoading={productLookup.isPending}
+          lookup={productLookup.data}
+          nrn={initialNafdacNumber}
+          onRetry={() => void productLookup.refetch()}
+        />
       ) : null}
 
       {passport?.exists && pagesQuery.isSuccess ? (
