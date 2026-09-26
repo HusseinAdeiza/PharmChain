@@ -43,7 +43,7 @@ All addresses, transaction hashes, block numbers, and CIDs below were returned b
 | `seed-output.json` path | `demo/seed/seed-output.json` |
 | QR SVG output path | `demo/seed/*.svg` (11 passport QR files) |
 | Approved public application URL | https://pharmchain.vercel.app |
-| Vercel production deployment | `dpl_DowFSNCi4mkRv94iozRcvugwNKtA` |
+| Vercel production deployment | `dpl_4fpDj2CTX9SSRqVQyfe4qB87pCkj` |
 | Frontend contract configuration | No local `.env` file; Vercel production env is set to the verified registry `0x0f784017793776A8D6537F827421696077aDb396` and credential `0xb1B2b43dBb26C12b25e3eBd85418830413c55B0A`; confirmed by live A4-0425 read |
 | Receipt confirmation record | 24/24 seed transactions returned successful receipts |
 | Monad `Finalized` record | PENDING |
@@ -67,7 +67,7 @@ All addresses, transaction hashes, block numbers, and CIDs below were returned b
 ## Frontend deployment record
 
 - Production URL: https://pharmchain.vercel.app
-- Vercel deployment: `dpl_DowFSNCi4mkRv94iozRcvugwNKtA`
+- Vercel deployment: `dpl_4fpDj2CTX9SSRqVQyfe4qB87pCkj`
 - Public route checks: `/`, `/register`, `/report`, and `/verify/A11-0550` returned HTTP 200.
 - The deployed frontend is configured for the verified registry and credential addresses above.
 
@@ -458,6 +458,7 @@ Do not place the JWT in `.env.example`, `.env.local`, a Vercel variable, source 
 - [`README.md`](./README.md) — setup, commands, implementation behavior, and safety controls.
 - [`RESEARCH.md`](./RESEARCH.md) — official product/alerts, contract API, seed mapping, and uncertainty log.
 - [`DEMO_SCRIPT.md`](./DEMO_SCRIPT.md) — post-deployment 90-second script and preflight fallback.
+- [`VIDEO_DEMO_SCRIPT.md`](./VIDEO_DEMO_SCRIPT.md) — recording-ready 90-second walkthrough with real demo URLs.
 - [`SUBMISSION.md`](./SUBMISSION.md) — deployed contract/source/seed record.
 
 No commit was created as part of this work.

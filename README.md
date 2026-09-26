@@ -16,7 +16,7 @@ The implementation contains:
 - **Mainnet contracts are deployed and source-verified** on Monad Mainnet (`chainId 143`); addresses and receipts are recorded in [`SUBMISSION.md`](./SUBMISSION.md).
 - **Mainnet seed is complete:** 5 credentials, 16 base batches, 1 active recall, 1 validated counterfeit flag, 4 IPFS PDFs, and 24/24 successful receipts; details are in [`demo/seed/seed-output.json`](./demo/seed/seed-output.json).
 - **Approved demo scenarios are live:** [A4-0425 VERIFIED](https://pharmchain.vercel.app/verify/A4-0425), [A4-0426 RECALLED](https://pharmchain.vercel.app/verify/A4-0426), and [A4-0427 COUNTERFEIT FLAG](https://pharmchain.vercel.app/verify/A4-0427); details are in [`demo/seed/demo-scenarios-output.json`](./demo/seed/demo-scenarios-output.json).
-- **Live frontend:** https://pharmchain.vercel.app (production deployment `dpl_DowFSNCi4mkRv94iozRcvugwNKtA`).
+- **Live frontend:** https://pharmchain.vercel.app (production deployment `dpl_4fpDj2CTX9SSRqVQyfe4qB87pCkj`).
 - Real NRNs not yet on-chain fall back to an official NAFDAC Green Book lookup and are labeled “Product found · not yet on-chain.”
 - The lookup layer also supports a second official adapter: `fda-ndc:US:<NDC>` through the US FDA NDC Directory, with the same provenance rules.
 - Core verification, navigation, and status copy support English, French, and Spanish from the header language switch.

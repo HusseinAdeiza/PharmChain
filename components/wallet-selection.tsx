@@ -80,6 +80,24 @@ export function useWalletSelection() {
   return context;
 }
 
+function connectorIcon(connector: Connector) {
+  const icon = (connector as Connector & { icon?: string }).icon;
+  return typeof icon === "string" && icon.length > 0 ? icon : undefined;
+}
+
+function WalletConnectorMark({ connector }: { connector: Connector }) {
+  const icon = connectorIcon(connector);
+  return (
+    <span
+      className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-xl border border-white/15 bg-black/40 bg-contain bg-center bg-no-repeat p-1.5 font-mono text-sm font-bold text-electric shadow-[0_8px_24px_-14px_rgba(31,182,255,0.7)]"
+      style={icon ? { backgroundImage: `url("${icon}")` } : undefined}
+      aria-hidden="true"
+    >
+      {icon ? null : connector.name.slice(0, 1).toUpperCase()}
+    </span>
+  );
+}
+
 function WalletSelectionDialog({
   connectors,
   error,
@@ -141,9 +159,7 @@ function WalletSelectionDialog({
                     isConnecting && "border-electric/40",
                   )}
                 >
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-electric/30 bg-electric/10 font-mono text-sm font-bold text-electric">
-                    {connector.name.slice(0, 1).toUpperCase()}
-                  </span>
+                  <WalletConnectorMark connector={connector} />
                   <span className="min-w-0 flex-1">
                     <span className="block truncate font-mono text-xs font-bold uppercase tracking-[0.1em] text-frost">
                       {connector.name}
