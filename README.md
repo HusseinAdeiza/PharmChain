@@ -2,6 +2,10 @@
 
 PharmChain is a Next.js frontend and Solidity/viem system for public medicine-passport inspection and manufacturer-authorized registry actions on **Monad Mainnet only**.
 
+I started with one concrete failure: a real product such as Dizpharm Paracetamol can exist in an official regulator database without having an on-chain batch passport. PharmChain keeps those facts separate—an official product record is not the same as a verified on-chain batch—and shows the source, jurisdiction, and evidence trail instead of hiding the difference.
+
+The engineering decisions, trade-offs, and unfinished work are recorded in [`ENGINEERING_JOURNAL.md`](./ENGINEERING_JOURNAL.md).
+
 The implementation contains:
 
 - `ManufacturerCredential`, an owner-issued soulbound ERC-721 manufacturer credential;
@@ -24,7 +28,7 @@ The implementation contains:
 - The official Foundry 1.8.1 executable is installed at `%USERPROFILE%\.foundry\versions\foundry-rs\foundry\v1.8.1\forge.exe`; the default PATH also contains 1.7.1. Use the 1.8.1 executable for Monad execution rules.
 - The frontend is hardcoded to Monad chain `143`, public RPC `https://rpc.monad.xyz`, and MonadScan.
 - The camera scanner is implemented with `html5-qrcode` and has a manual fallback; a physical iOS/Android camera test was not available in this environment and remains a pre-demo check.
-- The frontend does not query NAFDAC or upload evidence. The seed script performs separate IPFS uploads before broadcasting.
+- The frontend reads on-chain records and queries official regulator adapters server-side; it does not upload evidence from the browser. The seed script performs the IPFS uploads before broadcasting.
 
 See [`SUBMISSION.md`](./SUBMISSION.md) for the exact pending fields, deployment procedure, and seed procedure. See [`RESEARCH.md`](./RESEARCH.md) for official product/alerts and implementation analysis.
 

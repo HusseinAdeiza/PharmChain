@@ -456,6 +456,7 @@ Do not place the JWT in `.env.example`, `.env.local`, a Vercel variable, source 
 ## Submission artifacts
 
 - [`README.md`](./README.md) — setup, commands, implementation behavior, and safety controls.
+- [`ENGINEERING_JOURNAL.md`](./ENGINEERING_JOURNAL.md) — real decisions, trade-offs, and known limitations.
 - [`RESEARCH.md`](./RESEARCH.md) — official product/alerts, contract API, seed mapping, and uncertainty log.
 - [`DEMO_SCRIPT.md`](./DEMO_SCRIPT.md) — post-deployment 90-second script and preflight fallback.
 - [`VIDEO_DEMO_SCRIPT.md`](./VIDEO_DEMO_SCRIPT.md) — recording-ready 90-second walkthrough with real demo URLs.
