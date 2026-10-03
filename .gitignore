@@ -21,3 +21,7 @@ demo/seed/*
 !demo/verify/
 demo/verify/*
 !demo/verify/demo-verification.json
+
+.vercel
+.env*
+!.env.example

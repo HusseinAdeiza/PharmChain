@@ -43,7 +43,7 @@ All addresses, transaction hashes, block numbers, and CIDs below were returned b
 | `seed-output.json` path | `demo/seed/seed-output.json` |
 | QR SVG output path | `demo/seed/*.svg` (11 passport QR files) |
 | Approved public application URL | https://pharmchain.vercel.app |
-| Vercel production deployment | `dpl_4fpDj2CTX9SSRqVQyfe4qB87pCkj` |
+| Vercel production deployment | `dpl_HrNqDt76BLvSUPdNDpMpYzVtWCfm` (previous: `dpl_4fpDj2CTX9SSRqVQyfe4qB87pCkj`) |
 | Frontend contract configuration | No local `.env` file; Vercel production env is set to the verified registry `0x0f784017793776A8D6537F827421696077aDb396` and credential `0xb1B2b43dBb26C12b25e3eBd85418830413c55B0A`; confirmed by live A4-0425 read |
 | Receipt confirmation record | 24/24 seed transactions returned successful receipts |
 | Monad `Finalized` record | PENDING |
@@ -67,8 +67,9 @@ All addresses, transaction hashes, block numbers, and CIDs below were returned b
 ## Frontend deployment record
 
 - Production URL: https://pharmchain.vercel.app
-- Vercel deployment: `dpl_4fpDj2CTX9SSRqVQyfe4qB87pCkj`
-- Public route checks: `/`, `/register`, `/report`, and `/verify/A11-0550` returned HTTP 200.
+- Vercel deployment: `dpl_HrNqDt76BLvSUPdNDpMpYzVtWCfm`
+- Public route checks: `/`, `/register`, `/report`, `/verify/A4-0425`, `/verify/A4-0426`, `/verify/A11-100025`, `/verify/04-2531`, and the pre-filled report routes `/report?n=A4-0425`, `/report?n=A4-0425&batch=17`, `/report?report=2` all returned HTTP 200.
+- Official adapter checks: `?registry=nafdac&id=04-2531` returned 1 NAFDAC Green Book product; `?id=fda-ndc:US:50580-590` returned 1 US FDA NDC product (TYLENOL Extra Strength).
 - The deployed frontend is configured for the verified registry and credential addresses above.
 
 ## Mainnet seed record
