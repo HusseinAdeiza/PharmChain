@@ -174,6 +174,20 @@ const resultStateStampWord: Record<PassportVerificationState, string> = {
   review: "Review",
 };
 
+/**
+ * Builds the on-chain reporting link so the report form opens pre-filled with
+ * the exact key and batch the reader was just inspecting. This is the handoff
+ * that turns a read-only lookup into a complete report loop.
+ */
+function reportLink(params: { nrn?: string; batchId?: string; reportId?: string }) {
+  const search = new URLSearchParams();
+  if (params.nrn?.trim()) search.set("n", params.nrn.trim());
+  if (params.batchId?.trim()) search.set("batch", params.batchId.trim());
+  if (params.reportId?.trim()) search.set("report", params.reportId.trim());
+  const query = search.toString();
+  return query ? `/report?${query}` : "/report";
+}
+
 function ResultStatePanel({ state }: { state: PassportVerificationState }) {
   const { t } = useLanguage();
   const content = resultStateContent[state];
@@ -383,6 +397,20 @@ function BatchCard({ batch, evidence }: { batch: Batch; evidence?: EvidenceEntry
           Batch is past its recorded expiry date.
         </div>
       ) : null}
+
+      <div className="flex flex-col gap-3 border-t border-white/10 bg-black/20 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <p className="text-xs leading-5 text-muted">
+          Something does not match this batch? Open a report pre-filled with this key
+          and batch number.
+        </p>
+        <Link
+          href={reportLink({ nrn: batch.nafdacNumber, batchId: batch.batchId.toString() })}
+          className={buttonStyles("outline", "sm")}
+        >
+          <ShieldAlert className="h-4 w-4" />
+          Report this batch
+        </Link>
+      </div>
     </article>
   );
 }
@@ -494,7 +522,7 @@ function ProductLookupFallback({
             <RefreshCw className="h-4 w-4" />
             Retry lookup
           </Button>
-          <Link href="/report" className={buttonStyles("secondary", "sm")}>
+          <Link href={reportLink({ nrn: registrationId })} className={buttonStyles("secondary", "sm")}>
             {t("report_concern")}
           </Link>
         </div>
@@ -545,7 +573,7 @@ function ProductLookupFallback({
           <Link href="/register" className={buttonStyles("secondary", "sm")}>
             {t("register_batch")}
           </Link>
-          <Link href="/report" className={buttonStyles("outline", "sm")}>
+          <Link href={reportLink({ nrn: registrationId })} className={buttonStyles("outline", "sm")}>
             {t("report_concern")}
           </Link>
         </div>

@@ -8,7 +8,15 @@ export const metadata: Metadata = {
     "Submit a batch recall, counterfeit report, or validation decision to the configured DrugRegistry on Monad Mainnet.",
 };
 
-export default function ReportPage() {
+export default async function ReportPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const params = await searchParams;
+  const first = (value: string | string[] | undefined) =>
+    Array.isArray(value) ? value[0] : value;
+
   return (
     <section className="relative">
       <div className="mx-auto max-w-7xl px-4 pb-16 pt-12 sm:px-6 sm:pt-16 lg:px-8 lg:pb-20">
@@ -28,7 +36,11 @@ export default function ReportPage() {
         </div>
 
         <div className="mt-12">
-          <ReportForm />
+          <ReportForm
+            initialNafdacNumber={first(params.n)}
+            initialBatchId={first(params.batch)}
+            initialReportId={first(params.report)}
+          />
         </div>
       </div>
     </section>

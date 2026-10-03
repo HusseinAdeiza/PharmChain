@@ -2,22 +2,26 @@
 
 import { type FormEvent, useState } from "react";
 import {
+  ArrowRight,
   CircleAlert,
   ClipboardCheck,
   ExternalLink,
   FileWarning,
+  Fingerprint,
   LoaderCircle,
   PackageX,
+  RefreshCw,
   ShieldAlert,
   Siren,
 } from "lucide-react";
-import { Button, cn } from "@/components/ui/button";
+import Link from "next/link";
+import { Button, buttonStyles, cn } from "@/components/ui/button";
 import { FieldLabel, Input, Select, Textarea } from "@/components/ui/field";
 import {
   ActionRequirements,
   ActionTransactionStatus,
 } from "@/components/registry-action-status";
-import { isRegistryConfigured, registryAddress } from "@/lib/contracts";
+import { isRegistryConfigured, registryAddress, type CounterfeitReport } from "@/lib/contracts";
 import { monadAddressUrl, monadTransactionUrl } from "@/lib/monad";
 import { isValidNafdacNumber } from "@/lib/nafdac";
 import { useRegistryAction } from "@/lib/use-registry-action";
@@ -81,11 +85,22 @@ const confirmedStamp: Record<ReportMode, string> = {
 function ConfirmedReport({
   mode,
   transactionHash,
+  reportId,
+  reportedNafdacNumber,
+  storedReport,
+  onReadBack,
 }: {
   mode: ReportMode;
   transactionHash?: `0x${string}`;
+  reportId?: string;
+  reportedNafdacNumber?: string;
+  storedReport?: CounterfeitReport;
+  onReadBack: (reportId: string) => void;
 }) {
   const explorerUrl = monadTransactionUrl(transactionHash);
+  const passportUrl = reportedNafdacNumber
+    ? `/verify/${encodeURIComponent(reportedNafdacNumber)}`
+    : undefined;
   const title =
     mode === "recall"
       ? "Recall action confirmed"
@@ -119,17 +134,100 @@ function ConfirmedReport({
               <ExternalLink className="h-3.5 w-3.5" />
             </a>
           ) : null}
+
+          {mode === "counterfeit" && reportId ? (
+            <div className="mt-5 border-t border-teal/25 pt-4">
+              <p className="font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-teal">
+                Report #{reportId} is now public
+              </p>
+              {storedReport ? (
+                <dl className="mt-3 space-y-2 font-mono text-xs text-muted">
+                  <div className="flex flex-wrap gap-x-3">
+                    <dt className="uppercase tracking-[0.1em]">Key</dt>
+                    <dd className="text-frost">{storedReport.nafdacNumber || "not returned"}</dd>
+                  </div>
+                  <div className="flex flex-wrap gap-x-3">
+                    <dt className="uppercase tracking-[0.1em]">Reporter</dt>
+                    <dd className="break-all text-frost">{storedReport.reporter}</dd>
+                  </div>
+                  <div className="flex flex-wrap gap-x-3">
+                    <dt className="uppercase tracking-[0.1em]">Validation</dt>
+                    <dd className="text-frost">
+                      {storedReport.validated
+                        ? storedReport.isCounterfeit
+                          ? "validated as counterfeit"
+                          : "validated as not counterfeit"
+                        : "pending owner validation"}
+                    </dd>
+                  </div>
+                </dl>
+              ) : (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="mt-3"
+                  onClick={() => onReadBack(reportId)}
+                >
+                  <RefreshCw className="h-4 w-4" />
+                  Read the stored record back from the chain
+                </Button>
+              )}
+              {passportUrl ? (
+                <Link
+                  href={passportUrl}
+                  className={buttonStyles("secondary", "sm", "mt-4")}
+                >
+                  Open the public passport
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              ) : null}
+              <p className="mt-3 text-xs leading-5 text-muted">
+                A report is a signal, not a ruling. Until the registry owner validates it,
+                the passport shows it as pending rather than counterfeit.
+              </p>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
   );
 }
 
-export function ReportForm() {
+export function ReportForm({
+  initialNafdacNumber,
+  initialBatchId,
+  initialReportId,
+}: {
+  initialNafdacNumber?: string;
+  initialBatchId?: string;
+  initialReportId?: string;
+} = {}) {
   const action = useRegistryAction();
-  const [mode, setMode] = useState<ReportMode>("recall");
-  const [draft, setDraft] = useState<ReportDraft>(emptyDraft);
+  const incomingNrn = initialNafdacNumber?.trim() ?? "";
+  const incomingBatch = initialBatchId?.trim() ?? "";
+  const incomingReport = initialReportId?.trim() ?? "";
+  // Arriving from a batch passport should land on the action that reader can
+  // actually take. A member of the public reports a product; only the batch
+  // manufacturer or registry owner can recall or validate.
+  const [mode, setMode] = useState<ReportMode>(
+    incomingNrn && !incomingBatch && !incomingReport ? "counterfeit" : incomingBatch ? "recall" : incomingReport ? "validation" : "counterfeit",
+  );
+  const [draft, setDraft] = useState<ReportDraft>({
+    ...emptyDraft,
+    batchId: incomingBatch,
+    nafdacNumber: incomingNrn,
+    reportId: incomingReport,
+  });
   const [formError, setFormError] = useState<string>();
+
+  const sourceContext = incomingBatch
+    ? `Pre-filled from batch #${incomingBatch}${incomingNrn ? ` under ${incomingNrn}` : ""}.`
+    : incomingReport
+      ? `Pre-filled from counterfeit report #${incomingReport}.`
+      : incomingNrn
+        ? `Pre-filled from passport ${incomingNrn}.`
+        : undefined;
 
   const update = (field: keyof ReportDraft, value: string) => {
     setDraft((current) => ({ ...current, [field]: value }));
@@ -138,7 +236,14 @@ export function ReportForm() {
 
   const changeMode = (nextMode: ReportMode) => {
     setMode(nextMode);
-    setDraft(emptyDraft);
+    // Keep the key and batch the reader arrived with. Switching tabs should not
+    // force someone to re-type the identifier they just inspected.
+    setDraft({
+      ...emptyDraft,
+      batchId: incomingBatch,
+      nafdacNumber: incomingNrn,
+      reportId: incomingReport,
+    });
     setFormError(undefined);
     action.clear();
   };
@@ -266,6 +371,12 @@ export function ReportForm() {
                   ? "Provide the registry NAFDAC key and specific report details. Do not include personal medical information."
                   : "Only the DrugRegistry owner can validate a report. The call records isCounterfeit as true or false."}
             </p>
+            {sourceContext ? (
+              <p className="mt-4 flex items-start gap-2 rounded-2xl border border-electric/30 bg-electric/5 p-3 font-mono text-xs leading-5 text-frost">
+                <Fingerprint className="mt-0.5 h-3.5 w-3.5 shrink-0 text-electric" />
+                {sourceContext}
+              </p>
+            ) : null}
           </div>
 
           <div className="mt-6">
@@ -371,7 +482,16 @@ export function ReportForm() {
             <ActionRequirements action={action} />
             <ActionTransactionStatus action={action} />
             {action.isConfirmed ? (
-              <ConfirmedReport mode={mode} transactionHash={action.transactionHash} />
+              <ConfirmedReport
+                mode={mode}
+                transactionHash={action.transactionHash}
+                reportId={action.predictedRecordId}
+                reportedNafdacNumber={
+                  mode === "counterfeit" ? draft.nafdacNumber.trim() || undefined : undefined
+                }
+                storedReport={action.storedReport}
+                onReadBack={(reportId) => void action.confirmStoredReport(reportId)}
+              />
             ) : null}
 
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">

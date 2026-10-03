@@ -4,7 +4,9 @@ PharmChain is a Next.js frontend and Solidity/viem system for public medicine-pa
 
 I started with one concrete failure: a real product such as Dizpharm Paracetamol can exist in an official regulator database without having an on-chain batch passport. PharmChain keeps those facts separate—an official product record is not the same as a verified on-chain batch—and shows the source, jurisdiction, and evidence trail instead of hiding the difference.
 
-The engineering decisions, trade-offs, and unfinished work are recorded in [`ENGINEERING_JOURNAL.md`](./ENGINEERING_JOURNAL.md).
+The engineering decisions, trade-offs, and unfinished work are recorded in [`ENGINEERING_JOURNAL.md`](./ENGINEERING_JOURNAL.md). The competitor research and pre-submission priority plan are in [`HACKATHON_STRATEGY.md`](./HACKATHON_STRATEGY.md).
+
+> **Known defect:** the `A4-0427` demo key is a real NAFDAC registration (Griseo Cream) whose on-chain demo text describes a different product. See [the disclosure in `SUBMISSION.md`](./SUBMISSION.md#known-defect-the-a4-0427-demo-key-is-a-real-registration). `npm run verify:demo` reports this as a disclosure-required advisory.
 
 The implementation contains:
 
@@ -152,7 +154,10 @@ npm run typecheck
 npm run build
 npm run start
 npm run seed
+npm run verify:demo
 ```
+
+`npm run verify:demo` is a read-only independent evaluator. It re-derives the demo states from live chain reads instead of trusting the frontend, asserts contract invariants (credential linkage, recall authority, validator identity, evidence hashes, text limits, pagination caps), calls the official regulator adapter, and writes `demo/verify/demo-verification.json`. It broadcasts nothing and needs no private key. Findings that fail exit with code 1; contradictions that cannot be resolved by chain state are reported as disclosure-required advisories and do not fail the run. Set `SKIP_REGULATOR_LOOKUP=1` to run the chain checks without HTTP, or `NO_WRITE_REPORT=1` to suppress the JSON output.
 
 The secure PowerShell wrapper prompts for the Pinata JWT without echoing it, loads the restricted generated wallet file, runs the seed, and clears sensitive environment variables afterward:
 

@@ -1,0 +1,419 @@
+{
+  "evaluator": "scripts/verify-demo.ts",
+  "chainId": 143,
+  "network": "Monad Mainnet",
+  "rpcUrl": "https://rpc.monad.xyz",
+  "addresses": {
+    "registry": "0x0f784017793776A8D6537F827421696077aDb396",
+    "credential": "0xb1B2b43dBb26C12b25e3eBd85418830413c55B0A",
+    "addressSource": "demo/seed/seed-output.json"
+  },
+  "totals": {
+    "batches": "18",
+    "counterfeitReports": "2",
+    "manufacturerCredentials": "6"
+  },
+  "limits": {
+    "MAX_TEXT_LENGTH": "512",
+    "MAX_DETAILS_LENGTH": "2048",
+    "MAX_PASSPORT_ITEMS": "100"
+  },
+  "scenarios": {
+    "A4_0425": {
+      "nrn": "A4-0425",
+      "expectedState": "VERIFIED",
+      "derivedState": "VERIFIED",
+      "batchCount": "1",
+      "recalledCount": "0",
+      "reportCount": "0",
+      "pendingReportCount": "0",
+      "validatedCounterfeitCount": "0",
+      "batches": [
+        {
+          "batchId": "17",
+          "batchNumber": "DEMO-EMZOR-0425",
+          "drugName": "Paracetamol 500 mg — Emzor Nigeria Ltd (demo)",
+          "manufacturer": "0xf8bbf36018301cdff0B88A0f390350519c887bC9",
+          "recalled": false,
+          "recallReason": null,
+          "evidenceHash": "0x5cb585ee5861dfb7c0720dfd6d1484f5770b9fdd486564816a8a77f8390cfdf4"
+        }
+      ],
+      "reports": [],
+      "regulatorLookup": {
+        "reachable": true,
+        "products": 0,
+        "productNames": [],
+        "source": "NAFDAC Green Book",
+        "sourceUrl": "https://greenbook.nafdac.gov.ng/",
+        "note": ""
+      }
+    },
+    "A4_0426": {
+      "nrn": "A4-0426",
+      "expectedState": "RECALLED",
+      "derivedState": "RECALLED",
+      "batchCount": "1",
+      "recalledCount": "1",
+      "reportCount": "0",
+      "pendingReportCount": "0",
+      "validatedCounterfeitCount": "0",
+      "batches": [
+        {
+          "batchId": "18",
+          "batchNumber": "DEMO-FIDSON-0426",
+          "drugName": "Amoxicillin 500 mg — Fidson Healthcare PLC (demo)",
+          "manufacturer": "0xf86fa1c21Cc1D3CE90D43bbcFD48D7A3f34e542A",
+          "recalled": true,
+          "recallReason": "Elevated impurity levels detected in batch QA sample (demo scenario).",
+          "evidenceHash": "0x2700dd358660b776471a95c9d8de6dcb9da3d685ae0d1ef272b4b91deef77992"
+        }
+      ],
+      "reports": [],
+      "regulatorLookup": {
+        "reachable": true,
+        "products": 0,
+        "productNames": [],
+        "source": "NAFDAC Green Book",
+        "sourceUrl": "https://greenbook.nafdac.gov.ng/",
+        "note": ""
+      }
+    },
+    "A4_0427": {
+      "nrn": "A4-0427",
+      "expectedState": "COUNTERFEIT_FLAGGED",
+      "derivedState": "COUNTERFEIT_FLAGGED",
+      "batchCount": "0",
+      "recalledCount": "0",
+      "reportCount": "1",
+      "pendingReportCount": "0",
+      "validatedCounterfeitCount": "1",
+      "batches": [],
+      "reports": [
+        {
+          "reportId": "2",
+          "reporter": "0xf86fa1c21Cc1D3CE90D43bbcFD48D7A3f34e542A",
+          "validated": true,
+          "isCounterfeit": true
+        }
+      ],
+      "regulatorLookup": {
+        "reachable": true,
+        "products": 1,
+        "productNames": [
+          "Griseo Cream"
+        ],
+        "source": "NAFDAC Green Book",
+        "sourceUrl": "https://greenbook.nafdac.gov.ng/",
+        "note": ""
+      }
+    }
+  },
+  "findings": [
+    {
+      "check": "rpc chain id",
+      "expected": "143",
+      "observed": "143",
+      "ok": true
+    },
+    {
+      "check": "registry bytecode present",
+      "expected": "non-empty",
+      "observed": "present",
+      "ok": true
+    },
+    {
+      "check": "credential bytecode present",
+      "expected": "non-empty",
+      "observed": "present",
+      "ok": true
+    },
+    {
+      "check": "registry owner is set",
+      "expected": "non-zero address",
+      "observed": "0xf8bbf36018301cdff0B88A0f390350519c887bC9",
+      "ok": true
+    },
+    {
+      "check": "registry not paused",
+      "expected": "false",
+      "observed": "false",
+      "ok": true
+    },
+    {
+      "check": "registry points at credential contract",
+      "expected": "0xb1B2b43dBb26C12b25e3eBd85418830413c55B0A",
+      "observed": "0xb1B2b43dBb26C12b25e3eBd85418830413c55B0A",
+      "ok": true
+    },
+    {
+      "check": "credential owner matches registry owner",
+      "expected": "0xf8bbf36018301cdff0B88A0f390350519c887bC9",
+      "observed": "0xf8bbf36018301cdff0B88A0f390350519c887bC9",
+      "ok": true
+    },
+    {
+      "check": "credential not paused",
+      "expected": "false",
+      "observed": "false",
+      "ok": true
+    },
+    {
+      "check": "seeded batches present",
+      "expected": ">= 1",
+      "observed": "18",
+      "ok": true
+    },
+    {
+      "check": "seeded reports present",
+      "expected": ">= 1",
+      "observed": "2",
+      "ok": true
+    },
+    {
+      "check": "manufacturer credentials minted",
+      "expected": ">= 1",
+      "observed": "6",
+      "ok": true
+    },
+    {
+      "check": "A4_0425: passport exists",
+      "expected": "true",
+      "observed": "true",
+      "ok": true
+    },
+    {
+      "check": "A4_0425: canonical key matches",
+      "expected": "A4-0425",
+      "observed": "A4-0425",
+      "ok": true
+    },
+    {
+      "check": "A4_0425: counts agree with id lists",
+      "expected": "batchCount=1, reports=0",
+      "observed": "batchIds=1, reportIds=0",
+      "ok": true
+    },
+    {
+      "check": "A4_0425: passport id cap respected",
+      "expected": "<= 100",
+      "observed": "1",
+      "ok": true
+    },
+    {
+      "check": "A4_0425: batch 17 has evidence hash",
+      "expected": "non-zero bytes32",
+      "observed": "present",
+      "ok": true
+    },
+    {
+      "check": "A4_0425: batch 17 nrn matches passport",
+      "expected": "A4-0425",
+      "observed": "A4-0425",
+      "ok": true
+    },
+    {
+      "check": "A4_0425: batch 17 attestor is set",
+      "expected": "non-zero address",
+      "observed": "0xf8bbf36018301cdff0B88A0f390350519c887bC9",
+      "ok": true
+    },
+    {
+      "check": "A4_0425: batch 17 attestor is manufacturer",
+      "expected": "0xf8bbf36018301cdff0B88A0f390350519c887bC9",
+      "observed": "0xf8bbf36018301cdff0B88A0f390350519c887bC9",
+      "ok": true
+    },
+    {
+      "check": "A4_0425: batch 17 text within MAX_TEXT_LENGTH",
+      "expected": "<= 512",
+      "observed": "name=47, batch=15",
+      "ok": true
+    },
+    {
+      "check": "A4_0425: batch 17 manufacturer credential active",
+      "expected": "true",
+      "observed": "true",
+      "ok": true
+    },
+    {
+      "check": "A4_0425: derived state",
+      "expected": "VERIFIED",
+      "observed": "VERIFIED",
+      "ok": true
+    },
+    {
+      "check": "A4_0425: official regulator adapter answers",
+      "expected": "HTTP 200 with product list",
+      "observed": "0 product(s) from NAFDAC Green Book",
+      "ok": true
+    },
+    {
+      "check": "A4_0426: passport exists",
+      "expected": "true",
+      "observed": "true",
+      "ok": true
+    },
+    {
+      "check": "A4_0426: canonical key matches",
+      "expected": "A4-0426",
+      "observed": "A4-0426",
+      "ok": true
+    },
+    {
+      "check": "A4_0426: counts agree with id lists",
+      "expected": "batchCount=1, reports=0",
+      "observed": "batchIds=1, reportIds=0",
+      "ok": true
+    },
+    {
+      "check": "A4_0426: passport id cap respected",
+      "expected": "<= 100",
+      "observed": "1",
+      "ok": true
+    },
+    {
+      "check": "A4_0426: batch 18 has evidence hash",
+      "expected": "non-zero bytes32",
+      "observed": "present",
+      "ok": true
+    },
+    {
+      "check": "A4_0426: batch 18 nrn matches passport",
+      "expected": "A4-0426",
+      "observed": "A4-0426",
+      "ok": true
+    },
+    {
+      "check": "A4_0426: batch 18 attestor is set",
+      "expected": "non-zero address",
+      "observed": "0xf86fa1c21Cc1D3CE90D43bbcFD48D7A3f34e542A",
+      "ok": true
+    },
+    {
+      "check": "A4_0426: batch 18 attestor is manufacturer",
+      "expected": "0xf86fa1c21Cc1D3CE90D43bbcFD48D7A3f34e542A",
+      "observed": "0xf86fa1c21Cc1D3CE90D43bbcFD48D7A3f34e542A",
+      "ok": true
+    },
+    {
+      "check": "A4_0426: batch 18 text within MAX_TEXT_LENGTH",
+      "expected": "<= 512",
+      "observed": "name=51, batch=16",
+      "ok": true
+    },
+    {
+      "check": "A4_0426: batch 18 manufacturer credential active",
+      "expected": "true",
+      "observed": "true",
+      "ok": true
+    },
+    {
+      "check": "A4_0426: batch 18 recall has a reason",
+      "expected": "non-empty",
+      "observed": "Elevated impurity levels detected in batch QA sample (demo scenario).",
+      "ok": true
+    },
+    {
+      "check": "A4_0426: batch 18 recall recorded at",
+      "expected": "> 0",
+      "observed": "1790373374",
+      "ok": true
+    },
+    {
+      "check": "A4_0426: batch 18 recall authority is batch owner or registry owner",
+      "expected": "batch manufacturer or registry owner",
+      "observed": "0xf86fa1c21Cc1D3CE90D43bbcFD48D7A3f34e542A (registry owner 0xf8bbf36018301cdff0B88A0f390350519c887bC9)",
+      "ok": true
+    },
+    {
+      "check": "A4_0426: derived state",
+      "expected": "RECALLED",
+      "observed": "RECALLED",
+      "ok": true
+    },
+    {
+      "check": "A4_0426: official regulator adapter answers",
+      "expected": "HTTP 200 with product list",
+      "observed": "0 product(s) from NAFDAC Green Book",
+      "ok": true
+    },
+    {
+      "check": "A4_0427: passport exists",
+      "expected": "true",
+      "observed": "true",
+      "ok": true
+    },
+    {
+      "check": "A4_0427: canonical key matches",
+      "expected": "A4-0427",
+      "observed": "A4-0427",
+      "ok": true
+    },
+    {
+      "check": "A4_0427: counts agree with id lists",
+      "expected": "batchCount=0, reports=1",
+      "observed": "batchIds=0, reportIds=1",
+      "ok": true
+    },
+    {
+      "check": "A4_0427: passport id cap respected",
+      "expected": "<= 100",
+      "observed": "1",
+      "ok": true
+    },
+    {
+      "check": "A4_0427: report 2 nrn matches passport",
+      "expected": "A4-0427",
+      "observed": "A4-0427",
+      "ok": true
+    },
+    {
+      "check": "A4_0427: report 2 reporter is set",
+      "expected": "non-zero address",
+      "observed": "0xf86fa1c21Cc1D3CE90D43bbcFD48D7A3f34e542A",
+      "ok": true
+    },
+    {
+      "check": "A4_0427: report 2 details within MAX_DETAILS_LENGTH",
+      "expected": "<= 2048",
+      "observed": "212",
+      "ok": true
+    },
+    {
+      "check": "A4_0427: report 2 validator is registry owner",
+      "expected": "0xf8bbf36018301cdff0B88A0f390350519c887bC9",
+      "observed": "0xf8bbf36018301cdff0B88A0f390350519c887bC9",
+      "ok": true
+    },
+    {
+      "check": "A4_0427: report 2 validated timestamp",
+      "expected": "> 0",
+      "observed": "1790373593",
+      "ok": true
+    },
+    {
+      "check": "A4_0427: derived state",
+      "expected": "COUNTERFEIT_FLAGGED",
+      "observed": "COUNTERFEIT_FLAGGED",
+      "ok": true
+    },
+    {
+      "check": "A4_0427: official regulator adapter answers",
+      "expected": "HTTP 200 with product list",
+      "observed": "1 product(s) from NAFDAC Green Book",
+      "ok": true
+    }
+  ],
+  "advisories": [
+    {
+      "check": "A4_0427: demo narrative contradicts the official registry record",
+      "detail": "The NAFDAC Green Book lists A4-0427 as \"Griseo Cream\" (https://greenbook.nafdac.gov.ng/), but the on-chain demo records under that key describe: \"DEMO SCENARIO: Unverified Labs Ltd claims the same product key as the verified Emzor Nigeria Ltd paracetamol batch under…\". The NRN is a real registration, so a judge who checks the official source will see a different product than the demo claims."
+    }
+  ],
+  "passed": 49,
+  "failed": 0,
+  "advisoryCount": 1,
+  "ok": true,
+  "generatedAt": "2026-10-02T23:09:13.028Z"
+}

@@ -92,6 +92,19 @@ These are explicitly labeled demo records for the hackathon narrative, not claim
 - [A4-0427 — COUNTERFEIT FLAGGED](https://pharmchain.vercel.app/verify/A4-0427): report `2` records Unverified Labs Ltd claiming the same product key as the verified A4-0425 Emzor batch. [Report transaction](https://monadscan.com/tx/0xbd9dd2826e9fe7fbe9faa3bbac7acc324a49e1d426d43a17f71f282c1708d54b) · [validation transaction](https://monadscan.com/tx/0x5223aaef1deba0e60b6e670a716addbbc36ab9010be47990e2ebfa26890929e4).
 - Full scenario output, on-chain checks, and all six demo transaction links: [`demo/seed/demo-scenarios-output.json`](./demo/seed/demo-scenarios-output.json).
 
+### Known defect: the A4-0427 demo key is a real registration
+
+`A4-0427` is a genuine NAFDAC registration. The Green Book lists it as **Griseo Cream** (griseofulvin 1%, La-Lid Pharmaceutical Company Limited, Active, [record 99](https://greenbook.nafdac.gov.ng/products/details/99)). Our demo narrative under that key instead describes an "Unverified Labs Ltd" duplicate paracetamol claim.
+
+This is a real inconsistency, not a rounding error. A judge who opens the official source sees a different product than the demo claims. Two options exist and neither is cosmetic:
+
+1. **Disclose it.** State in the demo narration that `A4-0427` is a real registration used as a demo key, that the report text is fictional, and that the point of the scenario is that the registry never validated the underlying product.
+2. **Re-key the scenario.** Broadcast a new counterfeit report under an NRN with no official registration, so the demo key does not collide with a real product record. This costs one mainnet transaction and leaves the existing validated report in place, since the contract has no correction or supersession path.
+
+`npm run verify:demo` fails to flag this automatically on purpose: it reports it as a **disclosure-required advisory** rather than a hard failure, so the contradiction stays visible in [`demo/verify/demo-verification.json`](./demo/verify/demo-verification.json) instead of being silently tolerated. `A4-0425` and `A4-0426` return zero Green Book results, so only `A4-0427` currently carries this collision.
+
+Until the scenario is re-keyed, do not describe `A4-0427` as evidence that PharmChain detects a specific real product.
+
 ## Implemented in this repository
 
 - Solidity `ManufacturerCredential` with owner-only mint/revoke/pause and soulbound ERC-721 behavior.
@@ -200,6 +213,7 @@ No deployment credentials were needed for these checks:
 | Approved demo scenarios | SUCCESS; A4-0425 VERIFIED, A4-0426 RECALLED, A4-0427 COUNTERFEIT_FLAGGED; 6/6 scenario receipts successful |
 | Live A4-0425 passport | VERIFIED on https://pharmchain.vercel.app/verify/A4-0425 after client-side render |
 | Frontend deployment | SUCCESS; Vercel production deployment is ready and public |
+| `npm run verify:demo` | 49 passed, 0 failed, 1 disclosure-required advisory (the `A4-0427` key collision documented above); report at `demo/verify/demo-verification.json` |
 
 The fourteen passing tests cover core mint/revoke/soulbound behavior, credential-gated attestation, recall authority, owner validation, duplicate rejection, pause, historical batch recording, and revoked-credential rejection. They are not an external audit; the Monad-mode run uses the official 1.8.1 executable but is not a mainnet fork test.
 
@@ -439,6 +453,7 @@ Do not place the JWT in `.env.example`, `.env.local`, a Vercel variable, source 
 ## Security caveats for submission review
 
 - No independent audit is claimed.
+- The `A4-0427` demo key collides with a real NAFDAC registration for a different product; see the known defect section above.
 - Both contracts use a single ordinary owner rather than two-step ownership or enforced multisig.
 - Credential metadata is owner-asserted and not checked against NAFDAC.
 - Product NRN values are incorrectly reusable as organization metadata labels in the seed; they remain product identifiers.
@@ -456,6 +471,7 @@ Do not place the JWT in `.env.example`, `.env.local`, a Vercel variable, source 
 ## Submission artifacts
 
 - [`README.md`](./README.md) — setup, commands, implementation behavior, and safety controls.
+- [`HACKATHON_STRATEGY.md`](./HACKATHON_STRATEGY.md) — winner-pattern research and the pre-submission priority plan.
 - [`ENGINEERING_JOURNAL.md`](./ENGINEERING_JOURNAL.md) — real decisions, trade-offs, and known limitations.
 - [`RESEARCH.md`](./RESEARCH.md) — official product/alerts, contract API, seed mapping, and uncertainty log.
 - [`DEMO_SCRIPT.md`](./DEMO_SCRIPT.md) — post-deployment 90-second script and preflight fallback.

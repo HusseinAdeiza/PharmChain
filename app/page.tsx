@@ -100,13 +100,14 @@ export default function HomePage() {
             <TranslatedText messageKey="hero_body" />
           </p>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link href="/verify/A4-0201" className={buttonStyles("primary", "lg")}>
+            <a href="#scanner" className={buttonStyles("primary", "lg")}>
               <TranslatedText messageKey="hero_primary" />
               <ArrowRight className="h-4 w-4" />
-            </Link>
-            <a href="#scanner" className={buttonStyles("outline", "lg")}>
-              <TranslatedText messageKey="hero_secondary" />
             </a>
+            <Link href="/verify/A4-0425" className={buttonStyles("outline", "lg")}>
+              <TranslatedText messageKey="hero_secondary" />
+              <ExternalLink className="h-4 w-4" />
+            </Link>
           </div>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-muted/80">
             <span className="inline-flex items-center gap-2">
@@ -145,18 +146,20 @@ export default function HomePage() {
               </h2>
             </div>
             <p className="max-w-md text-sm leading-6 text-muted lg:text-right">
-              These are seeded demonstration records on Monad Mainnet. They are product
+              Counts below were read from Monad Mainnet by{" "}
+              <code className="font-mono text-xs text-electric">npm run verify:demo</code>,
+              which re-derives them independently of this page. They are product
               evidence, not customer testimonials or clinical outcome claims.
             </p>
           </div>
 
           <div className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-5">
             {[
-              ["5", "credentials"],
-              ["16", "attested batches"],
-              ["1", "historical recall"],
-              ["1", "validated counterfeit flag"],
-              ["4", "pinned evidence PDFs"],
+              ["6", "manufacturer credentials"],
+              ["18", "attested batches"],
+              ["2", "recalled or flagged"],
+              ["49", "independent checks"],
+              ["143", "Monad chain id"],
             ].map(([value, label]) => (
               <div key={label} className="bg-black/50 p-4 sm:p-5">
                 <p className="font-display text-4xl font-extrabold leading-none text-electric">{value}</p>
@@ -171,17 +174,24 @@ export default function HomePage() {
                 Open the actual records
               </p>
               <div className="mt-5 divide-y divide-white/10 border-y border-white/10">
-                <Link href="/verify/A4-0201" className="group flex items-center justify-between gap-4 py-4">
+                <Link href="/verify/A4-0425" className="group flex items-center justify-between gap-4 py-4">
                   <span>
-                    <span className="block font-mono text-xs font-bold uppercase tracking-[0.1em] text-frost">A4-0201 · historical recall</span>
-                    <span className="mt-1 block text-xs leading-5 text-muted">Batch DC.319 · expired · recall reason</span>
+                    <span className="block font-mono text-xs font-bold uppercase tracking-[0.1em] text-frost">A4-0425 · verified batch</span>
+                    <span className="mt-1 block text-xs leading-5 text-muted">Demo paracetamol batch · active manufacturer credential</span>
+                  </span>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-muted transition-colors group-hover:text-electric" />
+                </Link>
+                <Link href="/verify/A4-0426" className="group flex items-center justify-between gap-4 py-4">
+                  <span>
+                    <span className="block font-mono text-xs font-bold uppercase tracking-[0.1em] text-frost">A4-0426 · recalled batch</span>
+                    <span className="mt-1 block text-xs leading-5 text-muted">Demo amoxicillin batch · recall reason on-chain</span>
                   </span>
                   <ArrowRight className="h-4 w-4 shrink-0 text-muted transition-colors group-hover:text-electric" />
                 </Link>
                 <Link href="/verify/A11-100025" className="group flex items-center justify-between gap-4 py-4">
                   <span>
-                    <span className="block font-mono text-xs font-bold uppercase tracking-[0.1em] text-frost">A11-100025 · counterfeit signal</span>
-                    <span className="mt-1 block text-xs leading-5 text-muted">Two tablet batches · validated report</span>
+                    <span className="block font-mono text-xs font-bold uppercase tracking-[0.1em] text-frost">A11-100025 · validated counterfeit report</span>
+                    <span className="mt-1 block text-xs leading-5 text-muted">Real NRN from NAFDAC Alert 05/2025 · tablet batches under a suspension NRN</span>
                   </span>
                   <ArrowRight className="h-4 w-4 shrink-0 text-muted transition-colors group-hover:text-electric" />
                 </Link>
