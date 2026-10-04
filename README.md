@@ -6,7 +6,7 @@ I started with one concrete failure: a real product such as Dizpharm Paracetamol
 
 The engineering decisions, trade-offs, and unfinished work are recorded in [`ENGINEERING_JOURNAL.md`](./ENGINEERING_JOURNAL.md). The competitor research and pre-submission priority plan are in [`HACKATHON_STRATEGY.md`](./HACKATHON_STRATEGY.md).
 
-> **Known defect:** the `A4-0427` demo key is a real NAFDAC registration (Griseo Cream) whose on-chain demo text describes a different product. See [the disclosure in `SUBMISSION.md`](./SUBMISSION.md#known-defect-the-a4-0427-demo-key-is-a-real-registration). `npm run verify:demo` reports this as a disclosure-required advisory.
+> **Disclosed demo key:** `A4-0427` is a real NAFDAC registration (Griseo Cream) whose retired demo text describes a different product. It appears in no navigation or demo script, and its passport renders a permanent disclosure banner. See [`SUBMISSION.md`](./SUBMISSION.md#retired-the-a4-0427-demo-key-sits-on-a-real-registration) and [`lib/demo-disclosures.ts`](./lib/demo-disclosures.ts).
 
 The implementation contains:
 
@@ -22,7 +22,7 @@ The implementation contains:
 - **Mainnet contracts are deployed and source-verified** on Monad Mainnet (`chainId 143`); addresses and receipts are recorded in [`SUBMISSION.md`](./SUBMISSION.md).
 - **Mainnet seed is complete:** 5 credentials, 16 base batches, 1 active recall, 1 validated counterfeit flag, 4 IPFS PDFs, and 24/24 successful receipts; details are in [`demo/seed/seed-output.json`](./demo/seed/seed-output.json).
 - **Approved demo scenarios are live:** [A4-0425 VERIFIED](https://pharmchain.vercel.app/verify/A4-0425), [A4-0426 RECALLED](https://pharmchain.vercel.app/verify/A4-0426), and [A4-0427 COUNTERFEIT FLAG](https://pharmchain.vercel.app/verify/A4-0427); details are in [`demo/seed/demo-scenarios-output.json`](./demo/seed/demo-scenarios-output.json).
-- **Live frontend:** https://pharmchain.vercel.app (production deployment `dpl_HrNqDt76BLvSUPdNDpMpYzVtWCfm`).
+- **Live frontend:** https://pharmchain.vercel.app (production deployment `dpl_7xY7LP3L46PNgzTsB7HhbziJXtm6`).
 - Real NRNs not yet on-chain fall back to an official NAFDAC Green Book lookup and are labeled “Product found · not yet on-chain.”
 - The lookup layer also supports a second official adapter: `fda-ndc:US:<NDC>` through the US FDA NDC Directory, with the same provenance rules.
 - The reporting loop is closed: every passport hands off to `/report` pre-filled with the registry key, each batch card can open a report for its own batch, writes are simulated before the wallet prompt, and a submitted counterfeit report can be read back from the registry by its report ID.

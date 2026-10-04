@@ -17,6 +17,7 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createPublicClient, getAddress, http, parseAbi, type Address } from "viem";
 import { monadMainnet, MONAD_MAINNET_ID } from "../lib/monad";
+import { demoDisclosureFor } from "../lib/demo-disclosures";
 
 const registryAbi = parseAbi([
   "function owner() view returns (address)",
@@ -345,10 +346,21 @@ async function main() {
             ];
             const conflicting = claims.filter((claim) => !namesOverlap(claim, officialName));
             if (claims.length > 0 && conflicting.length === claims.length) {
-              advise(
-                `${scenario.key}: demo narrative contradicts the official registry record`,
-                `The NAFDAC Green Book lists ${scenario.nrn} as "${officialName}" (${regulator.sourceUrl}), but the on-chain demo records under that key describe: ${conflicting.map((c) => `"${c.slice(0, 120)}${c.length > 120 ? "…" : ""}"`).join(" · ")}. The NRN is a real registration, so a judge who checks the official source will see a different product than the demo claims.`,
-              );
+              const disclosed = demoDisclosureFor(scenario.nrn);
+              const detail = `The NAFDAC Green Book lists ${scenario.nrn} as "${officialName}" (${regulator.sourceUrl}), but the on-chain demo records under that key describe: ${conflicting.map((c) => `"${c.slice(0, 120)}${c.length > 120 ? "…" : ""}"`).join(" · ")}.`;
+              if (disclosed) {
+                advise(
+                  `${scenario.key}: disclosed demo key on a real registration`,
+                  `${detail} This collision is registered in lib/demo-disclosures.ts and disclosed on the passport, so it is an acknowledged limitation rather than an open finding.`,
+                );
+              } else {
+                record(
+                  `${scenario.key}: demo key collides with a real registration and is NOT disclosed`,
+                  "a disclosure registered in lib/demo-disclosures.ts",
+                  `official record is "${officialName}" with no matching disclosure`,
+                  false,
+                );
+              }
             }
           }
         }

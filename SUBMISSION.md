@@ -43,7 +43,7 @@ All addresses, transaction hashes, block numbers, and CIDs below were returned b
 | `seed-output.json` path | `demo/seed/seed-output.json` |
 | QR SVG output path | `demo/seed/*.svg` (11 passport QR files) |
 | Approved public application URL | https://pharmchain.vercel.app |
-| Vercel production deployment | `dpl_HrNqDt76BLvSUPdNDpMpYzVtWCfm` (previous: `dpl_4fpDj2CTX9SSRqVQyfe4qB87pCkj`) |
+| Vercel production deployment | `dpl_7xY7LP3L46PNgzTsB7HhbziJXtm6` (previous: `dpl_HrNqDt76BLvSUPdNDpMpYzVtWCfm`) |
 | Frontend contract configuration | No local `.env` file; Vercel production env is set to the verified registry `0x0f784017793776A8D6537F827421696077aDb396` and credential `0xb1B2b43dBb26C12b25e3eBd85418830413c55B0A`; confirmed by live A4-0425 read |
 | Receipt confirmation record | 24/24 seed transactions returned successful receipts |
 | Monad `Finalized` record | PENDING |
@@ -67,7 +67,7 @@ All addresses, transaction hashes, block numbers, and CIDs below were returned b
 ## Frontend deployment record
 
 - Production URL: https://pharmchain.vercel.app
-- Vercel deployment: `dpl_HrNqDt76BLvSUPdNDpMpYzVtWCfm`
+- Vercel deployment: `dpl_7xY7LP3L46PNgzTsB7HhbziJXtm6`
 - Public route checks: `/`, `/register`, `/report`, `/verify/A4-0425`, `/verify/A4-0426`, `/verify/A11-100025`, `/verify/04-2531`, and the pre-filled report routes `/report?n=A4-0425`, `/report?n=A4-0425&batch=17`, `/report?report=2` all returned HTTP 200.
 - Official adapter checks: `?registry=nafdac&id=04-2531` returned 1 NAFDAC Green Book product; `?id=fda-ndc:US:50580-590` returned 1 US FDA NDC product (TYLENOL Extra Strength).
 - The deployed frontend is configured for the verified registry and credential addresses above.
@@ -90,21 +90,25 @@ These are explicitly labeled demo records for the hackathon narrative, not claim
 
 - [A4-0425 — VERIFIED](https://pharmchain.vercel.app/verify/A4-0425): paracetamol batch `DEMO-EMZOR-0425`, credential `6`, manufacturer label Emzor Nigeria Ltd. [Attestation transaction](https://monadscan.com/tx/0x4f15282dd06d8d19225145a726f7ad43eb3291fc2d93ce285c26c69df388127d).
 - [A4-0426 — RECALLED](https://pharmchain.vercel.app/verify/A4-0426): amoxicillin batch `DEMO-FIDSON-0426`, reason “Elevated impurity levels detected in batch QA sample”. [Recall transaction](https://monadscan.com/tx/0x984980f8a64018fccfceff71a540a0619ed8f014dbc6f4616cf1c7842c96aa3f).
-- [A4-0427 — COUNTERFEIT FLAGGED](https://pharmchain.vercel.app/verify/A4-0427): report `2` records Unverified Labs Ltd claiming the same product key as the verified A4-0425 Emzor batch. [Report transaction](https://monadscan.com/tx/0xbd9dd2826e9fe7fbe9faa3bbac7acc324a49e1d426d43a17f71f282c1708d54b) · [validation transaction](https://monadscan.com/tx/0x5223aaef1deba0e60b6e670a716addbbc36ab9010be47990e2ebfa26890929e4).
+- **Counterfeit state is presented with [A11-100025](https://pharmchain.vercel.app/verify/A11-100025)**, which is a real documented case: NAFDAC Alert 05/2025 caught a falsified suspension carrying `A11-100025`, a number that actually belongs to a 20/120 mg tablet. The registry holds two tablet batches and validated counterfeit report `1` under that key. [Report transaction](https://monadscan.com/tx/0xfa88d6e86676bde6f13a7fca6b173691f5c4b5cbfc852d9056248e810a8a0797) · [validation transaction](https://monadscan.com/tx/0x3f54e6cf91bfa74197a60e09d59150e874fd99f1d663d830a35ed5a9c0a73af0).
 - Full scenario output, on-chain checks, and all six demo transaction links: [`demo/seed/demo-scenarios-output.json`](./demo/seed/demo-scenarios-output.json).
 
-### Known defect: the A4-0427 demo key is a real registration
+### Retired: the A4-0427 demo key sits on a real registration
 
-`A4-0427` is a genuine NAFDAC registration. The Green Book lists it as **Griseo Cream** (griseofulvin 1%, La-Lid Pharmaceutical Company Limited, Active, [record 99](https://greenbook.nafdac.gov.ng/products/details/99)). Our demo narrative under that key instead describes an "Unverified Labs Ltd" duplicate paracetamol claim.
+`A4-0427` is a genuine NAFDAC registration. The Green Book lists it as **Griseo Cream** (griseofulvin 1% topical cream, La-Lid Pharmaceutical Company Limited, Active, [record 99](https://greenbook.nafdac.gov.ng/products/details/99)). The retired demo narrative under that key instead described an "Unverified Labs Ltd" duplicate paracetamol claim.
 
-This is a real inconsistency, not a rounding error. A judge who opens the official source sees a different product than the demo claims. Two options exist and neither is cosmetic:
+Nothing in this registry concerns Griseo Cream, and PharmChain never evaluated that product. The risk was that a reader who assumed the key was real could conclude PharmChain had found this cream to be counterfeit.
 
-1. **Disclose it.** State in the demo narration that `A4-0427` is a real registration used as a demo key, that the report text is fictional, and that the point of the scenario is that the registry never validated the underlying product.
-2. **Re-key the scenario.** Broadcast a new counterfeit report under an NRN with no official registration, so the demo key does not collide with a real product record. This costs one mainnet transaction and leaves the existing validated report in place, since the contract has no correction or supersession path.
+How it is handled now:
 
-`npm run verify:demo` fails to flag this automatically on purpose: it reports it as a **disclosure-required advisory** rather than a hard failure, so the contradiction stays visible in [`demo/verify/demo-verification.json`](./demo/verify/demo-verification.json) instead of being silently tolerated. `A4-0425` and `A4-0426` return zero Green Book results, so only `A4-0427` currently carries this collision.
+- **Retired from the demo path.** `A4-0427` appears in no UI navigation, no demo script, and no landing-page link. The counterfeit state is presented with `A11-100025` instead, which is a real case with a citable alert.
+- **Disclosed at the point of reading.** Opening [A4-0427](https://pharmchain.vercel.app/verify/A4-0427) renders a permanent banner above the status stamp stating what the official registry lists, what the registry stores, why the difference is misleading, and how the demo handles it. The text is defined in [`lib/demo-disclosures.ts`](./lib/demo-disclosures.ts).
+- **Enforced by the evaluator.** `npm run verify:demo` treats a collision as an acknowledged advisory *only* when a disclosure is registered. A collision with no registered disclosure is a hard failure with a non-zero exit code, so a future demo key cannot quietly repeat this. This was verified by temporarily removing the disclosure, which produced `FAIL … NOT disclosed` and exit code `1`.
+- **Not correctable on-chain.** `DrugRegistry` has no correction, appeal, or supersession operation, and `validateCounterfeit` can only be called once. The stored report text is permanent, which is why the correction lives in the product rather than the contract.
 
-Until the scenario is re-keyed, do not describe `A4-0427` as evidence that PharmChain detects a specific real product.
+Current evaluator result: 49 passed, 0 failed, 1 acknowledged advisory. `A4-0425` and `A4-0426` return zero Green Book results, so `A4-0427` is the only key carrying this collision.
+
+The disclosure banner renders client-side after the passport read resolves. Verified in the deployed bundle at `https://pharmchain.vercel.app/verify/A4-0427`, which contains the `Demo data disclosure` landmark, the `Why this matters` section, and the `Griseo Cream` official-record text.
 
 ## Implemented in this repository
 
@@ -454,7 +458,7 @@ Do not place the JWT in `.env.example`, `.env.local`, a Vercel variable, source 
 ## Security caveats for submission review
 
 - No independent audit is claimed.
-- The `A4-0427` demo key collides with a real NAFDAC registration for a different product; see the known defect section above.
+- The retired `A4-0427` demo key collides with a real NAFDAC registration for a different product. It is disclosed in-product and unenforced on-chain; see the retired-scenario section above.
 - Both contracts use a single ordinary owner rather than two-step ownership or enforced multisig.
 - Credential metadata is owner-asserted and not checked against NAFDAC.
 - Product NRN values are incorrectly reusable as organization metadata labels in the seed; they remain product identifiers.

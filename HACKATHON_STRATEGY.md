@@ -109,7 +109,15 @@ Run the evaluator against every seeded record and include its results in the sub
 
 **Implemented:** `scripts/verify-demo.ts` (`npm run verify:demo`). It re-implements status derivation independently of the frontend, asserts contract invariants from live reads, calls the official adapter, and writes `demo/verify/demo-verification.json`. Current result: 49 passed, 0 failed, 1 advisory.
 
-**It already earned its keep:** the evaluator flagged that `A4-0427` is a genuine NAFDAC registration for Griseo Cream, while our on-chain demo report text describes a paracetamol/Emzor duplicate claim. A judge checking the official source would see a different product than the demo claims. Fix this before submitting by re-keying the scenario to an NRN with no official registration; the contract has no correction path, so the existing validated report stays. See [`SUBMISSION.md`](./SUBMISSION.md).
+**It already earned its keep:** the evaluator flagged that `A4-0427` is a genuine NAFDAC registration for Griseo Cream, while our on-chain demo report text describes a paracetamol/Emzor duplicate claim. A judge checking the official source would see a different product than the demo claims.
+
+Resolved by disclosure rather than by a new transaction. Re-keying was rejected on purpose: the counterfeit state is already presented honestly with `A11-100025`, a real documented case from NAFDAC Alert 05/2025, so a new record would only duplicate it. Instead:
+
+- the key is retired from every navigation and demo script;
+- its passport renders a permanent disclosure banner above the status stamp, sourced from `lib/demo-disclosures.ts`;
+- the evaluator treats a collision as an acknowledged advisory **only** when a disclosure is registered, and fails with a non-zero exit when one is missing.
+
+`DrugRegistry` has no correction or supersession operation, so the correction belongs in the product, not the contract.
 
 ### 4. Package before polishing features
 
@@ -132,7 +140,6 @@ The current `VIDEO_DEMO_SCRIPT.md`, `ENGINEERING_JOURNAL.md`, and `SUBMISSION.md
 1. Run the three-state demo on a real phone.
 2. Recruit the first tester and capture observed friction.
 3. Rehearse the 90-second video with a real wallet and real source links.
-4. Fix the `A4-0427` demo-key collision, or disclose it on camera.
 
 ### Next: one complete user loop
 

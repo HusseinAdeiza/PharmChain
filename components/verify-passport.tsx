@@ -28,6 +28,7 @@ import { PassportQr } from "@/components/passport-qr";
 import { TransactionEventExplorer } from "@/components/transaction-event-explorer";
 import { Button, buttonStyles, cn } from "@/components/ui/button";
 import { Input } from "@/components/ui/field";
+import { demoDisclosureFor, type DemoDisclosure } from "@/lib/demo-disclosures";
 import {
   DRUG_REGISTRY_ABI,
   isRegistryConfigured,
@@ -415,6 +416,71 @@ function BatchCard({ batch, evidence }: { batch: Batch; evidence?: EvidenceEntry
   );
 }
 
+/**
+ * Rendered above the status stamp so it cannot be scrolled past. The registry
+ * cannot correct a stored report, so the correction lives here.
+ */
+function DemoDisclosureBanner({ disclosure }: { disclosure: DemoDisclosure }) {
+  return (
+    <section
+      className="rounded-3xl border-2 border-gold/70 bg-gold/10 p-5 shadow-glow-gold sm:p-7"
+      aria-label="Demo data disclosure"
+    >
+      <div className="flex flex-wrap items-center gap-2.5">
+        <span className="inline-flex items-center gap-2 rounded-md border border-gold/60 bg-black/40 px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-[0.12em] text-gold">
+          <CircleAlert className="h-3.5 w-3.5" />
+          Demo data on a real key
+        </span>
+        <span className="rounded-md border border-white/15 bg-white/5 px-2.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-muted">
+          Recorded {disclosure.recordedAt}
+        </span>
+      </div>
+
+      <h2 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight tracking-[-0.01em] text-gold sm:text-3xl">
+        {disclosure.title}
+      </h2>
+
+      <dl className="mt-4 space-y-3 text-sm leading-6">
+        <div className="border-l-2 border-gold/50 pl-3">
+          <dt className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-muted">
+            What the official registry lists
+          </dt>
+          <dd className="mt-1 text-frost">
+            {disclosure.officialRecord}.{" "}
+            <a
+              href={disclosure.officialSourceUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 font-mono text-xs font-bold uppercase tracking-[0.08em] text-gold underline decoration-gold/40 decoration-1 underline-offset-4"
+            >
+              Open the official record
+              <ExternalLink className="h-3 w-3" />
+            </a>
+          </dd>
+        </div>
+        <div className="border-l-2 border-white/15 pl-3">
+          <dt className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-muted">
+            What this registry stores
+          </dt>
+          <dd className="mt-1 text-frost/80">{disclosure.onChainRecord}.</dd>
+        </div>
+        <div className="border-l-2 border-danger/60 pl-3">
+          <dt className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-muted">
+            Why this matters
+          </dt>
+          <dd className="mt-1 text-frost/80">{disclosure.risk}</dd>
+        </div>
+        <div className="border-l-2 border-teal/50 pl-3">
+          <dt className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-muted">
+            How the demo handles it
+          </dt>
+          <dd className="mt-1 text-frost/80">{disclosure.resolution}</dd>
+        </div>
+      </dl>
+    </section>
+  );
+}
+
 function ReportCard({ report }: { report: CounterfeitReport }) {
   const state = !report.validated
     ? "Pending owner validation"
@@ -604,9 +670,11 @@ function PassportResult({
   const verificationState = passportVerificationState(passport, batches, reports, currentTimestamp);
   const registryUrl = monadAddressUrl(registryAddress);
   const credentialUrl = monadAddressUrl(manufacturerCredentialAddress);
+  const disclosure = demoDisclosureFor(requestedNafdacNumber);
 
   return (
     <div className="mt-8 space-y-8">
+      {disclosure ? <DemoDisclosureBanner disclosure={disclosure} /> : null}
       <ResultStatePanel state={verificationState} />
 
       <section className="glass rounded-3xl p-5 sm:p-7">
